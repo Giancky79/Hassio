@@ -1,0 +1,139 @@
+- id: '1536957037532'
+  alias: Entrata Casa Giancarlo
+  trigger:
+  - entity_id: device_tracker.iphone_6s
+    for:
+      minutes: 1
+    from: not_home
+    platform: state
+    to: home
+  condition:
+  - after: '8:00:00'
+    before: '23:00:00'
+    condition: time
+  action:
+  - data:
+      message: Giancarlo è a casa
+    service: notify.ios_iphone_6s
+  - data:
+      message: Giancarlo è a casa
+    service: notify.telegram
+- id: '1537737057922'
+  alias: Entrata Ufficio Giancarlo
+  trigger:
+  - entity_id: device_tracker.iphone_6s
+    for:
+      minutes: 1
+    from: not_home
+    platform: state
+    to: Office
+  condition:
+  - after: '8:00:00'
+    before: '23:00:00'
+    condition: time
+  action:
+  - data:
+      message: Giancarlo è in ufficio
+    service: notify.ios_iphone_6s
+  - data:
+      message: Giancarlo è in ufficio
+    service: notify.telegram
+- id: '1538944842505'
+  alias: Backup Automatico
+  trigger:
+  - at: '23:00:00'
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - service: hassio.snapshot_full
+    data_template:
+      name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+- id: '1538948231983'
+  alias: Stop Backup
+  trigger:
+  - above: '85'
+    below: '90'
+    entity_id: sensor.disk_use_percent_
+    platform: numeric_state
+  condition: []
+  action:
+  - service: notify.ios_iphone_6s
+    data:
+      message: Spazio libero sulla SD in esaurimento!
+  - service: automation.turn_off
+    data:
+      entity_id: automation.backup_automatico
+  - service: notify.ios_iphone_6s
+    data:
+      message: Backup Automatico disattivato
+- id: Tipo Raccolta
+  alias: Tipo Raccolta
+  trigger:
+  - at: '19:30:00'
+    platform: time
+  condition: []
+  action:
+  - service: notify.ios_iphone_6s
+    data_template:
+      message: '{% if now().strftime(''%A'') == ''Monday'' %} Umido  {% elif now().strftime(''%A'')
+        == ''Tuesday'' %} Non riciclabile  {% elif now().strftime(''%A'') == ''Wednesday''%}
+        Carta (Umido da Giugno a Ottobre)  {% elif now().strftime(''%A'') == ''Thursday''%}
+        Vetro  {% elif now().strftime(''%A'') == ''Friday'' %} Umido {% elif now().strftime(''%A'')
+        == ''Sunday''%} Plastica  {% endif %}'
+  - service: notify.telegram
+    data_template:
+      message: '{% if now().strftime(''%A'') == ''Monday'' %} Umido  {% elif now().strftime(''%A'')
+        == ''Tuesday'' %} Non riciclabile  {% elif now().strftime(''%A'') == ''Wednesday''%}
+        Carta (Umido da Giugno a Ottobre)  {% elif now().strftime(''%A'') == ''Thursday''%}
+        Vetro  {% elif now().strftime(''%A'') == ''Friday'' %} Umido {% elif now().strftime(''%A'')
+        == ''Sunday''%} Plastica  {% endif %}'
+- id: Avvio HA
+  alias: Avvio HA
+  trigger:
+  - event: start
+    platform: homeassistant
+  action:
+  - data:
+      message: Home Assistant è operativo
+    service: notify.telegram
+  - data:
+      message: Home Assistant è operativo
+    service: notify.ios_iphone_6s
+- id: Aggiornamento HA
+  alias: Aggiornamento HA
+  trigger:
+  - entity_id: sensor.ha_latest_release
+    from: 'False'
+    platform: state
+    to: 'True'
+  condition:
+  - condition: template
+    value_template: '{{ states.sensor.current_version.state != states.sensor.latest_version.state
+      }}'
+  action:
+  - data:
+      message: Home Assistant {{ states.sensor.latest_version.state }} è disponibile
+    service: notify.telegram
+  - data:
+      message: Home Assistant {{ states.sensor.latest_version.state }} è disponibile
+    service: notify.ios_iphone_6s
+- id: riavvio HA
+  alias: Riavvio HA
+  trigger:
+  - at: 06:30:00
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+    - sat
+    - sun
+  action:
+  - service: homeassistant.restart

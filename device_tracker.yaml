@@ -1,0 +1,9 @@
+- platform: bluetooth_tracker
+  interval_seconds: 60
+  consider_home: 180
+  track_new_devices: True
+
+- platform: nmap_tracker
+  hosts: 192.168.1.0/24
+  home_interval: 60
+  track_new_devices: True

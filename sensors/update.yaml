@@ -1,0 +1,7 @@
+- platform: version
+  name: Current Version
+  source: local
+  
+- platform: version
+  name: Latest Version
+  source: docker

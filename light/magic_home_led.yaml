@@ -1,0 +1,29 @@
+- platform: mqtt
+  name: magic
+  state_topic: "stat/led_rgb/RESULT"
+  command_topic: "cmnd/led_rgb/POWER"
+  state_value_template: "{{ value_json.POWER }}"
+  brightness_state_topic: "stat/led_rgb/RESULT"
+  brightness_command_topic: "cmnd/led_rgb/Dimmer"
+  brightness_scale: 100
+  brightness_value_template: "{{ value_json.Dimmer }}"
+  white_value_state_topic: "stat/led_rgb/RESULT"
+  white_value_command_topic: "cmnd/led_rgb/Channel4"
+  white_value_scale: 100
+  white_value_template: "{{ value_json.Channel[3] }}"
+  rgb_command_topic: "cmnd/led_rgb/Color"
+  rgb_command_template: "{{ '%02x%02x%02x' | format(red, green, blue)}}"
+  rgb_state_topic: "stat/led_rgb/RESULT"
+  rgb_value_template: "{{(value_json.Channel[0]*2.55)|int}},{{(value_json.Channel[1]*2.55)|int}},{{(value_json.Channel[2]*2.55)|int}}"
+  effect_state_topic: "stat/led_rgb/RESULT"
+  effect_command_topic: "cmnd/led_rgb/Scheme"
+  effect_list:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+  retain: false
+  qos: 1
+  payload_on: "ON"
+  payload_off: "OFF"

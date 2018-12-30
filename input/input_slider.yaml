@@ -1,0 +1,6 @@
+light.hue_white_lamp_1:
+  name: Brightness
+  initial: 1
+  min: 1
+  max: 255
+  step: 1

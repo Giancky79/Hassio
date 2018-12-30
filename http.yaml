@@ -1,0 +1,8 @@
+base_url: !secret base_url
+api_password: !secret http_password
+server_port: !secret server_port
+ssl_certificate: /ssl/fullchain.pem
+ssl_key: /ssl/privkey.pem
+cors_allowed_origins:
+    - https://google.com
+    - https://home-assistant.io

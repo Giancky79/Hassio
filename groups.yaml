@@ -1,0 +1,195 @@
+# gruppi card
+
+default_view:
+  name: Home
+  icon: mdi:home-assistant
+  view: yes
+  entities:
+    - group.informazione
+    - climate.termostato
+    - group.ritiro_rifiuto    
+    - group.sensori
+    - group.info_ha
+    - device_tracker.iphone_6s
+    - device_tracker.samsung_galaxy_s7
+
+Comandi:
+  name: Comandi 
+  icon: mdi:lightbulb-on
+  view: yes
+  entities:
+    - group.luci_salone
+    - group.switch
+
+Server:
+  name: Rpi3B+
+  icon: mdi:server
+  view: yes
+  entities:
+    - group.raspberry
+    - group.automatismi
+    - group.scripts
+    - group.sonoff
+
+Presenze:
+  name: Presenze
+  icon: mdi:account-multiple
+  view: yes
+  entities:
+    - group.bluetooth
+    - group.gps
+    - group.battery
+    
+Media:
+  name: Media
+  icon: mdi:audio-video
+  view: yes
+  entities:
+    - media_player.volumio_volumiolocal
+    - media_player.spotify
+    - device_tracker.echo37h
+
+Test:
+  name: Test
+  icon: mdi:test-tube-off
+  view: yes
+  entities:
+   - group.prove_varie
+  
+# card
+
+Informazione:
+  name: Informazione
+  icon: mdi:calendar-clock
+  view: no
+  entities:
+    - sensor.date
+    - sensor.time
+    - sun.sun
+    - sensor.yr_symbol
+    - sensor.moon
+
+Info HA:
+  name: Info HA
+  icon: mdi:home-assistant
+  view: no
+  entities:
+    - sensor.ssl_certificate_expiry
+    - sensor.current_version
+    - sensor.latest_version
+
+Sensori:
+  name: Sensori
+  icon: mdi:oil-temperature
+  view: no
+  entities:
+    - sensor.temperatura_atrio
+    - sensor.umidita_atrio
+
+Switch:
+  name: Switch
+  icon: mdi:light-switch
+  view: no
+  entities:
+    - switch.attivazione_termostato
+    - climate.termostato
+    
+Bluetooth:
+  name: Bluetooth
+  icon: mdi:bluetooth
+  view: no
+  entities:
+      - device_tracker.iphone_6s_bl
+      - device_tracker.samsung_galaxy_s7
+      - device_tracker.macbook_air_di_giancarlo
+      - device_tracker.ipad
+      - device_tracker.beatssolo_wireless
+      - device_tracker.fire_di_flavia
+      - device_tracker.sky8473
+
+Battery:
+  name: Battery
+  icon: mdi:battery-charging
+  view: no
+  entities: 
+    - sensor.iphone_6s_battery_level
+    - sensor.iphone_6s_battery_state
+
+Raspberry:
+  name: raspberry
+  icon: mdi:raspberrypi
+  view: no
+  entities:
+    - sensor.ipv4_address_eth0
+    - sensor.processor_use  
+    - sensor.memory_use_percent
+    - sensor.memory_free
+    - sensor.disk_use_percent_
+    - sensor.since_last_boot
+    - sensor.last_boot
+    - sensor.cpu_temperature
+    
+Ritiro rifiuto:
+  name: Ritiro rifiuto
+  icon: mdi:delete-empty
+  view: no
+  entities:
+    - sensor.spazzatura
+    
+Gps:
+  name: Gps
+  icon: mdi:gps
+  view: no
+  entities:
+    - device_tracker.iphone_6s
+    - device_tracker.giancarlo_iphone6s
+    
+Luci salone:
+  name: Luci salone
+  icon: mdi:lightbulb-on
+  view: no
+  entities:
+    - light.hue_white_lamp_1
+    - light.hue_white_lamp_2
+    - light.magic 
+    
+Automatismi:
+  name: Automatismi
+  icon: mdi:home-automation
+  view: no
+  entities: 
+    - automation.avvio_ha
+    - automation.riavvio_ha
+    - automation.aggiornamento_ha
+    - automation.backup_automatico    
+    - automation.stop_backup    
+    - automation.tipo_raccolta
+    - automation.entrata_ufficio_giancarlo
+    - automation.entrata_casa_giancarlo
+
+Scripts:
+  name: Scripts
+  icon: mdi:home-automation
+  view: no
+  entities:
+    - script.termostato
+
+Sonoff:
+  name: Sonoff
+  icon: mdi:access-point-network
+  view: no
+  entities:
+    - sensor.termostato
+  
+Prove varie:
+  name: Prove varie
+  icon: mdi:lightbulb-on-outline
+  view: no
+  entities:
+    - sensor.dest_address
+    - input_select.destination
+    - sensor.distance_home
+    - sensor.people_home
+    - sensor.sun_up
+    - proximity.home
+    - input_number.target_temp
