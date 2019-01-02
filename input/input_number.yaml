@@ -5,3 +5,10 @@ target_temp:
   step: 0.5
   unit_of_measurement: "°C"
   icon: mdi:target
+  
+hue_white_lamp_1:
+  name: Brightness
+  initial: 1
+  min: 0
+  max: 255
+  step: 1
