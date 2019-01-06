@@ -1,0 +1,158 @@
+title: Home
+views:
+  - badges:
+      - device_tracker.iphone_6s
+      - device_tracker.samsung_galaxy_s7
+    cards:
+      - entity: climate.termostato
+        type: thermostat
+      - entities:
+          - sensor.spazzatura
+        show_header_toggle: true
+        title: Ritiro rifiuto
+        type: entities
+      - entities:
+          - sensor.temperatura_atrio
+          - sensor.umidita_atrio
+        title: Sensori
+        type: entities
+      - entities:
+          - sensor.ssl_certificate_expiry
+          - sensor.current_version
+          - sensor.latest_version
+        title: Info HA
+        type: entities
+      - entities:
+          - sensor.date
+          - sensor.time
+          - sun.sun
+          - sensor.yr_symbol
+          - sensor.moon
+          - sensor.fasilunari
+        title: Informazione
+        type: entities
+    icon: 'mdi:home-assistant'
+    path: default_view
+    title: Home
+  - cards:
+      - entities:
+          - switch.attivazione_termostato
+        show_header_toggle: true
+        title: Switch
+        type: entities
+      - entities:
+          - light.hue_white_lamp_1
+          - light.hue_white_lamp_2
+          - light.magic
+        title: Luci salone
+        type: entities
+      - entities:
+          - switch.attivazione_termostato
+        entity: group.switch
+        state_image:
+          'off': /local/living_room_off.jpg
+          'on': /local/living_room_on.jpg
+        title: Living room
+        type: picture-glance
+    badges: []
+    icon: 'mdi:television-classic'
+    path: salone
+    title: Salone
+  - cards:
+      - entities:
+          - switch.attivazione_termostato
+        entity: group.switch
+        state_image:
+          'off': /local/bedroom_boss_off.jpg
+          'on': /local/bedroom_boss_on.jpg
+        title: Camera Matrimoniale
+        type: picture-glance
+    badges: []
+    title: Camere
+    icon: 'mdi:bed-empty'
+    path: camere
+  - badges: []
+    cards:
+      - entities:
+          - sensor.ipv4_address_eth0
+          - sensor.processor_use
+          - sensor.memory_use_percent
+          - sensor.memory_free
+          - sensor.disk_use_percent_
+          - sensor.last_boot
+          - sensor.cpu_temperature
+        show_header_toggle: true
+        title: raspberry
+        type: entities
+      - entities:
+          - automation.avvio_ha
+          - automation.riavvio_ha
+          - automation.aggiornamento_ha
+          - automation.backup_automatico
+          - automation.stop_backup
+          - automation.tipo_raccolta
+          - automation.entrata_ufficio_giancarlo
+          - automation.entrata_casa_giancarlo
+        title: Automatismi
+        type: entities
+      - entities:
+          - script.termostato
+        title: Scripts
+        type: entities
+      - entities:
+          - sensor.termostato
+        title: Sonoff
+        type: entities
+    icon: 'mdi:server'
+    path: server
+    title: Rpi3B+
+  - badges: []
+    cards:
+      - entities:
+          - device_tracker.iphone_6s_bl
+          - device_tracker.samsung_galaxy_s7
+          - device_tracker.macbook_air_di_giancarlo
+          - device_tracker.ipad
+          - device_tracker.beatssolo_wireless
+          - device_tracker.fire_di_flavia
+          - device_tracker.sky8473
+        title: Bluetooth
+        type: entities
+      - entities:
+          - device_tracker.iphone_6s
+          - device_tracker.giancarlo_iphone6s
+        title: Gps
+        type: entities
+      - entities:
+          - sensor.iphone_6s_battery_level
+          - sensor.iphone_6s_battery_state
+        title: Battery
+        type: entities
+    icon: 'mdi:account-multiple'
+    path: presenze
+    title: Presenze
+  - badges:
+      - device_tracker.echo37h
+    cards: []
+    icon: 'mdi:audio-video'
+    path: media
+    title: Media
+  - badges: []
+    cards:
+      - entities:
+          - entity: sensor.dest_address
+          - entity: input_select.destination
+          - entity: sensor.people_home
+          - entity: sensor.sun_up
+          - entity: proximity.home
+          - entity: input_number.target_temp
+          - entity: sensor.mac_air
+          - entity: sensor.bt_mac_air
+          - entity: binary_sensor.openmqttgateway
+          - entity: sensor.mac_air_state
+          - entity: input_number.hue_white_lamp_1
+        title: Prove varie
+        type: entities
+    icon: 'mdi:test-tube-off'
+    path: test
+    title: Test
