@@ -28,11 +28,12 @@ class BirthdayCard extends HTMLElement {
 	
 		
 		var birthdayList=[
-			{name:"Giancarlo", day:3, month:11, year:1979},
-			{name:"Oksana", day:21, month:4, year:1974},
-			{name:"Anastasyia", day:30, month:10, year:1994},
-			{name:"Flavia", day:26, month:6, year:2015},
-			{name:"Wedding aniversary", day:30, month:10, year:2010, s:2},
+			{name:"Adam", day:17, month:2, year:1990},
+			{name:"Amanda", day:2, month:3, year:1967},
+			{name:"Grandfather", day:16, month:2, year:1927, s:1},
+			{name:"Gladys", day:10, month:2, year:1967},
+			{name:"Peter", day:7, month:3, year:1967},
+			{name:"Wedding aniversary", day:5, month:3, year:2003, s:2},
 		];
 		
 		
