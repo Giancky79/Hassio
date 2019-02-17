@@ -1,45 +1,18 @@
-homeassistant:
-# Name of the location where Home Assistant is running
-  name: Home
-# Location required to calculate the time the sun rises and sets
-  latitude: !secret latitude
-  longitude: !secret longitude
-# Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: !secret elevation
-# metric for Metric, imperial for Imperial
-  unit_system: metric
-# Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: !secret time_zone
-# Customization file
-  customize: !include customize.yaml
-  auth_providers:
-   - type: homeassistant
-   - type: legacy_api_password
-    
-# Show links to resources in log and frontend
-# introduction:
+homeassistant: !include home_assistant.yaml
 
-# Enables the frontend
+system_health:
+
+automation: !include_dir_merge_list automations
+
 frontend:
+  themes: !include themes.yaml
 
-# Enables configuration UI
 config:
-  
-# Secrets are defined in the file secrets.yaml
-# api_password: !secret http_password
-# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
-# base_url: example.duckdns.org:8123
 
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
 updater:
 # Optional, allows Home Assistant developers to focus on popular components.
 # include_used_components: true
 
-# Discover some devices automatically
 discovery:
 
 # Allows you to issue voice commands from the frontend in enabled browsers
@@ -61,6 +34,8 @@ sun:
 tts:
   - platform: google
 
+api:
+
 alexa: !include alexa.yaml
 
 homekit:
@@ -77,13 +52,13 @@ climate: !include climate.yaml
 
 group: !include groups.yaml
 
-automation: !include automations.yaml
-
 script: !include scripts.yaml
 
 http: !include http.yaml
 
-sensor:  !include_dir_merge_list sensors
+sensor: !include_dir_merge_list sensor
+
+binary_sensor: !include_dir_merge_list binary_sensor
 
 camera: !include_dir_merge_list cameras
 
@@ -101,8 +76,8 @@ light: !include_dir_merge_list light
 
 switch: !include_dir_merge_list switch
 
-#input_slider: !include input/input_slider.yaml
-
 input_select: !include input/input_select.yaml
 
 input_number: !include input/input_number.yaml
+
+media_player: !include_dir_list media_player
