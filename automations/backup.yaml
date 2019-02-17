@@ -1,0 +1,31 @@
+- id: backup_automatico
+  alias: Backup Automatico
+  trigger:
+  - at: '23:00:00'
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - service: hassio.snapshot_full
+    data_template:
+      name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+- id: stop_backup
+  alias: Stop Backup
+  trigger:
+  - above: '85'
+    below: '90'
+    entity_id: sensor.disk_use_percent
+    platform: numeric_state
+  condition: []
+  action:
+  - service: notify.ios_iphone_6s
+    data:
+      message: Spazio libero sulla SD in esaurimento!
+  - service: automation.turn_off
+    data:
+      entity_id: automation.backup_automatico
+  - service: notify.ios_iphone_6s
+    data:
+      message: Backup Automatico disattivato

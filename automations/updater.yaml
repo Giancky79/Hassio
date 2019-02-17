@@ -1,0 +1,9 @@
+- id: Aggiornamento HA
+  alias: 'aggiornamento ha' 
+  trigger:
+    platform: state
+    entity_id: updater.updater
+  action:
+    service: notify.notify
+    data:
+      message: 'aggiornamento per Home Assistant è disponibile.'

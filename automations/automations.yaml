@@ -1,0 +1,29 @@
+- id: Avvio HA
+  alias: Avvio HA
+  trigger:
+  - event: start
+    platform: homeassistant
+  action:
+  - data:
+      message: Home Assistant è operativo
+    service: notify.telegram
+  - data:
+      message: Home Assistant è operativo
+    service: notify.ios_iphone_6s
+#- id: riavvio HA
+#  alias: Riavvio HA
+#  trigger:
+#  - at: 06:30:00
+#    platform: time
+#  condition:
+#  - condition: time
+#    weekday:
+#    - mon
+#    - tue
+#    - wed
+#    - thu
+#    - fri
+#    - sat
+#    - sun
+#  action:
+#  - service: homeassistant.restart
