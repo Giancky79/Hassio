@@ -1,21 +1,25 @@
-#- id: Tipo Raccolta
-#  alias: Tipo Raccolta
-#  trigger:
-#  - at: '19:30:00'
-#    platform: time
-#  condition: []
-#  action:
-#  - service: notify.ios_iphone_6s
-#    data_template:
-#      message: '{% if now().strftime(''%A'') == ''Monday'' %} Umido  {% elif now().strftime(''%A'')
-#        == ''Tuesday'' %} Non riciclabile  {% elif now().strftime(''%A'') == ''Wednesday''%}
-#        Carta (Umido da Giugno a Ottobre)  {% elif now().strftime(''%A'') == ''Thursday''%}
-#        Vetro  {% elif now().strftime(''%A'') == ''Friday'' %} Umido {% elif now().strftime(''%A'')
-#        == ''Sunday''%} Plastica  {% endif %}'
-#  - service: notify.telegram
-#    data_template:
-#      message: '{% if now().strftime(''%A'') == ''Monday'' %} Umido  {% elif now().strftime(''%A'')
-#        == ''Tuesday'' %} Non riciclabile  {% elif now().strftime(''%A'') == ''Wednesday''%}
-#        Carta (Umido da Giugno a Ottobre)  {% elif now().strftime(''%A'') == ''Thursday''%}
-#        Vetro  {% elif now().strftime(''%A'') == ''Friday'' %} Umido {% elif now().strftime(''%A'')
-#        == ''Sunday''%} Plastica  {% endif %}'
+- id: Tipo Raccolta
+  alias: Tipo Raccolta
+  trigger:
+  - at: '19:30:00'
+    platform: time
+  condition: []
+  action:
+  - service: notify.ios_iphone_6s
+    data_template:
+      message: '{% if now().strftime(''%A'') == ''Monday'' %} Umido
+                {% elif now().strftime(''%A'') == ''Tuesday'' %} Non riciclabile
+                {% elif now().strftime(''%A'') == ''Wednesday''%} Carta (Umido da Giugno a Ottobre)  
+                {% elif now().strftime(''%A'') == ''Thursday''%} Vetro  
+                {% elif now().strftime(''%A'') == ''Friday'' %} Umido 
+                {% elif now().strftime(''%A'') == ''Sunday''%} Plastica  
+                {% endif %}'
+  - service: notify.telegram
+    data_template:
+      message: '{% if now().strftime(''%A'') == ''Monday'' %} Umido
+                {% elif now().strftime(''%A'') == ''Tuesday'' %} Non riciclabile
+                {% elif now().strftime(''%A'') == ''Wednesday''%} Carta (Umido da Giugno a Ottobre)  
+                {% elif now().strftime(''%A'') == ''Thursday''%} Vetro  
+                {% elif now().strftime(''%A'') == ''Friday'' %} Umido 
+                {% elif now().strftime(''%A'') == ''Sunday''%} Plastica  
+                {% endif %}'
