@@ -1,5 +1,4 @@
-- id: backup_automatico
-  alias: Backup Automatico
+- alias: 'Backup Automatico'
   trigger:
   - at: '23:00:00'
     platform: time
@@ -11,8 +10,7 @@
   - service: hassio.snapshot_full
     data_template:
       name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
-- id: stop_backup
-  alias: Stop Backup
+- alias: 'Stop Backup'
   trigger:
   - above: '85'
     below: '90'
@@ -29,3 +27,20 @@
   - service: notify.telegram
     data:
       message: Backup Automatico disattivato
+- alias: 'backup automatico dropbox'
+  trigger:
+  - at: '3:00:00'
+    platform: time
+  condition:
+    - condition: time
+      weekday:
+        - mon
+  action:
+    - service: hassio.snapshot_full
+      data_template:
+        name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+   - service: hassio.addon_stdin
+     data:
+        addon: 7be23ff5_dropbox_sync
+        input:
+          command: upload
