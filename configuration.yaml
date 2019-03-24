@@ -1,25 +1,47 @@
-homeassistant: !include home_assistant.yaml
+api:
 
-system_health:
+alexa: !include alexa.yaml
 
 automation: !include_dir_merge_list automations
 
-frontend:
-  themes: !include themes.yaml
+binary_sensor: !include_dir_merge_list binary_sensor
+
+camera: !include_dir_merge_list cameras
+
+climate: !include climate.yaml
 
 config:
 
-updater:
-# Optional, allows Home Assistant developers to focus on popular components.
-# include_used_components: true
+custom_updater:
 
 discovery:
 
-# Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
+device_tracker: !include device_tracker.yaml
+
+frontend: !include frontend.yaml
+
+group: !include group.yaml
 
 # Enables support for tracking state changes over time
 history:
+
+http: !include http.yaml
+
+homeassistant: !include home_assistant.yaml
+
+homekit:
+
+input_boolean: !include input/input_boolean.yaml
+
+input_number: !include input/input_number.yaml
+
+input_select: !include input/input_select.yaml
+
+input_text: !include input_text.yaml
+
+ios:
+
+light: !include_dir_merge_list light
 
 # View all events in a logbook
 logbook:
@@ -27,57 +49,40 @@ logbook:
 # Enables a map showing the location of tracked devices
 map:
 
+media_player: !include_dir_list media_player
+
+notify: !include notify.yaml
+
+owntracks: !include owntracks.yaml
+
+panel_iframe: !include panel_iframe.yaml
+
+person: !include person.yaml
+
+python_script:
+
+proximity: !include proximity.yaml
+
+script: !include scripts.yaml
+
+sensor: !include_dir_merge_list sensor
+
 # Track the sun
 sun:
+
+system_health:
+
+switch: !include_dir_merge_list switch
+
+telegram_bot: !include telegram_bot.yaml
 
 # Text to speech
 tts:
   - platform: google
 
-api:
-
-alexa: !include alexa.yaml
-
-homekit:
-
-ios:
-
-mqtt: !include mqtt.yaml
-
-telegram_bot: !include telegram_bot.yaml
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+# Optional, allows Home Assistant developers to focus on popular components.
+# include_used_components: true
 
 zone: !include zone.yaml
-
-climate: !include climate.yaml
-
-group: !include groups.yaml
-
-script: !include scripts.yaml
-
-http: !include http.yaml
-
-sensor: !include_dir_merge_list sensor
-
-binary_sensor: !include_dir_merge_list binary_sensor
-
-camera: !include_dir_merge_list cameras
-
-notify: !include notify.yaml
-
-device_tracker: !include device_tracker.yaml
-
-owntracks: !include owntracks.yaml
-
-proximity: !include proximity.yaml
-
-panel_iframe: !include panel_iframe.yaml
-
-light: !include_dir_merge_list light
-
-switch: !include_dir_merge_list switch
-
-input_select: !include input/input_select.yaml
-
-input_number: !include input/input_number.yaml
-
-media_player: !include_dir_list media_player
