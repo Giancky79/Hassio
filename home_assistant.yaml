@@ -12,5 +12,3 @@ time_zone: !secret time_zone
 # Customization file
 customize: !include customize.yaml
 packages: !include_dir_named packages
-auth_providers:
- - type: homeassistant
