@@ -1,6 +1,7 @@
 # Hassio
 Home Assistant
 questa è la mia prima esperienza
+Comincio creazione packages per semplificare l'integrazione
 
 ![alt text](https://github.com/Giancky79/Hassio/blob/master/image/Schermata%202018-12-30%20alle%2014.17.05.png)
 ![alt text](https://github.com/Giancky79/Hassio/blob/master/image/Schermata%202018-12-30%20alle%2014.17.24.png)
