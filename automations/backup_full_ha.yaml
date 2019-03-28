@@ -10,7 +10,7 @@
     action:
       - service: hassio.snapshot_full
         data_template:
-          name: Automated Backup {{ now().strftime('%Y-%m-%d') }}
+          name: Automated Full Backup {{ now().strftime('%Y-%m-%d') }}
 # BACKUP FULL SU SD
 # scaricare ed attivare in addon https://github.com/danielwelch/hassio-dropbox-sync
   - alias: 'Backup Full Dropbox'
