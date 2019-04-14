@@ -11,8 +11,7 @@
           message: Spazio libero sulla SD in esaurimento!
       - service: automation.turn_off
         data:
-          - entity_id: automation.backup_full_automatico
-          - entity_id: automation.backup_partial_automatico
+          entity_id: automation.backup_full_automatico, automation.backup_partial_automatico
       - service: notify.telegram
         data:
           message: Backup Automatico disattivato
