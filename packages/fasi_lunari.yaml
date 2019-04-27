@@ -1,18 +1,3 @@
-# FASI LUNARI
-#Customization:
-#  sensor.fasi_lunari:
-#    templates:
-#    hidden: "return (entities['sun.sun'].state === 'above_horizon');"
-
-group:
-  soleluna:
-    view: no
-    name: Sole e Luna
-    control: hidden
-    entities:
-      - sun.sun
-      - sensor.fasi_lunari
-
 sensor:
   - platform: moon
   - platform: template
