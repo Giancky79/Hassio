@@ -2,13 +2,11 @@ api:
 
 alexa: !include alexa.yaml
 
-automation: !include_dir_merge_list automations
+automation: !include automations.yaml
 
 binary_sensor: !include_dir_merge_list binary_sensor
 
 camera: !include_dir_merge_list cameras
-
-climate: !include climate.yaml
 
 config:
 
@@ -22,7 +20,6 @@ frontend: !include frontend.yaml
 
 group: !include group.yaml
 
-# Enables support for tracking state changes over time
 history:
 
 http: !include http.yaml
@@ -43,10 +40,8 @@ ios:
 
 light: !include_dir_merge_list light
 
-# View all events in a logbook
 logbook:
 
-# Enables a map showing the location of tracked devices
 map:
 
 media_player: !include_dir_list media_player
@@ -67,7 +62,6 @@ script: !include scripts.yaml
 
 sensor: !include_dir_merge_list sensor
 
-# Track the sun
 sun:
 
 system_health:
@@ -76,13 +70,9 @@ switch: !include_dir_merge_list switch
 
 telegram_bot: !include telegram_bot.yaml
 
-# Text to speech
 tts:
   - platform: google
 
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
 updater:
-# Optional, allows Home Assistant developers to focus on popular components.
-# include_used_components: true
 
 zone: !include zone.yaml
