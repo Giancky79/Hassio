@@ -1,4 +1,4 @@
-- id: 'aggiornamento ha'
+- id: 'Aggiornamento HA'
   alias: Aggiornamento HA
   trigger:
     - platform: state
