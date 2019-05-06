@@ -1,0 +1,182 @@
+automation:
+
+########################################################################################## 
+#                                                                                        #
+#                                      INFO LUCI                                         #
+#                                                                                        # 
+##########################################################################################
+
+  - alias: 'info luci'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /luci
+    action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: luci
+    - service: notify.telegram
+      data_template:
+        message: >-
+          {{U0001F4A1}}*MENÙ LUCI*
+          ----------------------------------
+
+          *luci Soggiorno*: {{ states.light.soggiorno.state }}
+
+          *Luci Studio*: {{ states.light.studio.state }}
+        data:
+          inline_keyboard:
+            - '{{ "\U0001F6CB" }} Soggiorno:/soggiorno, {{ "\U0001F4D6" }} Studio:/studio'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+          
+########################################################################################## 
+#                                                                                        #
+#                                        SALONE                                          #
+#                                                                                        # 
+##########################################################################################
+          
+  - alias: 'azioni luci soggiorno'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /soggiorno
+    action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: Menú Luci Soggiorno
+    - service: notify.telegram
+      data_template:
+        title: '*LUCI SOGGIORNO*'
+        message: 
+            "{% if is_state(\"light.soggiorno\", \"off\") %} Luci Spente {% else\ %} Luci Accese {% endif %} \n"
+        data:
+          inline_keyboard:
+            - 'Accendere:/accendi_soggiorno, Spegnere:/spegni_soggiorno'
+            - 'Luci:/luci'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+  - alias: 'accendi soggiorno'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /accendi_soggiorno
+    action:
+    - service: light.turn_on
+      entity_id: light.soggiorno
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: Controllo Luci Soggiorno
+    - service: notify.telegram
+      data_template:
+        title: '*LUCI SOGGIORNO*'
+        message: "{% if is_state(\"light.soggiorno\", \"off\") %} Luci Spente {% else\ %} Luci Accese {% endif %} \n"
+        data:
+          inline_keyboard:
+            - 'Accendere:/accendi_soggiorno, Spegnere:/spegni_soggiorno'
+            - 'Luci:/luci'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+  - alias: 'spegni soggiorno'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /spegni_soggiorno
+    action:
+    - service: light.turn_off
+      entity_id: light.soggiorno
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: Controllo Luci Soggiorno
+    - service: notify.telegram
+      data_template:
+        title: '*LUCI SOGGIORNO*'
+        message: "{% if is_state(\"light.soggiorno\", \"off\") %} Luci Spente {% else\ %} Luci Accese {% endif %} \n"
+        data:
+          inline_keyboard:
+            - 'Accendere:/accendi_soggiorno, Spegnere:/spegni_soggiorno'
+            - 'Luci:/luci'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+
+########################################################################################## 
+#                                                                                        #
+#                                        STUDIO                                          #
+#                                                                                        # 
+##########################################################################################
+          
+  - alias: 'azioni luci studio'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /studio
+    action:
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: Menú Luci Studio
+    - service: notify.telegram
+      data_template:
+        title: '*LUCI STUDIO*'
+        message: "{% if is_state(\"light.studio\", \"off\") %} Luci Spente {% else\ %} Luci Accese {% endif %} \n"
+        data:
+          inline_keyboard:
+            - 'Accendere:/accendi_studio, Spegnere:/spegni_studio'
+            - 'Luci:/luci'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+  - alias: 'accendi studio'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /accendi_studio
+    action:
+    - service: light.turn_on
+      entity_id: light.studio
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: Controllo luci Studio
+    - service: notify.telegram
+      data_template:
+        title: '*LUCI STUDIO*'
+        message: "{% if is_state(\"light.studio\", \"off\") %} Luci Spente {% else\ %} Luci Accese {% endif %} \n"
+        data:
+          inline_keyboard:
+            - 'Accendere:/accendi_studio, Spegnere:/spegni_studio'
+            - 'Luci:/luci'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+  - alias: 'spegni studio'
+    hide_entity: true
+    trigger:
+    - platform: event
+      event_type: telegram_callback
+      event_data:
+        data: /spegni_studio
+    action:
+    - service: light.turn_off
+      entity_id: light.studio
+    - service: telegram_bot.answer_callback_query
+      data_template:
+        callback_query_id: '{{ trigger.event.data.id }}'
+        message: Controllo Luci Studio
+    - service: notify.telegram
+      data_template:
+        title: '*LUCI STUDIO*'
+        message: "{% if is_state(\"light.studio\", \"off\") %} Luci Spente {% else\ %} Luci Accese {% endif %} \n"
+        data:
+          inline_keyboard:
+            - 'Accendere:/accendi_studio, Spegnere:/spegni_studio'
+            - 'Luci:/luci'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
