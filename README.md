@@ -6,3 +6,13 @@ questa è la mia prima esperienza
 Lista Lovelace Card usate:
 
 https://github.com/thomasloven/lovelace-card-modder
+
+https://github.com/thomasloven/lovelace-fold-entity-row
+
+https://github.com/erlsta/homeassistant-lovelace-birthday-reminder-card
+
+https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card
+
+https://github.com/thomasloven/lovelace-state-switch
+
+https://github.com/thomasloven/lovelace-card-tools
