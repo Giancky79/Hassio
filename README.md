@@ -5,4 +5,4 @@ questa è la mia prima esperienza
 
 Lista Lovelace Card usate:
 
-https://github.com/thomasloven/hass-config
+https://github.com/thomasloven/lovelace-card-modder
