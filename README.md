@@ -16,3 +16,11 @@ https://github.com/ciotlosm/custom-lovelace/tree/master/monster-card
 https://github.com/thomasloven/lovelace-state-switch
 
 https://github.com/thomasloven/lovelace-card-tools
+
+https://github.com/thomasloven/lovelace-state-switch
+
+https://github.com/ljmerza/light-entity-card
+
+https://github.com/custom-cards/tracker-card
+
+https://github.com/nervetattoo/simple-thermostat
