@@ -24,3 +24,5 @@ https://github.com/ljmerza/light-entity-card
 https://github.com/custom-cards/tracker-card
 
 https://github.com/nervetattoo/simple-thermostat
+
+https://github.com/maykar/compact-custom-header
