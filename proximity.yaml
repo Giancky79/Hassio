@@ -1,5 +1,0 @@
-home:
-  devices:
-    - device_tracker.iphone_6s
-  tolerance: 20
-  unit_of_measurement: km
