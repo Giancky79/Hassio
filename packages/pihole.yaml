@@ -1,0 +1,61 @@
+pi_hole:
+
+  host: !secret pihole_ip
+  location: !secret pihole_location
+  ssl: false
+  verify_ssl: true
+  api_key: !secret pihole_apikey
+
+input_select:
+
+  pihole_time:
+    name: Disable Time (minutes)
+    options:
+      - Select Time
+      - 00:01
+      - 00:05
+      - 00:15
+      - 00:30
+      - 00:45
+      - 00:60
+    initial: Select Time
+
+script:
+
+  'pihole_enable':
+    alias: Pihole enable
+    sequence:
+    - service: pi_hole.enable
+  
+  'pihole_disable_timer':
+    alias: Pihole disable timer
+    sequence:
+    - data_template:
+        duration: '{{states.input_select.pihole_time.state}}'
+      service: pi_hole.disable
+  
+sensor:
+
+  - platform: command_line
+    name: PiHole Status
+    command: !secret pihole_status
+    value_template: '{{ value_json.status }}'
+
+#   command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"    
+
+  - platform: command_line
+    command: !secret pihole_versions
+    name: PiHole Core
+    value_template: >-
+                Core Update: {{ value_json.core_update}} 
+                Current: {{ value_json.core_current}}  
+                Latest: {{ value_json.core_latest}}
+                Web Update : {{ value_json.web_update}} 
+                Current: {{ value_json.web_current}}   
+                Latest: {{ value_json.web_latest}}
+                FTL Update : {{ value_json.FTL_update}} 
+                Current: {{ value_json.FTL_current}} 
+                Latest: {{ value_json.FTL_latest}}
+                
+#   command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
+
