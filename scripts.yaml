@@ -1,8 +1,0 @@
-'termostato':
-  alias: termostato
-  sequence:
-  - data:
-      topic: cmnd/termostato/status
-      payload: 5
-    service: mqtt.publish 
-    
