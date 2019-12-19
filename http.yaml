@@ -1,7 +1,13 @@
-base_url: !secret base_url
-server_port: !secret server_port
-ssl_certificate: /ssl/fullchain.pem
-ssl_key: /ssl/privkey.pem
-cors_allowed_origins:
-    - https://google.com
-    - https://home-assistant.io
+http:
+  base_url: !secret url_server
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - !secret ip_proxies
+  ip_ban_enabled: true
+  login_attempts_threshold: 5
+# in caso di uso con addon duckdns e hassio con porta 8123
+#  server_port: !secret server_port
+#  ssl_certificate: /ssl/fullchain.pem
+#  ssl_key: /ssl/privkey.pem 
+
+
