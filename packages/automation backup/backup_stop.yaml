@@ -1,6 +1,6 @@
 automation:
 ###########################################################
-#                  STOP BACKUP SD PIENA                   #
+#                  STOP BACKUP    PIENA                   #
 ###########################################################
   - alias: 'Stop Backup'
     trigger:
@@ -11,7 +11,7 @@ automation:
     action:
       - service: notify.telegram
         data:
-          message: Spazio libero sulla SD in esaurimento!
+          message: Spazio libero in esaurimento!
       - service: automation.turn_off
         data:
           entity_id: automation.backup_full_automatico, automation.backup_partial_automatico
