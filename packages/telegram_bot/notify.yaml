@@ -1,4 +1,0 @@
-name: Telegram
-platform: telegram
-api_key: !secret telegram_api_key
-chat_id: !secret chat_ids_Giancarlo
