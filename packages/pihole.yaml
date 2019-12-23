@@ -1,3 +1,9 @@
+#################################################################################
+#                                                                               #
+#                                      PIHOLE                                   #
+#                                                                               #
+#################################################################################
+
 pi_hole:
 
   host: !secret pihole_ip
@@ -5,6 +11,12 @@ pi_hole:
   ssl: false
   verify_ssl: true
   api_key: !secret pihole_apikey
+
+#################################################################################
+#                                                                               #
+#                                     TIMER                                     #
+#                                                                               #
+#################################################################################
 
 input_select:
 
@@ -19,6 +31,12 @@ input_select:
       - 00:45
       - 00:60
     initial: Select Time
+    
+#################################################################################
+#                                                                               #
+#                                    SCRIPT                                     #
+#               SE VI PIACE IL COMANDO ESEGUI ALTRIMENTI AUTOMATION             #
+#################################################################################
 
 script:
 
@@ -33,6 +51,36 @@ script:
     - data_template:
         duration: '{{states.input_select.pihole_time.state}}'
       service: pi_hole.disable
+
+#################################################################################
+#                                                                               #
+#                                      AUTOMATION                               #
+#                                 SE VI PIACE LO SLIDE                          #
+#################################################################################
+
+automation:
+
+  - alias: pihole enable
+    description: ''
+    trigger: []
+    condition: []
+    action:
+    - service: pi_hole.enable
+  
+  - alias: 'pihole disable timer'
+    description: pihole disable timer
+    trigger: 
+    condition: 
+    action:
+    - data_template:
+        duration: '{{states.input_select.pihole_time.state}}'
+      service: pi_hole.disable
+
+#################################################################################
+#                                                                               #
+#                                     SENSORI                                   #
+#                                                                               #
+#################################################################################
   
 sensor:
 
@@ -59,3 +107,33 @@ sensor:
                 
 #   command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
 
+#################################################################################
+#                                                                               #
+#                               STRINGA PER LOVELACE                            #
+#                                                                               #
+#################################################################################
+#aggiungere in editor grezzo di lovelace come prima stringa
+resources:
+  - type: module
+    url: /community_plugin/lovelace-fold-entity-row/fold-entity-row.js
+    
+#per creare la card premere su + e selezionare manual card, copiare codice    
+entities:
+  - sensor.pihole_status
+  - input_select.pihole_time
+  - automation.pihole_disable_timer
+  - automation.pihole_enable
+  - entities:
+      - entity: sensor.pi_hole_ads_percentage_blocked_today
+      - entity: sensor.pi_hole_ads_blocked_today
+      - entity: sensor.pi_hole_dns_queries_cached
+      - entity: sensor.pi_hole_dns_queries_forwarded
+      - entity: sensor.pi_hole_dns_queries_today
+      - entity: sensor.pi_hole_dns_unique_clients
+      - entity: sensor.pi_hole_dns_unique_domains
+      - entity: sensor.pi_hole_domains_blocked
+      - entity: sensor.pi_hole_seen_clients
+      - entity: sensor.pihole_core
+    head: binary_sensor.pve_pihole_running
+    type: 'custom:fold-entity-row'
+type: entities
