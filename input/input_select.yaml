@@ -1,7 +1,0 @@
-destination:
-  name: destination
-  options:
-   - Home
-   - Office
-  initial: Home
-  icon: mdi:panda
