@@ -113,6 +113,7 @@ sensor:
 #                                                                               #
 #################################################################################
 #aggiungere in editor grezzo di lovelace come prima stringa
+#(valido solo se scaricato da HACS)
 resources:
   - type: module
     url: /community_plugin/lovelace-fold-entity-row/fold-entity-row.js
