@@ -6,11 +6,11 @@
 
 pi_hole:
 
-  host: !secret pihole_ip
-  location: !secret pihole_location
+  host: #mettere ip pihole se esterno ad hassio o localhost:4865 se addon
+  location: admin
   ssl: false
   verify_ssl: true
-  api_key: !secret pihole_apikey
+  api_key: # lo trovate in pihole sotto settings/api-web interface
 
 #################################################################################
 #                                                                               #
@@ -55,15 +55,15 @@ script:
 #################################################################################
 #                                                                               #
 #                                      AUTOMATION                               #
-#                                 SE VI PIACE LO SLIDE                          #
+#                             SE VI PIACCIONO LE AUTOMAZIONI                    #
 #################################################################################
 
 automation:
 
-  - alias: pihole enable
-    description: ''
-    trigger: []
-    condition: []
+  - alias: 'pihole enable'
+    description: pihole enabler
+    trigger:
+    condition:
     action:
     - service: pi_hole.enable
   
@@ -86,13 +86,12 @@ sensor:
 
   - platform: command_line
     name: PiHole Status
-    command: !secret pihole_status
+    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"  
     value_template: '{{ value_json.status }}'
-
-#   command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"    
+    scan_interval: 10  
 
   - platform: command_line
-    command: !secret pihole_versions
+    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
     name: PiHole Core
     value_template: >-
                 Core Update: {{ value_json.core_update}} 
@@ -104,8 +103,6 @@ sensor:
                 FTL Update : {{ value_json.FTL_update}} 
                 Current: {{ value_json.FTL_current}} 
                 Latest: {{ value_json.FTL_latest}}
-                
-#   command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
 
 #################################################################################
 #                                                                               #
