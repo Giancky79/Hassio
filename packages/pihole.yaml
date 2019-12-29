@@ -7,7 +7,7 @@
 pi_hole:
 
   host: #mettere ip pihole se esterno ad hassio o localhost:4865 se addon
-  location: admin
+  location: 
   ssl: false
   verify_ssl: true
   api_key: # lo trovate in pihole sotto settings/api-web interface
@@ -103,7 +103,7 @@ sensor:
                 FTL Update : {{ value_json.FTL_update}} 
                 Current: {{ value_json.FTL_current}} 
                 Latest: {{ value_json.FTL_latest}}
-        
+  
 sensor:
 
   - platform: command_line
@@ -135,7 +135,10 @@ sensor:
   - platform: template
     sensors:
       pi_hole_core:
-        value_template: "{%- if states.sensor.pi_hole_version.attributes.core_current == states.sensor.pi_hole_version.attributes.core_latest -%} {{states.sensor.pi_hole_version.attributes.core_current}} {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available {% endif%}"
+        value_template: >-
+          {% if states.sensor.pi_hole_version.attributes.core_current == states.sensor.pi_hole_version.attributes.core_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
+          {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available 
+          {% endif %}
         icon_template: >-
           {% if states.sensor.pi_hole_version.attributes.core_current == states.sensor.pi_hole_version.attributes.core_latest %}
             mdi:checkbox-marked
@@ -146,7 +149,10 @@ sensor:
   - platform: template
     sensors:
       pi_hole_web:
-        value_template: "{%- if states.sensor.pi_hole_version.attributes.web_current == states.sensor.pi_hole_version.attributes.web_latest -%} {{states.sensor.pi_hole_version.attributes.core_current}} {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available {% endif%}"
+        value_template: >- 
+          {% if states.sensor.pi_hole_version.attributes.web_current == states.sensor.pi_hole_version.attributes.web_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
+          {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available 
+          {% endif %}
         icon_template: >-
           {% if states.sensor.pi_hole_version.attributes.web_current == states.sensor.pi_hole_version.attributes.web_latest %}
             mdi:checkbox-marked
@@ -157,13 +163,16 @@ sensor:
   - platform: template
     sensors:
       pi_hole_ftl:
-        value_template: "{%- if states.sensor.pi_hole_version.attributes.ftl_current == states.sensor.pi_hole_version.attributes.ftl_latest -%} {{states.sensor.pi_hole_version.attributes.core_current}} {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available {% endif%}"
+        value_template: >-
+          {% if states.sensor.pi_hole_version.attributes.ftl_current == states.sensor.pi_hole_version.attributes.ftl_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
+          {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available 
+          {% endif%}
         icon_template: >-
           {% if states.sensor.pi_hole_version.attributes.ftl_current == states.sensor.pi_hole_version.attributes.ftl_latest %}
             mdi:checkbox-marked
           {% else %}
             mdi:checkbox-blank-outline
-          {% endif %}          
+          {% endif %}    
     
 
 #################################################################################
@@ -179,7 +188,6 @@ resources:
     
 #per creare la card premere su + e selezionare manual card, copiare codice    
 entities:
-  - sensor.pihole_status
   - input_select.pihole_time
   - automation.pihole_disable_timer
   - automation.pihole_enable
@@ -193,7 +201,10 @@ entities:
       - entity: sensor.pi_hole_dns_unique_domains
       - entity: sensor.pi_hole_domains_blocked
       - entity: sensor.pi_hole_seen_clients
-      - entity: sensor.pihole_core
-    head: binary_sensor.pve_pihole_running
+      - entity: sensor.pi_hole_core
+      - entity: sensor.pi_hole_web
+      - entity: sensor.pi_hole_ftl
+    head: sensor.pihole_status
     type: 'custom:fold-entity-row'
 type: entities
+
