@@ -1,0 +1,94 @@
+################################################################################
+#                                                                              #
+################################## SPEEDTEST ###################################
+#                                                                              #
+################################################################################
+
+speedtestdotnet:
+
+  scan_interval:
+    minutes: 30
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
+################################################################################
+#                                                                              #
+################################ SERVER PROXMOX ################################
+#                                                                              #
+################################################################################
+
+proxmoxve:
+  - host: #ip-server
+    verify_ssl: false
+    username: # proxmox_username
+    password: # proxmox_password
+    nodes:
+      - node: # proxmox_node
+        vms: #inserire le vm
+          - 133
+        containers: #inserire i lxc
+          - 100
+          - 101
+          - 102
+          - 103
+          - 104      
+
+################################################################################
+#                                                                              #
+################################# SENSORI VARI #################################
+#                                                                              #
+################################################################################      
+
+sensor:
+
+# se usate vm di hassio, cambia la porta eth0
+
+  - platform: systemmonitor
+    resources:
+      - type: ipv4_address
+        arg: eth0
+      - type: network_in
+        arg: eth0
+      - type: network_out
+        arg: eth0
+      - type: throughput_network_in
+        arg: eth0
+      - type: throughput_network_out
+        arg: eth0
+      - type: packets_in
+        arg: eth0
+      - type: packets_out
+        arg: eth0
+      - type: disk_use_percent
+        arg: /
+      - type: disk_use
+        arg: /
+      - type: disk_free
+        arg: /
+      - type: memory_use_percent
+      - type: memory_use
+      - type: memory_free
+      - type: processor_use
+      - type: last_boot
+
+  - platform: command_line
+    name: CPU Temperature
+    command: "cat /sys/class/thermal/thermal_zone0/temp"
+    unit_of_measurement: "°C"
+    value_template: '{{ value | multiply(0.001) | round(1) }}'
+
+  - platform: rest
+    resource: http://ip.jsontest.com
+    name: External IP
+    value_template: '{{ value_json.ip}}'
+    scan_interval: 86400
+
+  - platform: version
+  
+  - platform: uptime
+    unit_of_measurement: hours
+
+  - platform: command_line
+    command: hostname -i
