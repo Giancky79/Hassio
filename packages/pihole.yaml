@@ -7,7 +7,7 @@
 pi_hole:
 
   host: #mettere ip pihole se esterno ad hassio o localhost:4865 se addon
-  location: 
+  location: admin
   ssl: false
   verify_ssl: true
   api_key: # lo trovate in pihole sotto settings/api-web interface
@@ -84,42 +84,34 @@ automation:
   
 sensor:
 
-  - platform: command_line
-    name: PiHole Status
-    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"  
-    value_template: '{{ value_json.status }}'
-    scan_interval: 10  
-
-  - platform: command_line
-    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
-    name: PiHole Core
-    value_template: >-
-                Core Update: {{ value_json.core_update}} 
-                Current: {{ value_json.core_current}}  
-                Latest: {{ value_json.core_latest}}
-                Web Update : {{ value_json.web_update}} 
-                Current: {{ value_json.web_current}}   
-                Latest: {{ value_json.web_latest}}
-                FTL Update : {{ value_json.FTL_update}} 
-                Current: {{ value_json.FTL_current}} 
-                Latest: {{ value_json.FTL_latest}}
-  
-sensor:
-
-  - platform: command_line
-    name: pihole status
-    command: !secret pihole_status_curl
-    value_template: '{{ value_json.status }}'
-    scan_interval: 10
+#  - platform: command_line
+#    name: PiHole Status
+#    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"  
+#    value_template: '{{ value_json.status }}'
+#    scan_interval: 10  
+#
+#  - platform: command_line
+#    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
+#    name: PiHole Core
+#    value_template: >-
+#                Core Update: {{ value_json.core_update}} 
+#                Current: {{ value_json.core_current}}  
+#                Latest: {{ value_json.core_latest}}
+#                Web Update : {{ value_json.web_update}} 
+#                Current: {{ value_json.web_current}}   
+#                Latest: {{ value_json.web_latest}}
+#                FTL Update : {{ value_json.FTL_update}} 
+#                Current: {{ value_json.FTL_current}} 
+#                Latest: {{ value_json.FTL_latest}}
 
   - platform: rest
-    name: pi hole status
-    resource: !secret pihole_status
+    name: PiHole status
+    resource: http://IP-PIHOLE/admin/api.php?status
     value_template: '{{ value_json.status}}'
 
   - platform: rest
-    name: pi hole version
-    resource: !secret pihole_version
+    name: PiHole version
+    resource: http://IP-PIHOLE/admin/api.php?versions
     value_template: '{{ value_json.versions}}'
     json_attributes:
       - core_update
@@ -136,11 +128,11 @@ sensor:
     sensors:
       pi_hole_core:
         value_template: >-
-          {% if states.sensor.pi_hole_version.attributes.core_current == states.sensor.pi_hole_version.attributes.core_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
-          {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available 
+          {% if states.sensor.pihole_version.attributes.core_current == states.sensor.pihole_version.attributes.core_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
+          {% else %} {{states.sensor.pihole_version.attributes.core_latest}} Available 
           {% endif %}
         icon_template: >-
-          {% if states.sensor.pi_hole_version.attributes.core_current == states.sensor.pi_hole_version.attributes.core_latest %}
+          {% if states.sensor.pihole_version.attributes.core_current == states.sensor.pihole_version.attributes.core_latest %}
             mdi:checkbox-marked
           {% else %}
             mdi:checkbox-blank-outline
@@ -150,11 +142,11 @@ sensor:
     sensors:
       pi_hole_web:
         value_template: >- 
-          {% if states.sensor.pi_hole_version.attributes.web_current == states.sensor.pi_hole_version.attributes.web_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
-          {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available 
+          {% if states.sensor.pihole_version.attributes.web_current == states.sensor.pihole_version.attributes.web_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
+          {% else %} {{states.sensor.pihole_version.attributes.core_latest}} Available 
           {% endif %}
         icon_template: >-
-          {% if states.sensor.pi_hole_version.attributes.web_current == states.sensor.pi_hole_version.attributes.web_latest %}
+          {% if states.sensor.pihole_version.attributes.web_current == states.sensor.pihole_version.attributes.web_latest %}
             mdi:checkbox-marked
           {% else %}
             mdi:checkbox-blank-outline
@@ -164,11 +156,11 @@ sensor:
     sensors:
       pi_hole_ftl:
         value_template: >-
-          {% if states.sensor.pi_hole_version.attributes.ftl_current == states.sensor.pi_hole_version.attributes.ftl_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
-          {% else %} {{states.sensor.pi_hole_version.attributes.core_latest}} Available 
+          {% if states.sensor.pihole_version.attributes.ftl_current == states.sensor.pihole_version.attributes.ftl_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
+          {% else %} {{states.sensor.pihole_version.attributes.core_latest}} Available 
           {% endif%}
         icon_template: >-
-          {% if states.sensor.pi_hole_version.attributes.ftl_current == states.sensor.pi_hole_version.attributes.ftl_latest %}
+          {% if states.sensor.pihole_version.attributes.ftl_current == states.sensor.pihole_version.attributes.ftl_latest %}
             mdi:checkbox-marked
           {% else %}
             mdi:checkbox-blank-outline
