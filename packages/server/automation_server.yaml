@@ -1,0 +1,107 @@
+################################################################################
+#                                                                              #
+############################### AVVIO HA TELEGRAM ##############################
+#                                                                              #
+################################################################################
+
+automation:
+
+  - alias: 'Avvio HA notify'
+    initial_state: 'on'
+    trigger:
+      - platform: homeassistant 
+        event: start
+    action:
+      - service: notify.telegram
+        data:
+          message: >-
+            Home Assistant {{states('sensor.current_version')}} è operativo
+
+################################################################################
+#                                                                              #
+############################### AVVIO HA ALEXA #################################
+#                       installare Alexa-MediaPlayer (HACS)                    #
+################################################################################
+
+  - alias: 'Avvio HA Alexa'
+    initial_state: 'on'
+    trigger:
+      - platform: homeassistant 
+        event: start
+    condition:
+      condition: time
+      after: '07:00:00'
+      before: '22:30:00'
+      weekday:
+        - mon
+        - tue
+        - wed
+        - thu
+        - fri    
+    action:          
+      - service: media_player.volume_set
+        entity_id: media_player.echo_name #echo configurato in alexa media player
+        data:
+          volume_level: 0.2
+      - delay: '00:00:05'      
+      - service: notify.alexa_media
+        data_template:
+          data:
+            type: announce
+          target: media_player.echo_name #echo configurato in alexa media player
+          message: >-
+            Home Assistant è operativo, oggi è {{states.sensor.giorno_della_settimana.state}} 
+            e sono le ore {{states.sensor.time.state}}
+      - delay: '00:00:08' 
+      - service: media_player.volume_set
+        entity_id: media_player.echo_name #echo configurato in alexa media player
+        data:
+          volume_level: 0.4
+          
+################################################################################
+#                                                                              #
+################################# RIAVVIO HA ###################################
+#                                                                              #
+################################################################################
+
+  - alias: 'Riavvio HA'
+    trigger:
+      - platform: time
+        at: 06:30:00
+    condition:
+      - condition: time
+        weekday:
+          - mon
+          - tue
+          - wed
+          - thu
+          - fri
+          - sat
+          - sun
+    action:
+      - service: homeassistant.restart
+      
+################################################################################
+#                                                                              #
+########################### NOTIFICA LOGIN ERRATI HA ###########################
+#                                                                              #
+################################################################################
+      
+  - alias: 'Notifica Login Fallito'
+    initial_state: 'on'
+    trigger:
+    - platform: state
+      entity_id: persistent_notification.http_login
+    condition:
+    - condition: template
+      value_template: '{{ trigger.to_state.state != ''None'' }}'
+    action:
+    - service: notify.telegram
+      data_template:
+        title: '{{ states.persistent_notification.http_login.attributes.message }}'
+        message: >-
+          url: https://whatismyipaddress.com/ip/
+          {{ states.persistent_notification.http_login.attributes.message.split ("from ") [1]}}
+    - service: persistent_notification.dismiss
+      data:
+        notification_id: http_login
