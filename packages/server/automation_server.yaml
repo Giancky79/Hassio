@@ -13,7 +13,7 @@ automation:
         event: start
     action:
       - service: notify.telegram
-        data:
+        data_template:
           message: >-
             Home Assistant {{states('sensor.current_version')}} è operativo
 
