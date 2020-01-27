@@ -5,18 +5,15 @@ script:
       -  service: media_player.volume_set
          data_template:
            entity_id: >
-             {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.echo_di_giancarlo
-             {% elif is_state("input_select.select_audio_output", "Hall") %} media_player.ca_hall
+             {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#mettere nome echo
+             {% elif is_state("input_select.select_audio_output", "Salone") %} media_player.#mettere nome echo
              {% endif %}
            volume_level: '0.1'
       -  service: media_player.play_media
          data_template:
            entity_id: >
-             {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.echo_di_giancarlo
-             {% elif is_state("input_select.select_audio_output", "Hall") %} media_player.ca_hall
-             {% elif is_state("input_select.select_audio_output", "Bedroom") %} media_player.bed_room
-             {% elif is_state("input_select.select_audio_output", "Bathroom") %} media_player.ca_bathroom
-             {% elif is_state("input_select.select_audio_output", "Everywhere") %} media_player.home_group
+             {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#mettere nome echo
+             {% elif is_state("input_select.select_audio_output", "Salone") %} media_player.#mettere nome echo
              {% endif %}
            media_content_id: >
              {% if is_state("input_select.radio_station_list", "Radio Globo") %} Radio Globo-996
@@ -37,6 +34,7 @@ input_select:
     name: 'Speaker'
     options:
       - Camera Matrimoniale
+      - Salone
     icon: mdi:speaker-wireless    
 
   radio_station_list:
