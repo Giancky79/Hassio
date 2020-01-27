@@ -1,0 +1,48 @@
+script:
+  
+  radio:
+    sequence:
+      -  service: media_player.volume_set
+         data_template:
+           entity_id: >
+             {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.echo_di_giancarlo
+             {% elif is_state("input_select.select_audio_output", "Hall") %} media_player.ca_hall
+             {% endif %}
+           volume_level: '0.1'
+      -  service: media_player.play_media
+         data_template:
+           entity_id: >
+             {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.echo_di_giancarlo
+             {% elif is_state("input_select.select_audio_output", "Hall") %} media_player.ca_hall
+             {% elif is_state("input_select.select_audio_output", "Bedroom") %} media_player.bed_room
+             {% elif is_state("input_select.select_audio_output", "Bathroom") %} media_player.ca_bathroom
+             {% elif is_state("input_select.select_audio_output", "Everywhere") %} media_player.home_group
+             {% endif %}
+           media_content_id: >
+             {% if is_state("input_select.radio_station_list", "Radio Globo") %} Radio Globo-996
+             {% elif is_state("input_select.radio_station_list", "RDS") %} RDS Radio-1030
+             {% elif is_state("input_select.radio_station_list", "Radio 80") %} Radio 80-1027
+             {% elif is_state("input_select.radio_station_list", "RTL 102.5") %} RTL 1025
+             {% endif %}
+           media_content_type: >
+             {% if is_state("input_select.radio_station_list", "Radio Globo") %} TUNEIN
+             {% elif is_state("input_select.radio_station_list", "RDS") %} TUNEIN
+             {% elif is_state("input_select.radio_station_list", "Radio 80") %} TUNEIN
+             {% elif is_state("input_select.radio_station_list", "RTL 102.5") %} TUNEIN
+             {% endif %}
+ 
+input_select:
+
+  select_audio_output:
+    name: 'Speaker'
+    options:
+      - Camera Matrimoniale
+    icon: mdi:speaker-wireless    
+
+  radio_station_list:
+    name: 'Select Radio Station:'
+    options:
+      - Radio Globo
+      - RDS
+      - Radio 80
+      - RTL 102.5
