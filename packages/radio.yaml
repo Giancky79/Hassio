@@ -32,13 +32,15 @@ input_select:
 
   select_audio_output:
     name: 'Speaker'
+    icon: mdi:speaker-wireless 
     options:
       - Camera Matrimoniale
       - Salone
-    icon: mdi:speaker-wireless    
+       
 
   radio_station_list:
-    name: 'Select Radio Station:'
+    name: 'Select Radio Station'
+    icon: mdi:radio 
     options:
       - Radio Globo
       - RDS
