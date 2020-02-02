@@ -35,47 +35,18 @@ input_select:
 #################################################################################
 #                                                                               #
 #                                    SCRIPT                                     #
-#               SE VI PIACE IL COMANDO ESEGUI ALTRIMENTI AUTOMATION             #
+#                                                                               #
 #################################################################################
 
 script:
 
-  'pihole_enable':
-    alias: Pihole enable
-    sequence:
-    - service: pi_hole.enable
-  
-  'pihole_disable_timer':
+  'pihole_disable_timer_script':
     alias: Pihole disable timer
     sequence:
     - data_template:
         duration: '{{states.input_select.pihole_time.state}}'
       service: pi_hole.disable
-
-#################################################################################
-#                                                                               #
-#                                      AUTOMATION                               #
-#                             SE VI PIACCIONO LE AUTOMAZIONI                    #
-#################################################################################
-
-automation:
-
-  - alias: 'pihole enable'
-    description: pihole enabler
-    trigger:
-    condition:
-    action:
-    - service: pi_hole.enable
-  
-  - alias: 'pihole disable timer'
-    description: pihole disable timer
-    trigger: 
-    condition: 
-    action:
-    - data_template:
-        duration: '{{states.input_select.pihole_time.state}}'
-      service: pi_hole.disable
-
+      
 #################################################################################
 #                                                                               #
 #                                     SENSORI                                   #
@@ -84,119 +55,124 @@ automation:
   
 sensor:
 
-#  - platform: command_line
-#    name: PiHole Status
-#    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"  
-#    value_template: '{{ value_json.status }}'
-#    scan_interval: 10  
-#
-#  - platform: command_line
-#    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?versions'"
-#    name: PiHole Core
-#    value_template: >-
-#                Core Update: {{ value_json.core_update}} 
-#                Current: {{ value_json.core_current}}  
-#                Latest: {{ value_json.core_latest}}
-#                Web Update : {{ value_json.web_update}} 
-#                Current: {{ value_json.web_current}}   
-#                Latest: {{ value_json.web_latest}}
-#                FTL Update : {{ value_json.FTL_update}} 
-#                Current: {{ value_json.FTL_current}} 
-#                Latest: {{ value_json.FTL_latest}}
-
   - platform: rest
-    name: PiHole status
+    name: pi hole status
     resource: http://IP-PIHOLE/admin/api.php?status
     value_template: '{{ value_json.status}}'
 
   - platform: rest
-    name: PiHole version
-    resource: http://IP-PIHOLE/admin/api.php?versions
+    name: pi hole version
+    resource: http://IP-PIHOLE/admin/api.php?version
     value_template: '{{ value_json.versions}}'
     json_attributes:
-      - core_update
       - core_current
       - core_latest
-      - web_update
       - web_current
       - web_latest
-      - FTL_update
       - FTL_current
       - FTL_latest
 
   - platform: template
     sensors:
-      pi_hole_core:
-        value_template: >-
-          {% if states.sensor.pihole_version.attributes.core_current == states.sensor.pihole_version.attributes.core_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
-          {% else %} {{states.sensor.pihole_version.attributes.core_latest}} Available 
-          {% endif %}
-        icon_template: >-
-          {% if states.sensor.pihole_version.attributes.core_current == states.sensor.pihole_version.attributes.core_latest %}
-            mdi:checkbox-marked
-          {% else %}
-            mdi:checkbox-blank-outline
-          {% endif %}
-        
-  - platform: template
-    sensors:
-      pi_hole_web:
-        value_template: >- 
-          {% if states.sensor.pihole_version.attributes.web_current == states.sensor.pihole_version.attributes.web_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
-          {% else %} {{states.sensor.pihole_version.attributes.core_latest}} Available 
-          {% endif %}
-        icon_template: >-
-          {% if states.sensor.pihole_version.attributes.web_current == states.sensor.pihole_version.attributes.web_latest %}
-            mdi:checkbox-marked
-          {% else %}
-            mdi:checkbox-blank-outline
-          {% endif %}
-        
-  - platform: template
-    sensors:
-      pi_hole_ftl:
-        value_template: >-
-          {% if states.sensor.pihole_version.attributes.ftl_current == states.sensor.pihole_version.attributes.ftl_latest %} {{states.sensor.pi_hole_version.attributes.core_current}} 
-          {% else %} {{states.sensor.pihole_version.attributes.core_latest}} Available 
-          {% endif%}
-        icon_template: >-
-          {% if states.sensor.pihole_version.attributes.ftl_current == states.sensor.pihole_version.attributes.ftl_latest %}
-            mdi:checkbox-marked
-          {% else %}
-            mdi:checkbox-blank-outline
-          {% endif %}    
     
+      pihole_check:
+        friendly_name: PiHole Check
+        value_template: >-
+          {% set core_current = states.sensor.pihole_version.attributes["core_current"] %}
+          {% set core_latest = states.sensor.pihole_version.attributes["core_latest"] %}
+          {% set web_current = states.sensor.pihole_version.attributes["web_current"] %}
+          {% set web_latest = states.sensor.pihole_version.attributes["web_latest"] %}
+          {% set ftl_current = states.sensor.pihole_version.attributes["FTL_current"] %}
+          {% set ftl_latest = states.sensor.pihole_version.attributes["FTL_latest"] %}
+          {% if core_current != core_latest %} update 
+          {% elif web_current != web_latest %} update
+          {% elif ftl_current != ftl_latest %} update
+          {% else %} latest update
+          {% endif %}
+        icon_template: >-
+          {% if is_state("sensor.pihole_check", "latest update") %} 
+            mdi:checkbox-marked
+          {% else %}
+            mdi:cloud-download
+          {% endif %}
 
+
+
+binary_sensor:
+  - platform: template
+    sensors:
+      pihole:
+        friendly_name: "stato pihole"
+        value_template: "{{ is_state('sensor.pi_hole_status','enabled') }}"
+    
 #################################################################################
 #                                                                               #
 #                               STRINGA PER LOVELACE                            #
 #                                                                               #
 #################################################################################
-#aggiungere in editor grezzo di lovelace come prima stringa
-#(valido solo se scaricato da HACS)
-resources:
-  - type: module
-    url: /community_plugin/lovelace-fold-entity-row/fold-entity-row.js
-    
+
+Da HACS scaricate le seguenti card:
+
+button-card
+bar-card
+fold-entity-row
+  
 #per creare la card premere su + e selezionare manual card, copiare codice    
 entities:
-  - input_select.pihole_time
-  - automation.pihole_disable_timer
-  - automation.pihole_enable
+  - binary_sensor.pve_pihole_running
+  - sensor.pihole_check
   - entities:
-      - entity: sensor.pi_hole_ads_percentage_blocked_today
-      - entity: sensor.pi_hole_ads_blocked_today
-      - entity: sensor.pi_hole_dns_queries_cached
-      - entity: sensor.pi_hole_dns_queries_forwarded
-      - entity: sensor.pi_hole_dns_queries_today
+      - entity: binary_sensor.pihole_enable
+        hold_action:
+          action: call-service
+          service: pi_hole.enable
+        icon: 'mdi:pi-hole'
+        name: PiHole Disabler Timer
+        size: 30px
+        state:
+          - color: red
+            value: 'off'
+          - color: green
+            value: 'on'
+        style:
+          - font-size: 8px
+        tap_action:
+          action: call-service
+          service: script.pihole_timer_disabler
+        type: 'custom:button-card'
+      - entity: input_select.pihole_timer
+      - color: red
+        entity: sensor.pi_hole_ads_blocked_today
+        title: PiHole ADS Blocked Today
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: blue
+        entity: sensor.pi_hole_dns_queries_cached
+        title: PiHole DNS Queries Cached
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: cornflowerblue
+        entity: sensor.pi_hole_dns_queries_forwarded
+        title: PiHole DNS Queries Forwarded
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: salmon
+        entity: sensor.pi_hole_dns_queries_today
+        title: PiHole DNS Queries Today
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: green
+        entity: sensor.pi_hole_dns_unique_domains
+        title: PiHole DNS Unique Domains
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: purple
+        entity: sensor.pi_hole_domains_blocked
+        title: PiHole Domains Blocked
+        title_position: inside
+        type: 'custom:bar-card'
       - entity: sensor.pi_hole_dns_unique_clients
-      - entity: sensor.pi_hole_dns_unique_domains
-      - entity: sensor.pi_hole_domains_blocked
       - entity: sensor.pi_hole_seen_clients
-      - entity: sensor.pi_hole_core
-      - entity: sensor.pi_hole_web
-      - entity: sensor.pi_hole_ftl
-    head: sensor.pihole_status
+    head: binary_sensor.pihole_enable
     type: 'custom:fold-entity-row'
 type: entities
-
