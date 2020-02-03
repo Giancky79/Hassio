@@ -20,12 +20,11 @@ pi_hole:
 
 input_select:
 
-  pihole_time:
-    name: Disable Time (minutes)
+  pihole_timer:
+    name: Pihole Timer
     options:
       - Select Time
       - 00:01
-      - 00:05
       - 00:15
       - 00:30
       - 00:45
@@ -40,11 +39,10 @@ input_select:
 
 script:
 
-  'pihole_disable_timer_script':
-    alias: Pihole disable timer
+  'pihole_timer_disabler':
     sequence:
     - data_template:
-        duration: '{{states.input_select.pihole_time.state}}'
+        duration: '{{states.input_select.pihole_timer.state}}'
       service: pi_hole.disable
       
 #################################################################################
@@ -56,13 +54,13 @@ script:
 sensor:
 
   - platform: rest
-    name: pi hole status
-    resource: http://IP-PIHOLE/admin/api.php?status
+    name: "PiHole Status"
+    resource: !secret pihole_status
     value_template: '{{ value_json.status}}'
 
   - platform: rest
-    name: pi hole version
-    resource: http://IP-PIHOLE/admin/api.php?version
+    name: "PiHole Version"
+    resource: !secret pihole_version
     value_template: '{{ value_json.versions}}'
     json_attributes:
       - core_current
@@ -76,7 +74,7 @@ sensor:
     sensors:
     
       pihole_check:
-        friendly_name: PiHole Check
+        friendly_name: "PiHole Check"
         value_template: >-
           {% set core_current = states.sensor.pihole_version.attributes["core_current"] %}
           {% set core_latest = states.sensor.pihole_version.attributes["core_latest"] %}
@@ -96,14 +94,15 @@ sensor:
             mdi:cloud-download
           {% endif %}
 
-
-
 binary_sensor:
+
   - platform: template
     sensors:
-      pihole:
-        friendly_name: "stato pihole"
-        value_template: "{{ is_state('sensor.pi_hole_status','enabled') }}"
+    
+      pihole_enable:
+        friendly_name: "PiHole Enable"
+        value_template: "{{ is_state('sensor.pihole_status','enabled') }}"
+
     
 #################################################################################
 #                                                                               #
@@ -127,7 +126,7 @@ entities:
           action: call-service
           service: pi_hole.enable
         icon: 'mdi:pi-hole'
-        name: PiHole Disabler Timer
+        name: PiHole Timer Disabler
         size: 30px
         state:
           - color: red
@@ -169,8 +168,13 @@ entities:
         title: PiHole Domains Blocked
         title_position: inside
         type: 'custom:bar-card'
-      - entity: sensor.pi_hole_dns_unique_clients
-      - entity: sensor.pi_hole_seen_clients
+      - color: orange
+        entity: sensor.pi_hole_ads_percentage_blocked_today
+        title: PiHole ADS Percentage Blocked Today
+        title_position: inside
+        type: 'custom:bar-card'
+      - sensor.pi_hole_dns_unique_clients
+      - sensor.pi_hole_seen_clients
     head: binary_sensor.pihole_enable
     type: 'custom:fold-entity-row'
 type: entities
