@@ -79,16 +79,9 @@ sensor:
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(1) }}'
 
-#  - platform: rest
-#    resource: http://ip.jsontest.com
-#    name: External IP
-#    value_template: '{{ value_json.ip}}'
-#    scan_interval: 86400
-
   - platform: version
   
   - platform: uptime
     unit_of_measurement: hours
 
-#  - platform: command_line
-#    command: hostname -i
+  - platform: dnsip  
