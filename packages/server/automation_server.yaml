@@ -7,7 +7,7 @@
 automation:
 
   - alias: 'Avvio HA notify'
-    initial_state: 'on'
+    initial_state: true
     trigger:
       - platform: homeassistant 
         event: start
@@ -23,7 +23,7 @@ automation:
 ################################################################################
 
   - alias: 'Avvio HA Alexa'
-    initial_state: 'on'
+    initial_state: true
     trigger:
       - platform: homeassistant 
         event: start
@@ -64,6 +64,7 @@ automation:
 ################################################################################
 
   - alias: 'Riavvio HA'
+    initial_state: true
     trigger:
       - platform: time
         at: 06:30:00
@@ -87,20 +88,35 @@ automation:
 ################################################################################
       
   - alias: 'Notifica Login Fallito'
-    initial_state: 'on'
+    initial_state: true
     trigger:
-    - platform: state
-      entity_id: persistent_notification.http_login
+      - platform: state
+        entity_id: persistent_notification.http_login
     condition:
-    - condition: template
-      value_template: '{{ trigger.to_state.state != ''None'' }}'
+      - condition: template
+        value_template: "{{ trigger.to_state.state != 'None' }}"
     action:
-    - service: notify.telegram
+      - service: notify.telegram
+        data_template:
+          title: "Tentativo Accesso"
+          message: "url: https://whatismyipaddress.com/ip/{{ states.persistent_notification.http_login.attributes.message.split ('from') [1]}}"
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: "http_login" 
+       
+ ################################################################################
+#                                                                              #
+############################## NOTIFICA CAMBIO IP ##############################
+#                                                                              #
+################################################################################
+
+  - alias: external ip changes
+    initial_state: true
+    trigger:
+      platform: state 
+      entity_id: sensor.dnsip
+    action:
+      service: notify.telegram
       data_template:
-        title: '{{ states.persistent_notification.http_login.attributes.message }}'
-        message: >-
-          url: https://whatismyipaddress.com/ip/
-          {{ states.persistent_notification.http_login.attributes.message.split ("from ") [1]}}
-    - service: persistent_notification.dismiss
-      data:
-        notification_id: http_login
+        message: "New external IP address is {{ states('sensor.myip') }}"
+
