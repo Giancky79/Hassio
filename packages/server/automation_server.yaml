@@ -63,7 +63,7 @@ automation:
 ################################################################################
 
   - alias: 'Riavvio HA'
-    initial_state: true
+#    initial_state: true
     trigger:
       - platform: time
         at: 06:30:00
@@ -98,11 +98,11 @@ automation:
       - service: notify.telegram
         data_template:
           title: "Tentativo Accesso"
-          message: "url: https://whatismyipaddress.com/ip/{{ states.persistent_notification.http_login.attributes.message.split ('from') [1]}}"
+          message: "url: https://whatismyipaddress.com/ip/{{ states.persistent_notification.http_login.attributes.message.split ('from ') [1]}}"
       - service: persistent_notification.dismiss
         data:
-          notification_id: "http_login" 
-       
+          notification_id: "http_login"
+
 ################################################################################
 #                                                                              #
 ############################## NOTIFICA CAMBIO IP ##############################
@@ -112,16 +112,16 @@ automation:
   - alias: external ip changes
     initial_state: true
     trigger:
-      platform: state 
-      entity_id: sensor.dnsip
+      - platform: state 
+        entity_id: sensor.dnsip
     action:
-      service: notify.telegram
-      data_template:
-        message: "New external IP address is {{ states('sensor.myip') }}"
+      - service: notify.telegram
+        data_template:
+          message: "Il tuo nuovo ip è {{ states('sensor.myip') }}"
 
 ################################################################################
 #                                                                              #
-############################### NOTIFICA UOPDATE ###############################
+################################ NOTIFICA UPDATE ###############################
 #                                                                              #
 ################################################################################
 
@@ -129,10 +129,59 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.updater
-        from: 'off'
         to: 'on'
+    condition:
     action:
       - service: notify.telegram
         data_template:
-          message: "Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} is available."
+          message: >-
+            Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} è disponibile. 
+            La tua versione attuale è {{ states('sensor.current_version') }}
 
+################################################################################
+#                                                                              #
+################################# CAMBIO TEMA ##################################
+#                                                                              #
+################################################################################
+
+  - alias: 'Tema Diurno'
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: binary_sensor.sun_up
+        to: 'on'
+    condition:
+      condition: or
+      conditions:
+        - condition: time
+          before: '19:00:00'
+          after: '7:00:00'
+        - condition: state
+          entity_id: binary_sensor.sun_up
+          state: 'on' 
+    action:
+      - service: frontend.set_theme
+        data:
+          name: 'default'
+          
+  - alias: 'Tema Notturno'
+    trigger:
+      - platform: homeassistant
+        event: start
+      - platform: state
+        entity_id: binary_sensor.sun_up
+        to: 'on'
+    condition:
+      condition: or
+      conditions:
+        - condition: time
+          before: '7:00:00'
+          after: '19:00:00'
+        - condition: state
+          entity_id: binary_sensor.sun_up
+          state: 'off'
+    action:
+      - service: frontend.set_theme
+        data:
+          name: 'ios-dark-mode'
