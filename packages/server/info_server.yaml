@@ -43,8 +43,54 @@ sensor:
     value_template: '{{ value | multiply(0.001) | round(1) }}'
 
   - platform: version
+    name: Current version
+    source: local
   
-  - platform: uptime
-    unit_of_measurement: hours
-
   - platform: dnsip  
+
+  - platform: uptime
+    name: Tempo Attivo
+
+  - platform: template
+    sensors:
+      ha_uptime:
+        entity_id: sensor.tempo_attivo
+        friendly_name_template: "Tempo HA Attivo"
+        value_template: >
+          {% if states('sensor.tempo_attivo') == '0.0' %} 
+            Buon inizio di giornata
+          {% else %}
+            {% macro phrase(value, name) %}
+            {%- set value = value | int %}
+            {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+            {%- endmacro %}
+
+            {% set weeks = (states('sensor.tempo_attivo') | int / 7) | int %}
+            {% set days = (states('sensor.tempo_attivo') | int) - (weeks * 7) %}
+            {% set hours = (states('sensor.tempo_attivo') | float - states('sensor.tempo_attivo') | int) * 24 %}
+            {% set minutes = (hours - hours | int) * 60 %}
+
+            {{ [ phrase(weeks, 'settimane'), phrase(days, 'giorni'), phrase(hours, 'ore'), phrase(minutes, 'minuti') ] | select('!=','') | list | join(', ') }}
+          {% endif %}
+
+      host_uptime:
+        entity_id: sensor.last_boot
+        friendly_name_template: "Host Attivo"
+        value_template: >
+          {% set up_time = as_timestamp(now()) - as_timestamp(states('sensor.last_boot')) %}
+          {% set minutes = (up_time // 60) | int %}
+          {% set hours = (minutes // 60) %}
+          {% set days = (hours // 24) %}
+          {% set minutes = (minutes % 60) %}
+          {% set hours =  (hours % 24) %}
+          {% set days = (days % 7) %}
+          {% macro phrase(value, name) %}
+                      {%- set value = value %}
+                      {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+          {%- endmacro %}
+          {% set text = [ phrase(days, 'giorni'), phrase(hours, 'ore'), phrase(minutes, 'minuti') ] | select('!=','') | list | join(', ') %}
+          {% set last_comma = text.rfind(',') %}
+          {% if last_comma != -1 %}
+              {% set text = text[:last_comma] + ' e' + text[last_comma + 1:] %}
+          {% endif %}
+          {{ text }}
