@@ -1,3 +1,5 @@
+api:
+
 # Configure a default setup of Home Assistant (frontend, api, etc)
 default_config:
 
@@ -8,6 +10,8 @@ homeassistant:
   packages: !include_dir_named packages
   #customize: !include customize.yaml
   #customize_glob: !include customize_glob.yaml        
+  whitelist_external_dirs:
+    - /config
         
 # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
 # http:
