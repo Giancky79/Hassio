@@ -1,0 +1,2 @@
+shell_command:
+  pihole_updater: "ssh root@IP-PIHOLE 'pihole -up'"
