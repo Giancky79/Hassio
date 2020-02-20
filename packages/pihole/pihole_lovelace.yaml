@@ -1,0 +1,71 @@
+# creare una manual card in lovelace e copiare il codice
+# da HACS/PLUGIN scaricate le seguenti cards:
+# button-card
+# bar-card
+# fold-entity-row
+
+entities:
+  - binary_sensor.pve_pihole_running
+  - sensor.pihole_check
+  - input_select.pihole_auto_updater
+  - entities:
+      - entity: binary_sensor.pihole_enable
+        hold_action:
+          action: call-service
+          service: pi_hole.enable
+        icon: 'mdi:pi-hole'
+        name: PiHole Timer Disabler
+        size: 30px
+        state:
+          - color: red
+            value: 'off'
+          - color: green
+            value: 'on'
+        tap_action:
+          action: call-service
+          service: script.pihole_timer_disabler
+        type: 'custom:button-card'
+      - entity: input_select.pihole_timer
+      - color: red
+        entity: sensor.pi_hole_ads_blocked_today
+        title: PiHole ADS Blocked Today
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: blue
+        entity: sensor.pi_hole_dns_queries_cached
+        title: PiHole DNS Queries Cached
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: cornflowerblue
+        entity: sensor.pi_hole_dns_queries_forwarded
+        title: PiHole DNS Queries Forwarded
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: salmon
+        entity: sensor.pi_hole_dns_queries_today
+        title: PiHole DNS Queries Today
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: green
+        entity: sensor.pi_hole_dns_unique_domains
+        title: PiHole DNS Unique Domains
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: purple
+        entity: sensor.pi_hole_domains_blocked
+        title: PiHole Domains Blocked
+        title_position: inside
+        type: 'custom:bar-card'
+      - color: orange
+        entity: sensor.pi_hole_ads_percentage_blocked_today
+        title: PiHole ADS Percentage Blocked Today
+        title_position: inside
+        type: 'custom:bar-card'
+      - sensor.pi_hole_dns_unique_clients
+      - sensor.pi_hole_seen_clients
+      - script.pihole_updater
+      - automation.pihole_auto_updater_notification
+      - automation.pihole_manual_updater_notification
+    head: binary_sensor.pihole_enable
+    type: 'custom:fold-entity-row'
+type: entities
