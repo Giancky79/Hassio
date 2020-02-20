@@ -63,7 +63,7 @@ automation:
 ################################################################################
 
   - alias: 'Riavvio HA'
-#    initial_state: true
+    initial_state: true
     trigger:
       - platform: time
         at: 06:30:00
@@ -171,7 +171,7 @@ automation:
         event: start
       - platform: state
         entity_id: binary_sensor.sun_up
-        to: 'on'
+        to: 'off'
     condition:
       condition: or
       conditions:
