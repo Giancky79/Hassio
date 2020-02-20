@@ -1,0 +1,60 @@
+sensor:
+    
+#  - platform: command_line
+#    name: "PiHole Status CML"
+#    command: !secret pihole_status_curl
+#    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?status'"
+#    value_template: '{{ value_json.status }}'
+    
+#  - platform: command_line
+#    name: "PiHole Version CML"
+#    command: !secret pihole_version_curl
+#    command: "curl -X GET 'http://IP-PIHOLE/admin/api.php?version'"
+#    value_template: >-
+#      {{ value_json.core_current }}
+#      {{ value_json.core_latest }}
+#      {{ value_json.web_current }}
+#      {{ value_json.web_latest }}
+#      {{ value_json.FTL_current }}
+#      {{ value_json.FTL_latest }}
+ 
+  - platform: rest
+    name: "PiHole Status"
+    resource: !secret pihole_status
+    value_template: '{{ value_json.status }}'
+
+  - platform: rest
+    name: "PiHole Version"
+    resource: !secret pihole_version
+    value_template: '{{ value_json.versions }}'
+    json_attributes:
+      - core_current
+      - core_latest
+      - web_current
+      - web_latest
+      - FTL_current
+      - FTL_latest
+
+  - platform: template
+    sensors:
+    
+      pihole_check:
+        friendly_name: "PiHole Check"
+        value_template: >-
+          {% set core_current = states.sensor.pihole_version.attributes["core_current"] %}
+          {% set core_latest = states.sensor.pihole_version.attributes["core_latest"] %}
+          {% set web_current = states.sensor.pihole_version.attributes["web_current"] %}
+          {% set web_latest = states.sensor.pihole_version.attributes["web_latest"] %}
+          {% set ftl_current = states.sensor.pihole_version.attributes["FTL_current"] %}
+          {% set ftl_latest = states.sensor.pihole_version.attributes["FTL_latest"] %}
+          {% if core_current != core_latest or web_current != web_latest or ftl_current != ftl_latest %} 
+            Update
+          {% else %} 
+            Latest Update
+          {% endif %}
+        icon_template: >-
+          {% if is_state('sensor.pihole_check', 'Latest Update') %} 
+            mdi:checkbox-marked
+          {% else %}
+            mdi:cloud-download
+          {% endif %}
