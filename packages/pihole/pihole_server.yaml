@@ -1,0 +1,7 @@
+pi_hole:
+
+  host: !secret pihole_ip
+  location: !secret pihole_location
+  ssl: false
+  verify_ssl: true
+  api_key: !secret pihole_apikey
