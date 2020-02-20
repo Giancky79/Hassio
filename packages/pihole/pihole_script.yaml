@@ -1,1 +1,11 @@
+script:
 
+  'pihole_timer_disabler':
+    sequence:
+    - data_template:
+        duration: '{{states.input_select.pihole_timer.state}}'
+      service: pi_hole.disable
+
+  'pihole_updater':
+    sequence:
+    - service: shell_command.pihole_updater
