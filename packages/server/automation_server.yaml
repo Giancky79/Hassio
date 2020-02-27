@@ -13,8 +13,13 @@ automation:
     action:
       - service: notify.telegram
          data_template:
-          message: "Home Assistant {{states('sensor.current_version')}} è operativo"
-
+          message: >
+            {{ [  
+            "Home Assistant {{ states('sensor.current_version') }} è operativo, nessun problema",
+            "Oggi è un nuovo giorno, Home Assistant {{ states('sensor.current_version') }}  è operativo.... fortunatamente", 
+            "Home Assistant {{ states('sensor.current_version') }} è operativo, cosa vuoi fare oggi?"
+            ] | random }}
+         
 ################################################################################
 #                                                                              #
 ############################### AVVIO HA ALEXA #################################
