@@ -22,7 +22,7 @@ automation:
           - fri    
     action:          
       - service: media_player.volume_set
-        entity_id: media_player.
+        entity_id: media_player.echo_name #echo configurato in alexa media player
         data:
           volume_level: 0.5
       - delay: '00:00:05'
@@ -41,6 +41,6 @@ automation:
             ] | random }}
       - delay: '00:00:15' 
       - service: media_player.volume_set
-        entity_id: media_player.
+        entity_id: media_player.echo_name #echo configurato in alexa media player
         data:
           volume_level: 0.1
