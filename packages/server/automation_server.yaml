@@ -99,9 +99,9 @@ automation:
     action:
       - service: notify.telegram
         data_template:
-          message: >-
+          message: >
             Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} è disponibile. 
-            La tua versione attuale è {{ states('sensor.current_version') }}
+            La tua versione attuale è {{ states('sensor.current_version') }
 
 ################################################################################
 #                                                                              #
@@ -117,14 +117,9 @@ automation:
         entity_id: binary_sensor.sun_up
         to: 'on'
     condition:
-      condition: or
-      conditions:
-        - condition: time
-          before: '19:00:00'
-          after: '7:00:00'
-        - condition: state
-          entity_id: binary_sensor.sun_up
-          state: 'on' 
+      - condition: state
+        entity_id: binary_sensor.sun_up
+        state:  'on'
     action:
       - service: frontend.set_theme
         data:
@@ -138,14 +133,9 @@ automation:
         entity_id: binary_sensor.sun_up
         to: 'off'
     condition:
-      condition: or
-      conditions:
-        - condition: time
-          before: '7:00:00'
-          after: '19:00:00'
-        - condition: state
-          entity_id: binary_sensor.sun_up
-          state: 'off'
+      - condition: state
+        entity_id: binary_sensor.sun_up
+        state:  'off'
     action:
       - service: frontend.set_theme
         data:
