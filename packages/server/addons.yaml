@@ -1,0 +1,10 @@
+sensor:
+
+  - platform: rest
+    resource: http://ip-HA:8123/api/hassio/addons/core_samba/info
+    name: samba
+    value_template: '{{ value_json.data.state }}'
+    scan_interval: 20
+    headers:
+      Authorization: # 'Bearer token_ha'
+      Content-Type: application/json
