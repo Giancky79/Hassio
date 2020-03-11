@@ -1,45 +1,69 @@
-- platform: yr
+sensor:
 
-- platform: moon
+  - platform: moon
 
-- platform: template
-  sensors:
-    fasilunari:
-      entity_id: sensor.moon
-      friendly_name: "Luna"
-      icon_template: >
+  - platform: template
+    sensors:
+
+      fasi_lunari:
+        friendly_name: "Luna"
+        entity_id: sensor.moon
+        value_template: >
+          {{ {
+          'new_moon' : 'Nuova',
+          'waxing_crescent' : 'Crescente',
+          'first_quarter' : 'Primo Quarto',
+          'waxing_gibbous' : 'Gibbosa Crescente',
+          'full_moon' : 'Piena',
+          'waning_gibbous' : 'Gibbosa Calante',
+          'last_quarter' : 'Ultimo Quarto',
+          'waning_crescent' : 'Calante'
+          } [states('sensor.moon')] }}
+        icon_template: >
           {% if is_state('sensor.moon', 'new_moon') %}
-            mdi:circle-outline
+            mdi:moon-new
           {% elif is_state('sensor.moon', 'waxing_crescent') %}
-            mdi:arrow-up-bold
+            mdi:moon-waxing-crescent
           {% elif is_state('sensor.moon', 'first_quarter') %}
-            mdi:arrow-up-bold
+            mdi:moon-first-quarter
           {% elif is_state('sensor.moon', 'waxing_gibbous') %}
-            mdi:arrow-up-bold
+            mdi:moon-waxing-gibbous
           {% elif is_state('sensor.moon', 'full_moon') %}
-            mdi:brightness-1
+            mdi:moon-full
           {% elif is_state('sensor.moon', 'waning_gibbous') %}
-            mdi:arrow-down-bold
+            mdi:moon-waning-gibbous
           {% elif is_state('sensor.moon', 'last_quarter') %}
-            mdi:arrow-down-bold
+            mdi:moon-last-quarter
           {% elif is_state('sensor.moon', 'waning_crescent') %}
-            mdi:arrow-down-bold
+            mdi:moon-waning-crescent
           {% endif %}
-      value_template: >
-          {% if is_state('sensor.moon', 'new_moon') %}
-            Luna Nuova
-          {% elif is_state('sensor.moon', 'waxing_crescent') %}
-            Luna Crescente
-          {% elif is_state('sensor.moon', 'first_quarter') %}
-            Primo Quarto
-          {% elif is_state('sensor.moon', 'waxing_gibbous') %}
-            Gibbosa Crescente
-          {% elif is_state('sensor.moon', 'full_moon') %}
-            Luna Piena
-          {% elif is_state('sensor.moon', 'waning_gibbous') %}
-            Gibbosa Calante
-          {% elif is_state('sensor.moon', 'last_quarter') %}
-            Ultimo Quarto
-          {% elif is_state('sensor.moon', 'waning_crescent') %}
-            Luna Calante
+
+binary_sensor:
+  - platform: template
+    sensors:
+      day_or_night:
+        friendly_name: "day or night"
+        value_template: >
+          {{ states.sun.sun.attributes.elevation|float > 0 }}
+        icon_template: >
+          {% if is_state("binary_sensor.day_or_night", "on") %}
+            mdi:white-balance-sunny
+          {% else %}
+            mdi:weather-night
+          {% endif %}
+
+
+      sun_horizon:
+        entity_id:
+          - sun.sun
+        value_template: >-
+          {{ {
+          'above_horizon' : 'sopra_orizzonte',
+          'below_horizon: 'sotto_orizzonte',
+          } [states('sun.sun')] }}
+        icon_template: >-
+          {% if is_state("sun.sun", "above_horizon") %}
+            mdi:weather-sunset-up
+          {% else %}
+            mdi:weather-sunset-down
           {% endif %}
