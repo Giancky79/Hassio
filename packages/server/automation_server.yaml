@@ -23,6 +23,24 @@ automation:
 
 ################################################################################
 #                                                                              #
+################################# SERVIZIO HA ##################################
+#                                                                              #
+################################################################################
+
+  - alias: 'Servizio HA'
+    initial_state: true
+    trigger:
+      - platform: homeassistant
+        event: shutdown
+    action:
+      - service: notify.telegram
+        data:
+          message: >
+            Il servizio Home Assistant, alle ore {{ states('sensor.time') }} del {{ states('sensor.date') }}, 
+            è momentaneamente sospeso fino al prossimo avviso.
+            
+################################################################################
+#                                                                              #
 ################################# RIAVVIO HA ###################################
 #                                                                              #
 ################################################################################
@@ -114,11 +132,11 @@ automation:
       - platform: homeassistant
         event: start
       - platform: state
-        entity_id: binary_sensor.sun_up
+        entity_id: binary_sensor.day_or_night
         to: 'on'
     condition:
       - condition: state
-        entity_id: binary_sensor.sun_up
+        entity_id: binary_sensor.day_or_night
         state:  'on'
     action:
       - service: frontend.set_theme
@@ -130,11 +148,11 @@ automation:
       - platform: homeassistant
         event: start
       - platform: state
-        entity_id: binary_sensor.sun_up
+        entity_id: binary_sensor.day_or_night
         to: 'off'
     condition:
       - condition: state
-        entity_id: binary_sensor.sun_up
+        entity_id: binary_sensor.day_or_night
         state:  'off'
     action:
       - service: frontend.set_theme
