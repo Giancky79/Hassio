@@ -1,3 +1,10 @@
+homeassistant:
+  customize:
+    switch.pihole_lxc:
+      icon: mdi:package-variant-closed
+    switch.pfsense_vm:
+      icon: mdi:monitor
+      
 ################################################################################
 #                                                                              #
 ################################ SERVER PROXMOX ################################
@@ -5,17 +12,59 @@
 ################################################################################
 
 proxmoxve:
-  - host: #ip-server
+  - host: !secret proxmox_ip
     verify_ssl: false
-    username: # proxmox_username
-    password: # proxmox_password
+    username: !secret proxmox_user
+    password: !secret proxmox_pass
     nodes:
-      - node: # proxmox_node
-        vms: #inserire le vm
-          - 133
-        containers: #inserire i lxc
-          - 100
-          - 101
-          - 102
-          - 103
-          - 104      
+      - node: !secret proxmox_node
+        vms: 
+          - # numero vm
+        containers:
+          - # numero contenitore 
+          
+################################################################################
+#                                                                              #
+############################### SENSORI PROXMOX ################################
+#                                                                              #
+################################################################################
+          
+sensor:
+
+  - platform: command_line
+    name: Dati
+    unit_of_measurement: '%'
+    command: >-
+      ssh root@IP_PROXMOX pvesm status | awk 'NR==2'| awk '{ print $7 }' | cut -d '%' -f 1
+    scan_interval: 120
+
+  - platform: command_line
+    name: Local
+    unit_of_measurement: '%'
+    command: >-
+      ssh root@IP-PROXMOX pvesm status | awk 'NR==3'| awk '{ print $7 }' | cut -d '%' -f 1
+    scan_interval: 120
+
+  - platform: command_line
+    name: Local-Lvm
+    unit_of_measurement: '%'
+    command: >-
+      ssh root@IP-PROXMOX pvesm status | awk 'NR==4'| awk '{ print $7 }' | cut -d '%' -f 1
+    scan_interval: 120
+
+################################################################################
+#                                                                              #
+################################ SWITCH PROXMOX ################################
+#                                                                              #
+################################################################################
+
+switch:
+  - platform: command_line
+    switches:
+      pihole_lxc:
+
+        friendly_name: 'Pihole Lxc'
+        command_on: "ssh root@IP_PROXMOX 'pct start 102'"
+        command_off: "ssh root@IP-PROXMOX 'pct stop 102'"
+        command_state: "ssh root@IP-PROXMOX pct status 102 | grep -oPc 'status: running'"
+        value_template: '{{ value == "1" }}'
