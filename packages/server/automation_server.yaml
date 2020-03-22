@@ -2,43 +2,43 @@ automation:
 
 ################################################################################
 #                                                                              #
-############################### AVVIO HA TELEGRAM ##############################
+################################## AVVIO HA  ###################################
 #                                                                              #
 ################################################################################
 
-  - alias: 'Avvio HA notify'
+  - alias: 'Avvio HA'
     initial_state: true
     trigger:
       - platform: homeassistant 
         event: start
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data_template:
           message: >
             {{ [  
             "Home Assistant {{ states('sensor.current_version') }} è operativo, nessun problema",
             "Oggi è un nuovo giorno, Home Assistant {{ states('sensor.current_version') }}  è operativo.... fortunatamente", 
-            "Home Assistant {{ states('sensor.current_version') }} è operativo, cosa vuoi fare oggi?"
+            "Cosa vuoi fare oggi? ah! Home Assistant {{ states('sensor.current_version') }} è operativo"
             ] | random }}
 
 ################################################################################
 #                                                                              #
-################################# SERVIZIO HA ##################################
+################################## RIAVVIO HA ##################################
 #                                                                              #
 ################################################################################
 
-  - alias: 'Servizio HA'
+  - alias: 'Home Assistant'
     initial_state: true
     trigger:
       - platform: homeassistant
         event: shutdown
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data:
           message: >
-            Il servizio Home Assistant, alle ore {{ states('sensor.time') }} del {{ states('sensor.date') }}, 
+            Home Assistant, il {{ now().strftime("%d-%m-%Y") }}, dalle ore {{ states('sensor.time') }}
             è momentaneamente sospeso fino al prossimo avviso.
-            
+
 ################################################################################
 #                                                                              #
 ################################# RIAVVIO HA ###################################
@@ -46,7 +46,7 @@ automation:
 ################################################################################
 
   - alias: 'Riavvio HA'
-    initial_state: true
+#    initial_state: true
     trigger:
       - platform: time
         at: 06:30:00
@@ -78,27 +78,27 @@ automation:
       - condition: template
         value_template: "{{ trigger.to_state.state != 'None' }}"
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data_template:
           title: "Tentativo Accesso"
-          message: "url: https://whatismyipaddress.com/ip/{{ states.persistent_notification.http_login.attributes.message.split ('from ') [1]}}"
+          message: "url: https://whatismyipaddress.com/ip/{{ states.persistent_notification.http_login.attributes.message.split ('from ') [1] }}"
       - service: persistent_notification.dismiss
         data:
           notification_id: "http_login"
 
 ################################################################################
 #                                                                              #
-############################## NOTIFICA CAMBIO IP ##############################
+################################### CAMBIO IP ##################################
 #                                                                              #
 ################################################################################
 
-  - alias: external ip changes
+  - alias: 'external ip changes'
     initial_state: true
     trigger:
       - platform: state 
         entity_id: sensor.dnsip
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data_template:
           message: "Il tuo nuovo ip è {{ states('sensor.myip') }}"
 
@@ -112,14 +112,14 @@ automation:
     trigger:
       - platform: state
         entity_id: binary_sensor.updater
+        from: 'off'
         to: 'on'
-    condition:
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data_template:
           message: >
             Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} è disponibile. 
-            La tua versione attuale è {{ states('sensor.current_version') }
+            La tua versione attuale è {{ states('sensor.current_version') }}
 
 ################################################################################
 #                                                                              #
