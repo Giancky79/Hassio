@@ -17,19 +17,30 @@ sensor:
       #     {% elif now().strftime('%A') == 'Friday' %} Umido
       #     {% endif %}
 
+
       spazzatura:
         friendly_name: "Ritiro"
-        entity_id: sensor.date
-        value_template: >
+        entity_id: sensor.weekday
+        value_template: >-
           {{ {
-          'Monday': 'Umido', 
-          'Tuesday': 'Non riciclabile',
-          'Wednesday': 'Carta (Umido da Giugno a Ottobre)', 
-          'Thursday': 'Vetro',
-          'Friday': 'Umido',
-          'Saturday': 'Nessun ritiro',
-          'Sunday': 'Plastica'
-          } [ now().strftime('%A') ] }}
+          'Lunedì' : 'Umido', 
+          'Martedì' : 'Non riciclabile',
+          'Mercoledì' : 'Carta (Umido da Giugno a Ottobre)', 
+          'Giovedì' : 'Vetro',
+          'Venerdì' : 'Umido',
+          'Sabato' : 'Nessun ritiro',
+          'Domenica' : 'Plastica'
+          } [ states('sensor.weekday')] }}
+        icon_template: >
+          {{ {
+          'Lunedì' : 'mdi:apple', 
+          'Martedì' : 'mdi:delete-empty',
+          'Mercoledì' : 'mdi:file', 
+          'Giovedì' : 'mdi:glass-cocktail',
+          'Venerdì' : 'mdi:apple',
+          'Sabato' : 'circle-off-outline',
+          'Domenica' : 'mdi:food-fork-drink'
+          } [ states('sensor.weekday')] }}
 
       spazzatura_3:
         friendly_name: "Ritiro 3"
