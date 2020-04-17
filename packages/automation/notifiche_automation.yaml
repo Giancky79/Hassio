@@ -1,0 +1,59 @@
+automation:
+
+################################################################################
+#                                                                              #
+############################## NOTIFICA RIFIUTI ################################
+#                                                                              #
+################################################################################
+
+  - alias: 'Notifica Raccolta'
+    trigger:
+      - at: '19:30:00'
+        platform: time
+    action:
+      - service: notify.telegram
+        data_template:
+          message: "{{ states('sensor.spazzatura') }}"
+      - service: input_select.select_option
+        entity_id: input_select.spazzatura
+        data_template:
+          option: "{{ states('sensor.spazzatura') }}"
+          
+################################################################################
+#                                                                              #
+################################## AVVIO HA  ###################################
+#                                                                              #
+################################################################################
+
+  - alias: 'Avvio HA'
+    initial_state: true
+    trigger:
+      - event: start
+        platform: homeassistant
+    action:
+      - service: notify.telegram
+        data_template:
+          message: >
+            {{ [  
+            "Home Assistant {{ states('sensor.current_version') }} è operativo, nessun problema",
+            "Oggi è un nuovo giorno, Home Assistant {{ states('sensor.current_version') }}  è operativo.... fortunatamente", 
+            "Cosa vuoi fare oggi? ah! Home Assistant {{ states('sensor.current_version') }} è operativo"
+            ] | random }}
+
+################################################################################
+#                                                                              #
+################################## RIAVVIO HA ##################################
+#                                                                              #
+################################################################################
+
+  - alias: 'Home Assistant'
+    initial_state: true
+    trigger:
+      - event: shutdown
+        platform: homeassistant
+    action:
+      - service: notify.telegram
+        data:
+          message: >
+            Home Assistant, il {{ now().strftime("%d-%m-%Y") }}, dalle ore {{ now().strftime("%H:%M") }}
+            è momentaneamente sospeso fino al prossimo avviso
