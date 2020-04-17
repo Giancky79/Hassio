@@ -1,0 +1,29 @@
+sensor:
+
+  - platform: template
+    sensors:
+
+      spazzatura:
+        friendly_name: "Ritiro"
+        entity_id: sensor.weekday
+        value_template: >-
+          {{ {
+          'Lunedì' : 'Umido', 
+          'Martedì' : 'Non riciclabile',
+          'Mercoledì' : 'Carta (Umido da Giugno a Ottobre)', 
+          'Giovedì' : 'Vetro',
+          'Venerdì' : 'Umido',
+          'Sabato' : 'Nessun ritiro',
+          'Domenica' : 'Plastica'
+          } [ states('sensor.weekday')] }}
+        icon_template: >
+          {{ {
+          'Lunedì' : 'mdi:apple', 
+          'Martedì' : 'mdi:delete-empty',
+          'Mercoledì' : 'mdi:newspaper', 
+          'Giovedì' : 'mdi:glass-cocktail',
+          'Venerdì' : 'mdi:apple',
+          'Sabato' : 'circle-off-outline',
+          'Domenica' : 'mdi:food-fork-drink'
+          } [ states('sensor.weekday')] }}
+          
