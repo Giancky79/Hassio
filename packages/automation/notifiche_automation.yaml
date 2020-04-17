@@ -57,3 +57,62 @@ automation:
           message: >
             Home Assistant, il {{ now().strftime("%d-%m-%Y") }}, dalle ore {{ now().strftime("%H:%M") }}
             è momentaneamente sospeso fino al prossimo avviso
+
+################################################################################
+#                                                                              #
+########################### NOTIFICA LOGIN ERRATI HA ###########################
+#                                                                              #
+################################################################################
+      
+  - alias: 'Notifica Login Fallito'
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: persistent_notification.http_login
+    condition:
+      - condition: template
+        value_template: "{{ trigger.to_state.state != 'None' }}"
+    action:
+      - service: notify.telegram
+        data_template:
+          title: "Tentativo Accesso"
+          message: "url: https://whatismyipaddress.com/ip/{{ states.persistent_notification.http_login.attributes.message.split ('from ') [1] }}"
+      - service: persistent_notification.dismiss
+        data:
+          notification_id: "http_login"
+
+################################################################################
+#                                                                              #
+################################### CAMBIO IP ##################################
+#                                                                              #
+################################################################################
+
+  - alias: Notifica Cambio IP
+    initial_state: true 
+    trigger:
+      - platform: state 
+        entity_id: sensor.myip
+    action:
+      - service: notify.telegram
+        data_template:
+          message: "Nuovo IP: {{ states('sensor.myip') }}"
+      
+################################################################################
+#                                                                              #
+################################ NOTIFICA UPDATE ###############################
+#                                                                              #
+################################################################################
+
+  - alias: Notifica Update
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.updater
+        from: 'off'
+        to: 'on'
+    action:
+      - service: notify.telegram
+        data_template:
+          message: >
+            Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} è disponibile. 
+            La tua versione attuale è {{ states('sensor.current_version') }}
+            
