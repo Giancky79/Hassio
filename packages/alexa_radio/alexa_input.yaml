@@ -1,0 +1,83 @@
+input_select:
+
+  select_audio_output:
+    name: 'Speaker'
+    icon: mdi:speaker-wireless 
+    options:
+      - Camera Matrimoniale
+      - Tutti
+      
+  alexa_tunein:
+    name: 'Alexa Tunein'
+    icon: mdi:radio  
+    options:
+      - nessuno
+      - Radio Globo-996
+      - RDS Radio-1030
+      - Radio 80-1027
+      - RTL 1025
+
+  alexa_apple_music:
+    name: 'Alexa Apple Music'
+    icon: mdi:radio  
+    options:
+      - nessuno
+      
+  alexa_amazon_music:
+    name: 'Alexa Amazon Music'
+    icon: mdi:radio  
+    options:
+      - nessuno
+      
+  alexa_deezer:
+    name: 'Alexa Deezer'
+    icon: mdi:radio  
+    options:
+     - nessuno
+     
+  alexa_spotify:
+    name: 'Alexa Spotify'
+    icon: mdi:radio  
+    options:
+      - nessuno
+      
+  alexa_sequence:
+    name: 'Alexa Sequence'
+    icon: mdi:radio  
+    options:
+      - nessuno
+      - Alexa.Weather.Play
+      - Alexa.Traffic.Play
+      - Alexa.FlashBriefing.Play
+      - Alexa.GoodMorning.Play
+      - Alexa.SingASong.Play
+      - Alexa.TellStory.Play
+      - Alexa.Joke.Play
+      - Alexa.Music.PlaySearchPhrase
+      - Alexa.Calendar.PlayTomorrow
+      - Alexa.Calendar.PlayToday
+      - Alexa.Calendar.PlayNext
+      - Alexa.CleanUp.Play
+
+  radio_format_streaming:
+    name: 'Select Format Streaming'
+    icon: mdi:radio 
+    initial: nessuno
+    options:
+      - nessuno
+      - TUNEIN
+      - APPLE_MUSIC
+      - AMAZON_MUSIC
+      - DEEZER
+      - SPOTIFY
+      - sequence
+      
+input_number:
+
+  echo_volume:
+    icon: mdi:volume-high
+    name: Echo Volume
+    initial: 0.2
+    min: 0
+    max: 1
+    step: 0.1
