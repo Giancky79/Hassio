@@ -1,31 +1,32 @@
 sensor:
+
   - platform: moon
+
   - platform: template
     sensors:
-      fasi_lunari:
-        friendly_name_template: "Luna"
-        entity_id: sensor.moon, sensor.fasi_lunari
-        value_template: "{{ {
-            'new_moon' : 'Luna Nuova [congiunzione o fase di novilunio]',
-            'waxing_crescent' : 'Luna Crescente',
-            'first_quarter' : 'Primo Quarto',
-            'waxing_gibbous' : 'Gibbosa Crescente',
-            'full_moon' : 'Luna Piena [opposizione o fase di plenilunio]',
-            'waning_gibbous' : 'Gibbosa Calante',
-            'last_quarter' : 'Ultimo Quarto',
-            'waning_crescent' : 'Luna Calante'
-            } [states('sensor.moon')] }}"
 
-        entity_picture_template: >
-          {% set state = states('sensor.fasi_lunari').title().split(" [")[0].replace(' ','-') | lower %}
-          {{ '/local/icons/fasi_lunari/{}.png'.format(state) }}
-
-# 1 Luna nuova (o congiunzione o fase di novilunio)
-# 2 Luna crescente
-# 3 Primo quarto
-# 4 Gibbosa crescente
-# 5 Luna piena (o opposizione o fase di plenilunio)
-# 6 Gibbosa calante
-# 7 Ultimo quarto
-# 8 Luna calante
-# https://www.home-assistant.io/components/sensor.moon/
+      moon_state:
+        friendly_name: "Fasi Lunari"
+        entity_id: sensor.moon
+        value_template: >-
+          {{ {
+          'new_moon' : 'Nuova',
+          'waxing_crescent' : 'Crescente',
+          'first_quarter' : 'Primo Quarto',
+          'waxing_gibbous' : 'Gibbosa Crescente',
+          'full_moon' : 'Piena',
+          'waning_gibbous' : 'Gibbosa Calante',
+          'last_quarter' : 'Ultimo Quarto',
+          'waning_crescent' : 'Calante'
+          } [states('sensor.moon')] }}
+        icon_template: >
+          {{ {
+          'new_moon' : 'mdi:moon-new',
+          'waxing_crescent' : 'mdi:moon-waxing-crescent',
+          'first_quarter' : 'mdi:moon-first-quarter',
+          'waxing_gibbous' : 'mdi:moon-waxing-gibbous',
+          'full_moon' : 'mdi:moon-full',
+          'waning_gibbous' : 'mdi:moon-waning-gibbous',
+          'last_quarter' : 'mdi:moon-last-quarter',
+          'waning_crescent' : 'mdi:moon-waning-crescent'
+          } [states('sensor.moon')] }}
