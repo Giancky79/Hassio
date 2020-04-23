@@ -1,0 +1,5 @@
+binary_sensor:
+  - platform: workday
+    country: IT
+    workdays: [mon, tue, wed, thu, fri]
+    excludes: [sat, sun, holiday]
