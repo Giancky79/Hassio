@@ -1,0 +1,80 @@
+cards:
+  - cards:
+      - entities:
+          - entity: input_number.echo_volume
+          - entity: input_select.select_audio_output
+        title: Alexa Radio
+        type: entities
+    type: vertical-stack
+  - cards:
+      - entity: input_select.alexa_sequence
+        hold_action:
+          action: more-info
+        icon: 'mdi:account-tie-voice'
+        name: Alexa
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          service: script.alexa_sequence
+        type: entity-button
+      - entity: input_select.alexa_spotify
+        hold_action:
+          action: more-info
+        icon: 'mdi:spotify'
+        name: Spotify
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          service: script.alexa_spotify
+        type: entity-button
+      - entity: input_select.alexa_tunein
+        hold_action:
+          action: more-info
+        icon: 'mdi:radio'
+        name: Tunein
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          service: script.alexa_tunein
+        type: entity-button
+    type: horizontal-stack
+  - cards:
+      - entity: input_select.alexa_amazon_music
+        hold_action:
+          action: more-info
+        icon: 'mdi:amazon-alexa'
+        name: Amazon
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          service: script.alexa_amazon_music
+        type: entity-button
+      - entity: input_select.alexa_apple_music
+        hold_action:
+          action: more-info
+        icon: 'mdi:apple'
+        name: Apple
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          service: script.alexa_apple_music
+        type: entity-button
+      - entity: input_select.alexa_deezer
+        hold_action:
+          action: more-info
+        icon: 'mdi:equalizer'
+        name: Deezer
+        show_icon: true
+        show_name: true
+        tap_action:
+          action: call-service
+          service: script.alexa_deezer
+        type: entity-button
+    type: horizontal-stack
+type: vertical-stack
+
