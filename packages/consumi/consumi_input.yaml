@@ -1,0 +1,41 @@
+input_number:
+
+  prezzo_energia:
+    name: Prezzo Energia
+    min: 0.001
+    max: 1.000
+    unit_of_measurement: '€'
+    mode: box
+    icon: mdi:currency-eur
+
+  consumo_mese_precedente:
+    name: Consumo Mese Precedente
+    min: 0
+    max: 1000000
+    step: 0.01
+    mode: box
+    unit_of_measurement: 'kWh'
+    
+  costo_mese_precedente:
+    name: Costo Mese Precedente
+    min: 0
+    max: 5000
+    step: 0.001
+    mode: box
+    unit_of_measurement: €
+    
+  consumo_anno_precedente:
+    name: Consumo Anno Precedente
+    min: 0
+    max: 1000000
+    step: 0.01
+    mode: box
+    unit_of_measurement: 'kWh'
+
+  costo_anno_precedente:
+    name: Costo Anno Precedente
+    min: 0
+    max: 5000
+    step: 0.001
+    mode: box
+    unit_of_measurement: €
