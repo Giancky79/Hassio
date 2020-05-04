@@ -1,0 +1,15 @@
+utility_meter:
+
+  fascia_consumo_mensile:
+    source: sensor.consumo_giornaliero
+    cycle: monthly
+    offset:
+      days: '1'
+    tariffs:
+      - mono_oraria
+      
+  fascia_consumo_annuale:
+    source: sensor.consumo_giornaliero
+    cycle: yearly
+    tariffs:
+      - mono_oraria
