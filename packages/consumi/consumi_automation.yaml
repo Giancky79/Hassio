@@ -1,0 +1,61 @@
+automation:
+
+############################################################################################
+#                                                                                          #
+#-------------------------------            MESE            -------------------------------#
+#                                                                                          #
+############################################################################################
+
+  - alias: Costi Consumi Mese Precedente
+    trigger:
+      platform: time
+      at: '20:59:45'
+    condition:
+      - condition: template
+        value_template: "{{ states.sensor.fine_del_mese.state == '0' }}"
+    action:
+      - service: input_number.set_value
+        data_template:
+          entity_id: input_number.consumo_mese_precedente
+          value: '{{ (states.sensor.fascia_consumo_mensile_mono_oraria.state | float) }}'
+      - service: input_number.set_value
+        data_template:          
+          entity_id: input_number.costo_mese_precedente
+          value: '{{ (states.sensor.costo_mensile.state | float) }}'
+      - service: notify.telegram_giancarlo
+        data_template:
+          message: >
+            Report Consumi Mensili
+            Consumo: {{(states.input_number.consumo_mese_precedente.state | float)| round(2) }} kWh
+            Spesa: {{(states.input_number.costo_mese_precedente.state | float)| round(2) }} €
+
+############################################################################################
+#                                                                                          #
+#-------------------------------            ANNO            -------------------------------#
+#                                                                                          #
+############################################################################################
+
+  - alias: Costi Consumi Anno Precedente
+    trigger:
+      platform: time
+      at: '20:59:45'
+    condition:
+      - condition: template
+        value_template: '{{ now().strftime("%m") == "12" }}'
+      - condition: template
+        value_template: "{{ states.sensor.fine_del_mese.state == '0' }}"
+    action:
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.consumo_anno_precedente
+        value: '{{ (states.sensor.fascia_consumo_annuale_mono_oraria.state | float) }}'
+    - service: input_number.set_value
+      data_template:
+        entity_id: input_number.costo_anno_precedente
+        value: '{{ (states.sensor.costo_annuale.state | float) }}'
+    - service: notify.telegram_giancarlo
+      data:
+        message: >
+          Report Consumi Annuali
+          Consumo: {{(states.input_number.consumo_anno_precedente.state | float)| round(2) }} kWh
+          Spesa: {{(states.input_number.costo_anno_precedente.state | float)| round(2) }} €"
