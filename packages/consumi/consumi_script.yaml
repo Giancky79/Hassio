@@ -1,0 +1,13 @@
+script:
+
+  reset_consumo_mensile:
+    alias: "Reset Consumo Mensile"
+    sequence:
+      - service: utility_meter.reset
+        entity_id: utility_meter.fascia_consumo_mensile
+
+  reset_consumo_annuale:
+    alias: "Reset Consumo Annuale"
+    sequence:
+      - service: utility_meter.reset
+        entity_id: utility_meter.fascia_consumo_annuale
