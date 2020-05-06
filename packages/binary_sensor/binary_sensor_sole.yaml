@@ -1,0 +1,12 @@
+binary_sensor:
+  - platform: template
+    sensors:
+      sun:
+        friendly_name: "Sole"
+        value_template: "{{ state_attr('sun.sun', 'elevation')|float > 0 }}"
+        icon_template: >
+          {% if is_state("binary_sensor.sun", "on") %}
+            mdi:white-balance-sunny
+          {% else %}
+            mdi:weather-night
+          {% endif %}
