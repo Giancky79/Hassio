@@ -1,0 +1,115 @@
+switch:
+
+  - platform: rest
+    name: Shelly1PM Switch - <xxxyyyy>
+    timeout: 5
+    resource: http://ip/relay/0
+    body_on: 'turn=on'
+    body_off: 'turn=off'
+    is_on_template: '{{ value_json.ison == true }}'
+    headers:
+      Content-Type: application/json
+    verify_ssl: false
+
+
+  - platform: command_line
+    switches:
+      shelly1pm_fw_update_<xxxyyy> :
+        friendly_name: Shelly1PM FW Update - <xxxyyy>
+        command_on: "http://ip/ota?update=1"
+
+sensor:
+
+  - platform: rest
+    name: Shelly1PM Status - <xxxyyy>
+    timeout: 5
+    resource: http://ip/status
+    value_template: "{{ value_json.status }}"
+    json_attributes:
+      - temperature
+      - overtemperature
+      - cloud
+      - mqtt
+      - meters
+      - wifi_sta
+      - mqtt
+      - time
+      - serial
+      - has_update
+      - mac
+      - relays
+      - inputs
+      - ext_temperature
+      - tmp
+      - update 
+      - ram_total 
+      - ram_free
+      - fs_size
+      - fs_free
+      - uptime
+
+  - platform: template
+    sensors:
+      shelly1pm_switch_<xxxyyy>:
+        friendly_name: 'Shelly1PM Switch - <xxxyyy>'
+        value_template: >
+          {% if is_state('switch.shelly1pm_switch_<xxxyyy>', 'on') %}
+            on
+          {% else %}
+            off
+          {% endif %}
+        icon_template: >
+          {% if is_state('switch.shelly1pm_switch_<xxxyyy>', 'on') %}
+            mdi:flash
+          {% else %}
+            mdi:flash-outline
+          {% endif %}
+
+      shelly1pm_temperature_<xxxyyy>:
+        friendly_name: 'Shelly1PM Temperature - <xxxyyy>'
+        icon_template: mdi:thermometer
+        unit_of_measurement: '°C'
+        value_template: "{{ state_attr('sensor.shelly1pm_status_<xxxyyy>', 'temperature') | round }}"
+        
+      shelly1pm_overtemperature_:
+        friendly_name: 'Shelly1PM Overtemperature - <xxxyyy>'
+        value_template: "{{ state_attr('sensor.shelly1pm_status_<xxxyyy>', 'overtemperature') }}"
+        icon_template: >
+          {% if state_attr('sensor.shelly1pm_status_<xxxyyy>', 'overtemperature'), False %}
+            mdi:thermometer-low
+          {% else %}
+            mdi:thermometer-alert
+          {% endif %} 
+
+      shelly1pm_cloud_enabled_connected_<xxxyyy>:
+        friendly_name: 'Shelly1PM Cloud Enabled & Connected - <xxxyyy>'
+        value_template: >
+          {% set enabled = state_attr('sensor.shelly1pm_status_<xxxyyy>', 'cloud').enabled %}
+          {% set connected = state_attr('sensor.shelly1pm_status_<xxxyyy>', 'cloud').connected %}
+          {% if enabled == True and connected == True %}
+            True
+          {% else %}
+            False
+          {% endif %}
+        icon_template: >-
+          {% if is_state('sensor.shelly1pm_cloud_enabled_connected_<xxxyyy>', 'True') %}
+            mdi:cloud-check
+          {% else %}
+            mdi:cloud-alert
+          {% endif %}
+
+      shelly1pm_meters_power_<xxxyyy>:
+        friendly_name: 'Shelly1PM PowerMeter - <xxxyyy>'
+        icon_template: mdi:flash-circle
+        unit_of_measurement: 'W'
+        value_template: "{{ state_attr('sensor.shelly1pm_status_<xxxyyy>', 'meters').0.power | round }}"
+
+      shelly1pm_wifi_<xxxyyy>:
+        friendly_name: 'Shelly1PM WiFi - <xxxyyy>'
+        value_template: "{{ state_attr('sensor.shelly1pm_status_<xxxyyy>', 'wifi_sta').connected }}"
+        icon_template: >-
+          {% if is_state('sensor.shelly1pm_wifi_<xxxyyy>', 'True') %}
+            mdi:cloud-check
+          {% else %}
+            mdi:cloud-alert
+          {% endif %}
