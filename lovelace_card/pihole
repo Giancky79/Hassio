@@ -1,0 +1,64 @@
+cards:
+  - entities:
+      - entity: binary_sensor.pve_pihole_running
+      - entity: binary_sensor.pihole_enable
+      - entity: sensor.pihole_check
+    title: Pihole
+    type: glance
+  - entities:
+      - entity: input_select.pihole_auto_updater
+      - entity: input_select.pihole_info
+      - entity: input_select.pihole_timer
+    show_header_toggle: false
+    type: entities
+  - card:
+      entities:
+        - entity: sensor.pi_hole_ads_blocked_today
+        - entity: sensor.pi_hole_ads_percentage_blocked_today
+        - entity: sensor.pi_hole_dns_queries_cached
+        - entity: sensor.pi_hole_dns_queries_forwarded
+        - entity: sensor.pi_hole_dns_queries_today
+        - entity: sensor.pi_hole_dns_unique_clients
+        - entity: sensor.pi_hole_dns_unique_domains
+        - entity: sensor.pi_hole_domains_blocked
+        - entity: sensor.pi_hole_seen_clients
+        - entity: sensor.pihole_version
+      title: Pi-Hole Info
+      type: entities
+    conditions:
+      - entity: input_select.pihole_info
+        state: enable
+    type: conditional
+  - card:
+      confirmation:
+        text: '[[[ return "PiHole verrà disattivato momentaneamente, sei sicuro?" ]]]'
+      entity: binary_sensor.pihole_enable
+      hold_action:
+        action: call-service
+        service: pi_hole.enable
+      icon: 'mdi:pi-hole'
+      name: PiHole Timer Disabler
+      size: 30px
+      state:
+        - color: red
+          value: 'off'
+        - color: green
+          value: 'on'
+      tap_action:
+        action: call-service
+        service: script.pihole_timer_disabler
+      type: 'custom:button-card'
+    conditions:
+      - entity: input_select.pihole_timer
+        state_not: select timer
+    type: conditional
+  - card:
+      entities:
+        - entity: script.pihole_updater
+      show_header_toggle: false
+      type: entities
+    conditions:
+      - entity: input_select.pihole_auto_updater
+        state_not: auto
+    type: conditional
+type: vertical-stack
