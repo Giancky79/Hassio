@@ -4,18 +4,27 @@ input_select:
     name: Pihole Timer
     icon: mdi:alarm
     options:
-      - Select Time
+      - select timer
       - 00:01
+      - 00:05
       - 00:15
       - 00:30
       - 00:45
       - 00:60
-    initial: Select Time
+    initial: select timer
 
   pihole_auto_updater:
     name: Pihole Auto Updater
     icon: mdi:update
     options:
-      - Auto
-      - Manual
-    initial: Manual
+      - auto
+      - manual
+    initial: manual
+
+  pihole_info:
+    name: Pihole Info
+    icon: mdi:information-outline
+    options:
+      - enable
+      - disable
+    initial: disable
