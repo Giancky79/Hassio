@@ -41,20 +41,15 @@ sensor:
       pihole_check:
         friendly_name: "PiHole Check"
         value_template: >-
-          {% set core_current = states.sensor.pihole_version.attributes["core_current"] %}
-          {% set core_latest = states.sensor.pihole_version.attributes["core_latest"] %}
-          {% set web_current = states.sensor.pihole_version.attributes["web_current"] %}
-          {% set web_latest = states.sensor.pihole_version.attributes["web_latest"] %}
-          {% set ftl_current = states.sensor.pihole_version.attributes["FTL_current"] %}
-          {% set ftl_latest = states.sensor.pihole_version.attributes["FTL_latest"] %}
-          {% if core_current != core_latest or web_current != web_latest or ftl_current != ftl_latest %} 
+          {% if (is_state_attr("sensor.pihole_version", "core_update", true) or
+            is_state_attr("sensor.pihole_version", "web_update", true) or
+            is_state_attr("sensor.pihole_version", "FTL_update", true)) %}
             Update
           {% else %} 
             Latest Update
           {% endif %}
         icon_template: >-
-          {% if is_state('sensor.pihole_check', 'Latest Update') %} 
-            mdi:checkbox-marked
-          {% else %}
-            mdi:cloud-download
-          {% endif %}
+          {{ {
+          'Latest Update' : 'mdi:checkbox-marked',
+          'Update' : 'mdi:cloud-download'
+          } [ states('sensor.pihole_check')] }}
