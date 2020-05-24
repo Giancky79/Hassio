@@ -1,273 +1,176 @@
 script:
 
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+
   alexa_tunein:
     alias: 'Alexa Tunein'
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: >
-            {{ {
-            'Camera Matrimoniale' : 'media_player.#nome echo', 
-            'Tutti' : 'media_player.ovunque'
-            } [ states('input_select.select_audio_output')] }}
-          volume_level: >
-            {{ states.input_number.echo_volume.state | float }}
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          volume_level: '{{ states("input_number.echo_volume") | float }}'
       - service: input_select.select_option
         data:
-          entity_id: input_select.radio_format_streaming  
+          entity_id: input_select.radio_format_streaming
           option: TUNEIN
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_apple_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_amazon_music 
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_deezer 
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_spotify
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_sequence
-          option: nessuno
-      - delay: '00:00:03'
+      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: >
-            {{ {
-            'Camera Matrimoniale' : 'media_player.#nome echo', 
-            'Tutti' : 'media_player.ovunque'
-            } [ states('input_select.select_audio_output')] }}
-          media_content_id: '{{ states.input_select.alexa_tunein.state }}'
-          media_content_type: '{{ states.input_select.radio_format_streaming.state }}'
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          media_content_id: '{{ states("input_select.alexa_tunein") }}'
+          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+      - delay: '00:00:02'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.alexa_tunein, input_select.alexa_apple_music, input_select.alexa_amazon_music, input_select.alexa_deezer, input_select.alexa_spotify, input_select.alexa_sequence
+          option: nessuno
+
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+#                                                                                           #
+#############################################################################################
 
   alexa_apple_music:
     alias: 'Alexa Apple Music'
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          volume_level: > 
-            {{ states.input_number.echo_volume.state | float }}
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          volume_level: '{{ states("input_number.echo_volume") | float }}'
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming 
           option: APPLE_MUSIC
       - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_tunein
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_amazon_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_deezer
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_spotify
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_sequence
-          option: nessuno
-      - delay: '00:00:03'
+      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          media_content_id: '{{ states.input_select.alexa_apple_music.state }}'
-          media_content_type: '{{ states.input_select.radio_format_streaming.state }}'
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          media_content_id: '{{ states("input_select.alexa_tunein") }}'
+          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+      - delay: '00:00:02'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.alexa_tunein, input_select.alexa_apple_music, input_select.alexa_amazon_music, input_select.alexa_deezer, input_select.alexa_spotify, input_select.alexa_sequence
+          option: nessuno
+
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+#                                                                                           #
+#############################################################################################
 
   alexa_sequence:
     alias: 'Alexa Sequence'
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          volume_level: >
-            {{ states.input_number.echo_volume.state | float }}
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          volume_level: '{{ states("input_number.echo_volume") | float }}'
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: sequence
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_tunein
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_apple_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_amazon_m
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_deezer
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_spotify
-          option: nessuno
-      - delay: '00:00:03'
+      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          media_content_id: '{{ states.input_select.alexa_sequence.state }}'
-          media_content_type: '{{ states.input_select.radio_format_streaming.state }}'
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          media_content_id: '{{ states("input_select.alexa_tunein") }}'
+          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+      - delay: '00:00:02'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.alexa_tunein, input_select.alexa_apple_music, input_select.alexa_amazon_music, input_select.alexa_deezer, input_select.alexa_spotify, input_select.alexa_sequence
+          option: nessuno
+
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+#                                                                                           #
+#############################################################################################
 
   alexa_amazon_music:
     alias: 'Alexa Amazon Music'
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          volume_level: >
-            {{ states.input_number.echo_volume.state | float }}
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          volume_level: '{{ states("input_number.echo_volume") | float }}'
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: AMAZON_MUSIC
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_apple_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_amazon_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_deezer
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_spotify
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_sequence
-          option: nessuno
-      - delay: '00:00:03'
+      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          media_content_id: '{{ states.input_select.alexa_amazon_music.state }}'
-          media_content_type: '{{ states.input_select.radio_format_streaming.state }}'
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          media_content_id: '{{ states("input_select.alexa_tunein") }}'
+          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+      - delay: '00:00:02'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.alexa_tunein, input_select.alexa_apple_music, input_select.alexa_amazon_music, input_select.alexa_deezer, input_select.alexa_spotify, input_select.alexa_sequence
+          option: nessuno
+
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+#                                                                                           #
+#############################################################################################
 
   alexa_deezer:
     alias: 'Alexa Deezer'
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          volume_level: > 
-            {{ states.input_number.echo_volume.state | float }}
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          volume_level: '{{ states("input_number.echo_volume") | float }}'
       - service: input_select.select_option
         data:  
           entity_id: input_select.radio_format_streaming
           option: DEEZER
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_apple_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_amazon_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_deezer
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_spotify
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_sequence
-          option: nessuno
-      - delay: '00:00:03'
+      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          media_content_id: '{{ states.input_select.alexa_deezer.state }}'
-          media_content_type: '{{ states.input_select.radio_format_streaming.state }}'
-          
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          media_content_id: '{{ states("input_select.alexa_tunein") }}'
+          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+      - delay: '00:00:02'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.alexa_tunein, input_select.alexa_apple_music, input_select.alexa_amazon_music, input_select.alexa_deezer, input_select.alexa_spotify, input_select.alexa_sequence
+          option: nessuno
+
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+#                                                                                           #
+#############################################################################################
+
   alexa_spotify:
     alias: 'Alexa Spotify'
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          volume_level: >
-            {{ states.input_number.echo_volume.state | float }}
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          volume_level: '{{ states("input_number.echo_volume") | float }}'
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: SPOTIFY
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_apple_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_amazon_music
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_deezer
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_spotify
-          option: nessuno
-      - service: input_select.select_option
-        data:
-          entity_id: input_select.alexa_sequence
-          option: nessuno
-      - delay: '00:00:03'
+      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: >
-            {% if is_state("input_select.select_audio_output", "Camera Matrimoniale") %} media_player.#nome echo
-            {% elif is_state("input_select.select_audio_output", "Tutti") %} media_player.ovunque
-            {% endif %}
-          media_content_id: '{{ states.input_select.alexa_spotify.state }}'
-          media_content_type: '{{ states.input_select.radio_format_streaming.state }}'
+          entity_id: '{{ states("input_text.select_audio_output") }}'
+          media_content_id: '{{ states("input_select.alexa_tunein") }}'
+          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+      - delay: '00:00:02'
+      - service: input_select.select_option
+        data:
+          entity_id: input_select.alexa_tunein, input_select.alexa_apple_music, input_select.alexa_amazon_music, input_select.alexa_deezer, input_select.alexa_spotify, input_select.alexa_sequence
+          option: nessuno
