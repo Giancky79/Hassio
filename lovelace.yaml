@@ -1,0 +1,10 @@
+title: Casa
+views:
+  - icon: 'mdi:speaker'
+    panel: false
+    path: Alexa
+    theme: ''
+    title: Alexa
+    badges: []
+    cards:
+      - !include lovelace-yaml/alexa.yaml
