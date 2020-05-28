@@ -1,8 +1,19 @@
 cards:
+  - card:
+      theme: aqua-fiesta
+      title: web-radio
+      type: glance
+    entities:
+      - media_player.camera_da_letto
+    state_filter:
+      - playing
+    type: entity-filter
   - cards:
       - entities:
           - entity: input_number.echo_volume
           - entity: input_select.select_audio_output
+        show_header_toggle: false
+        theme: aqua-fiesta
         title: Alexa Radio
         type: entities
     type: vertical-stack
@@ -16,7 +27,10 @@ cards:
         show_name: true
         tap_action:
           action: call-service
+          confirmation:
+            text: sicuro?
           service: script.alexa_sequence
+        theme: aqua-fiesta
         type: entity-button
       - entity: input_select.alexa_spotify
         hold_action:
@@ -27,7 +41,10 @@ cards:
         show_name: true
         tap_action:
           action: call-service
+          confirmation:
+            text: sicuro?
           service: script.alexa_spotify
+        theme: aqua-fiesta
         type: entity-button
       - entity: input_select.alexa_tunein
         hold_action:
@@ -38,7 +55,10 @@ cards:
         show_name: true
         tap_action:
           action: call-service
+          confirmation:
+            text: sicuro?
           service: script.alexa_tunein
+        theme: aqua-fiesta
         type: entity-button
     type: horizontal-stack
   - cards:
@@ -51,7 +71,10 @@ cards:
         show_name: true
         tap_action:
           action: call-service
+          confirmation:
+            text: sicuro?
           service: script.alexa_amazon_music
+        theme: aqua-fiesta
         type: entity-button
       - entity: input_select.alexa_apple_music
         hold_action:
@@ -62,7 +85,10 @@ cards:
         show_name: true
         tap_action:
           action: call-service
+          confirmation:
+            text: sicuro?          
           service: script.alexa_apple_music
+        theme: aqua-fiesta
         type: entity-button
       - entity: input_select.alexa_deezer
         hold_action:
@@ -73,8 +99,10 @@ cards:
         show_name: true
         tap_action:
           action: call-service
+          confirmation:
+            text: sicuro?
           service: script.alexa_deezer
+        theme: aqua-fiesta
         type: entity-button
     type: horizontal-stack
 type: vertical-stack
-
