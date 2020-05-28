@@ -1,5 +1,4 @@
 http:
-  base_url: !secret url_server
   use_x_forwarded_for: true
   trusted_proxies:
     - !secret ip_proxies
