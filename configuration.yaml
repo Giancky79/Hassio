@@ -12,7 +12,19 @@ homeassistant:
   #customize_glob: !include customize_glob.yaml        
   whitelist_external_dirs:
     - /config
-        
+
+lovelace: 
+  mode: storage
+  # Add yaml dashboards
+  dashboards:
+    lovelace-yaml:
+      mode: yaml
+      title: Lovelace-yaml
+      icon: mdi:script
+      show_in_sidebar: true
+      require_admin: false
+      filename: lovelace_yaml.yaml
+      
 # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
 # http:
 #   base_url: example.duckdns.org:8123
