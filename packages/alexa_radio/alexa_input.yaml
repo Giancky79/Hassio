@@ -3,13 +3,16 @@ input_select:
   select_audio_output:
     name: 'Speaker'
     icon: mdi:speaker-wireless 
+    initial: nessuno
     options:
-      - Camera Matrimoniale
-      - Tutti
-      
+      - nessuno
+      - media_player.nome_echo
+      - media_player.nome_echo
+
   alexa_tunein:
     name: 'Alexa Tunein'
-    icon: mdi:radio  
+    icon: mdi:radio
+    initial: nessuno
     options:
       - nessuno
       - Radio Globo-996
@@ -19,31 +22,36 @@ input_select:
 
   alexa_apple_music:
     name: 'Alexa Apple Music'
-    icon: mdi:radio  
+    icon: mdi:apple
+    initial: nessuno
     options:
       - nessuno
       
   alexa_amazon_music:
     name: 'Alexa Amazon Music'
-    icon: mdi:radio  
+    icon: mdi:amazon-alexa
+    initial: nessuno
     options:
       - nessuno
       
   alexa_deezer:
     name: 'Alexa Deezer'
-    icon: mdi:radio  
+    icon: mdi:equalizer
+    initial: nessuno
     options:
-     - nessuno
-     
+      - nessuno
+
   alexa_spotify:
     name: 'Alexa Spotify'
-    icon: mdi:radio  
+    icon: mdi:spotify
+    initial: nessuno
     options:
       - nessuno
       
   alexa_sequence:
     name: 'Alexa Sequence'
-    icon: mdi:radio  
+    icon: mdi:account-tie-voice
+    initial: nessuno
     options:
       - nessuno
       - Alexa.Weather.Play
@@ -61,7 +69,7 @@ input_select:
 
   radio_format_streaming:
     name: 'Select Format Streaming'
-    icon: mdi:radio 
+    icon: mdi:radio
     initial: nessuno
     options:
       - nessuno
@@ -77,7 +85,7 @@ input_number:
   echo_volume:
     icon: mdi:volume-high
     name: Echo Volume
-    initial: 0.2
+    initial: 0.4
     min: 0
     max: 1
     step: 0.1
