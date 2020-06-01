@@ -5,9 +5,6 @@ sensor:
       - time
       - date
 
-
-          # {{ now().strftime("%d-%m-%Y") }}
-
   - platform: template
     sensors:
           
