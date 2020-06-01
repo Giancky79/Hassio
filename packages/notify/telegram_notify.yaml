@@ -1,0 +1,14 @@
+notify:
+  - name: Telegram Giancarlo
+    platform: telegram
+    chat_id: !secret chat_ids_giancarlo
+    
+  - name: Telegram Oksana
+    platform: telegram
+    chat_id: !secret chat_ids_oksana
+
+  - name: Famiglia
+    platform: group
+    services:
+      - service: telegram_giancarlo
+      - service: telegram_oksana
