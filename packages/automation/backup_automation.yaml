@@ -18,27 +18,6 @@ automation:
       - service: hassio.snapshot_full
         data_template:
           name: Automated Full Backup {{ now().strftime("%d-%m-%Y") }}
-          
-################################################################################
-#                              BACKUP FULL DROPBOX                             #
-#                          scaricare ed attivare in addon                      #
-#                  https://github.com/danielwelch/hassio-dropbox-sync          #
-################################################################################
-
-  - alias: 'Backup Full Dropbox'
-    trigger:
-      - platform: time
-        at: '23:50:00'
-    condition:
-      - condition: time
-        weekday:
-          - mon
-    action:
-      - service: hassio.addon_stdin
-        data:
-          addon: 7be23ff5_dropbox_sync
-          input:
-            command: upload
 
 ################################################################################
 #                                                                              #
@@ -49,7 +28,7 @@ automation:
   - alias: 'Backup Partial Automatico'
     trigger:
       - platform: time
-        at: '2:00:00'
+        at: '11:00:00'
     condition:
       - condition: time
         weekday:
@@ -65,11 +44,10 @@ automation:
 #            in folders selezionate le cartelle che vi interessano,            #                                                                              #
 #                  homeassistant è la vostra cartella /config                  #
 ################################################################################
-          
+
           folders:
-            - ssl
-            - homeassistant
-            
+            - homeassistant 
+
 ################################################################################
 #                      in addons inserire id - nome addon,                     #
 #                          ad esempio a0d7b954_nodered,                        #
@@ -79,33 +57,10 @@ automation:
           addons: 
             - a0d7b954_nodered          
 
-################################################################################
-#                            BACKUP PARZIALE DROPBOX                           #
-#                        scaricare ed attivare in addon                        #
-#              https://github.com/danielwelch/hassio-dropbox-sync              #
-################################################################################       
-          
 #          repositories: 
 #            - https://github.com/hassio-addons/repository
-#            - https://github.com/esphome/hassio
-          
-  - alias: 'Backup Partial Dropbox'
-    trigger:
-      - platform: time
-        at: '2:50:00'
-    condition:
-      - condition: time
-        weekday:
-          - mon
-          - thu
-          - sat
-    action:
-      - service: hassio.addon_stdin
-        data:
-          addon: 7be23ff5_dropbox_sync
-          input:
-            command: upload
-            
+#            - https://github.com/esphome/hassio   
+
 ################################################################################
 #                                                                              #
 ################################# STOP BACKUP ##################################
@@ -119,12 +74,12 @@ automation:
         below: '90'
         entity_id: sensor.disk_use_percent
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data:
           message: Spazio libero in esaurimento!
       - service: automation.turn_off
         data:
           entity_id: automation.backup_full_automatico, automation.backup_partial_automatico
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data:
           message: Backup Automatico disattivato
