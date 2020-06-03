@@ -8,7 +8,7 @@ automation:
   - alias: 'Backup Full Dropbox'
     trigger:
       - platform: time
-        at: '23:50:00'  #scegliere l'orario in base al backup full + 1 ora
+        at: '11:00:00'  #scegliere l'orario in base al backup full + 1 ora
     condition:
       - condition: time
         weekday:
@@ -29,7 +29,7 @@ automation:
   - alias: 'Backup Partial Dropbox'
     trigger:
       - platform: time
-        at: '2:50:00'  #scegliere l'orario in base al backup parziale + 1 ora
+        at: '12:00:00'  #scegliere l'orario in base al backup parziale + 1 ora
     condition:
       - condition: time
         weekday:
