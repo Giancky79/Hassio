@@ -25,7 +25,7 @@ automation:
           - sun
     action:          
       - service: media_player.volume_set
-        entity_id: media_player.#<nome echo>
+        entity_id: !secret echo_camera       
         data:
           volume_level: 0.5
       - delay: '00:00:05'
@@ -33,7 +33,7 @@ automation:
         data_template:
           data:
             type: announce
-          target: media_player.#<nome echo>
+          target: !secret echo_camera
           message: >
             {{ [
             "Home Assistant è operativo, oggi è {{ states('sensor.giorno_della_settimana') }} e sono le ore {{ states('sensor.time') }}",
@@ -44,7 +44,7 @@ automation:
             ] | random }}
       - delay: '00:00:15' 
       - service: media_player.volume_set
-        entity_id: media_player.#<nome echo>
+        entity_id: !secret echo_camera
         data:
           volume_level: 0.1
 
@@ -64,5 +64,5 @@ automation:
         data_template:
           data:
             type: announce
-          target: media_player.#<nome echo>
+          target: !secret echo_camera 
           message: "oggi c'è da buttare {{ states('sensor.spazzatura') }}"
