@@ -1,7 +1,7 @@
 cards:
   - card:
       entities:
-        - entity: media_player.camera_da_letto
+        - entity: media_player.nome_echo
       show_header_toggle: false
       theme: aqua-fiesta
       title: Alexa Radio
