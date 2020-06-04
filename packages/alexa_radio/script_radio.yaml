@@ -11,18 +11,17 @@ script:
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          volume_level: '{{ states("input_number.echo_volume") | float }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          volume_level: "{{ states('input_number.echo_volume') | float }}"
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: TUNEIN
-      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          media_content_id: '{{ states("input_select.alexa_tunein") }}'
-          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          media_content_id: "{{ states('input_select.alexa_tunein') }}"
+          media_content_type: "{{ states('input_select.radio_format_streaming') }}"
       - delay: '00:00:02'
       - service: input_select.select_option
         data:
@@ -40,19 +39,17 @@ script:
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          volume_level: '{{ states("input_number.echo_volume") | float }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          volume_level: "{{ states('input_number.echo_volume') | float }}"
       - service: input_select.select_option
         data:
-          entity_id: input_select.radio_format_streaming 
+          entity_id: input_select.radio_format_streaming
           option: APPLE_MUSIC
-      - service: input_select.select_option
-      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          media_content_id: '{{ states("input_select.alexa_tunein") }}'
-          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          media_content_id: "{{ states('input_select.alexa_apple_music') }}"
+          media_content_type: "{{ states('input_select.radio_format_streaming') }}"
       - delay: '00:00:02'
       - service: input_select.select_option
         data:
@@ -70,18 +67,17 @@ script:
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          volume_level: '{{ states("input_number.echo_volume") | float }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          volume_level: "{{ states('input_number.echo_volume') | float }}"
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: sequence
-      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          media_content_id: '{{ states("input_select.alexa_tunein") }}'
-          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          media_content_id: "{{ states('input_select.alexa_sequence') }}"
+          media_content_type: "{{ states('input_select.radio_format_streaming') }}"
       - delay: '00:00:02'
       - service: input_select.select_option
         data:
@@ -99,18 +95,17 @@ script:
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          volume_level: '{{ states("input_number.echo_volume") | float }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          volume_level: "{{ states('input_number.echo_volume') | float }}"
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: AMAZON_MUSIC
-      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          media_content_id: '{{ states("input_select.alexa_tunein") }}'
-          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          media_content_id: "{{ states('input_select.alexa_amazon_music') }}"
+          media_content_type: "{{ states('input_select.radio_format_streaming') }}"
       - delay: '00:00:02'
       - service: input_select.select_option
         data:
@@ -128,18 +123,17 @@ script:
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          volume_level: '{{ states("input_number.echo_volume") | float }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          volume_level: "{{ states('input_number.echo_volume') | float }}"
       - service: input_select.select_option
-        data:  
+        data:
           entity_id: input_select.radio_format_streaming
           option: DEEZER
-      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          media_content_id: '{{ states("input_select.alexa_tunein") }}'
-          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          media_content_id: "{{ states('input_select.alexa_deezer') }}"
+          media_content_type: "{{ states('input_select.radio_format_streaming') }}"
       - delay: '00:00:02'
       - service: input_select.select_option
         data:
@@ -157,18 +151,17 @@ script:
     sequence:
       - service: media_player.volume_set
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          volume_level: '{{ states("input_number.echo_volume") | float }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          volume_level: "{{ states('input_number.echo_volume') | float }}"
       - service: input_select.select_option
         data:
           entity_id: input_select.radio_format_streaming
           option: SPOTIFY
-      - delay: '00:00:02'
       - service: media_player.play_media
         data_template:
-          entity_id: '{{ states("input_text.select_audio_output") }}'
-          media_content_id: '{{ states("input_select.alexa_tunein") }}'
-          media_content_type: '{{ states("input_select.radio_format_streaming") }}'
+          entity_id: "{{ states('input_select.select_audio_output') }}"
+          media_content_id: "{{ states('input_select.alexa_spotify') }}"
+          media_content_type: "{{ states('input_select.radio_format_streaming') }}"
       - delay: '00:00:02'
       - service: input_select.select_option
         data:
