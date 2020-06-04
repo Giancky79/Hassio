@@ -116,3 +116,26 @@ automation:
             Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} è disponibile. 
             La tua versione attuale è {{ states('sensor.current_version') }}
             
+################################################################################
+#                                                                              #
+############################## NOTIFICA MOVIMENTO ##############################
+#                                                                              #
+################################################################################
+
+  - alias: "Notifica Movimento"
+    trigger:
+      platform: state
+      entity_id: device_tracker.iphone, device_tracker.redmi_note_8_pro
+    condition:
+      condition: template
+      value_template: '{{ trigger.to_state.state != trigger.from_state.state }}'
+    action:
+      service: notify.telegram_giancarlo
+      data_template:
+        title: "Movimento"
+        message: >-
+          {% if (trigger.to_state.state in ['home', 'Office']) and (trigger.from_state.state in ['away', 'not_home']) %}
+            Ben arrivato {{ trigger.from_state.attributes.friendly_name }} in {{ trigger.to_state.state }}
+          {% elif (trigger.to_state.state in ['away', 'not_home']) and (trigger.from_state.state in ['home', 'Office']) %}
+            Buona partenza {{ trigger.from_state.attributes.friendly_name }} da {{ trigger.from_state.state }}
+          {% endif %}
