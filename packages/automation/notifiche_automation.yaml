@@ -14,10 +14,6 @@ automation:
       - service: notify.telegram
         data_template:
           message: "{{ states('sensor.spazzatura') }}"
-      - service: input_select.select_option
-        entity_id: input_select.spazzatura
-        data_template:
-          option: "{{ states('sensor.spazzatura') }}"
           
 ################################################################################
 #                                                                              #
@@ -125,12 +121,14 @@ automation:
   - alias: "Notifica Movimento"
     trigger:
       platform: state
-      entity_id: device_tracker.iphone, device_tracker.redmi_note_8_pro
+      entity_id:
+        - !secret device_giancarlo
+        - !secret device_oksana
     condition:
       condition: template
       value_template: '{{ trigger.to_state.state != trigger.from_state.state }}'
     action:
-      service: notify.telegram_giancarlo
+      service: notify.telegram
       data_template:
         title: "Movimento"
         message: >-
