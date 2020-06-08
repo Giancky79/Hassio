@@ -1,55 +1,50 @@
+sensor:
+
 ################################################################################
 #                                                                              #
 ################################# SENSORI VARI #################################
 #                                                                              #
-################################################################################      
-
-sensor:
-
-# se usate vm di hassio, cambia la porta eth0
+################################################################################  
 
   - platform: systemmonitor
     resources:
-      - type: ipv4_address
-        arg: eth0
-      - type: network_in
-        arg: eth0
-      - type: network_out
-        arg: eth0
-      - type: throughput_network_in
-        arg: eth0
-      - type: throughput_network_out
-        arg: eth0
-      - type: packets_in
-        arg: eth0
-      - type: packets_out
-        arg: eth0
-      - type: disk_use_percent
-        arg: /
-      - type: disk_use
-        arg: /
-      - type: disk_free
-        arg: /
-      - type: memory_use_percent
-      - type: memory_use
-      - type: memory_free
-      - type: processor_use
-      - type: last_boot
+        - type: ipv4_address
+          arg: eth0
+        - type: network_in
+          arg: eth0
+        - type: network_out
+          arg: eth0
+        - type: throughput_network_in
+          arg: eth0
+        - type: throughput_network_out
+          arg: eth0
+        - type: packets_in
+          arg: eth0
+        - type: packets_out
+          arg: eth0
+        - type: disk_use_percent
+          arg: /
+        - type: disk_use
+          arg: /
+        - type: disk_free
+          arg: /
+        - type: memory_use_percent
+        - type: memory_use
+        - type: memory_free
+        - type: processor_use
+        - type: last_boot
+
+################################################################################
+#                                                                              #
+############################### TEMPERATURA CPU ################################
+#                                                                              #
+################################################################################
 
   - platform: command_line
     name: CPU Temperature
     command: "cat /sys/class/thermal/thermal_zone0/temp"
     unit_of_measurement: "°C"
     value_template: '{{ value | multiply(0.001) | round(1) }}'
-
-  - platform: version
-    name: Current version
-    source: local
-  
-  - platform: dnsip  
-
-  - platform: uptime
-    name: Tempo Attivo
 
 ################################################################################
 #                                                                              #
