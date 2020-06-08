@@ -51,6 +51,15 @@ sensor:
   - platform: uptime
     name: Tempo Attivo
 
+################################################################################
+#                                                                              #
+################################ TEMPO AVVIO HA ################################
+#                                                                              #
+################################################################################
+
+  - platform: uptime
+    name: Tempo Attivo
+  
   - platform: template
     sensors:
       ha_last_boot:
@@ -62,14 +71,20 @@ sensor:
           {% else %}
             {% macro phrase(value, name) %}
             {%- set value = value | int %}
-            {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+              {{- '{} {}'.format(value, name) if value | int > 0 else '' }}
             {%- endmacro %}
             {% set weeks = (states('sensor.tempo_attivo') | int / 7) | int %}
             {% set days = (states('sensor.tempo_attivo') | int) - (weeks * 7) %}
             {% set hours = (states('sensor.tempo_attivo') | float - states('sensor.tempo_attivo') | int) * 24 %}
             {% set minutes = (hours - hours | int) * 60 %}
-            {{ [ phrase(weeks, 'settimane'), phrase(days, 'giorni'), phrase(hours, 'ore'), phrase(minutes, 'minuti') ] | select('!=','') | list | join(', ') }}
+              {{ [ phrase(weeks, 'settimane' if weeks > 1 else 'settimana'), phrase(days, 'giorni' if days > 1 else 'giorno'), phrase(hours, 'ore' if hours > 1 else 'ora'), phrase(minutes, 'minuti' if minutes > 1 else 'minuto') ] | select('!=','') | list | join(', ') }}
           {% endif %}
+
+################################################################################
+#                                                                              #
+############################## TEMPO AVVIO SERVER ##############################
+#                                                                              #
+################################################################################
 
       server_uptime:
         friendly_name: "Ultimo Riavvio Server"
@@ -85,10 +100,9 @@ sensor:
           {% set days = (days % 7) %}
           {% macro phrase(value, name) %}
             {%- set value = value %}
-            {%- set end = 's' if value > 1 else '' %}
-              {{- '{} {}{}'.format(value, name, end) if value | int > 0 else '' }}
+              {{- '{} {}'.format(value, name) if value | int > 0 else '' }}
           {%- endmacro %}
-          {% set text = [ phrase(weeks, 'week'), phrase(days, 'day'), phrase(hours, 'hr'), phrase(minutes, 'min') ] | select('!=','') | list | join(', ') %}
+          {% set text = [ phrase(weeks, 'settimane' if weeks > 1 else 'settimana'), phrase(days, 'giorni' if days > 1 else 'giorno'), phrase(hours, 'ore' if hours > 1 else 'ora'), phrase(minutes, 'minuti' if minutes > 1 else 'minuto') ] | select('!=','') | list | join(', ') %}
           {% set last_comma = text.rfind(',') %}
           {% if last_comma != -1 %}
             {% set text = text[:last_comma] + ' e' + text[last_comma + 1:] %}
