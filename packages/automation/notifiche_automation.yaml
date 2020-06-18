@@ -99,17 +99,16 @@ automation:
 #                                                                              #
 ################################################################################
 
-  - alias: Notifica Update
+  - alias: 'Notifica Update'
+    initial_state: 'true'
     trigger:
-      - platform: state
-        entity_id: binary_sensor.updater
-        from: 'off'
-        to: 'on'
+      - platform: template
+        value_template: "{{ states('sensor.latest_version') != states('sensor.current_version') }}"
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data_template:
-          message: >
-            Home Assistant {{ state_attr('binary_sensor.updater', 'newest_version') }} è disponibile. 
+          message: >- 
+            Home Assistant {{ states('sensor.latest_version') }} è disponibile. 
             La tua versione attuale è {{ states('sensor.current_version') }}
             
 ################################################################################
