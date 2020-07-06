@@ -14,3 +14,12 @@ sensor:
       Accept: application/vnd.github.v3+json
       Content-Type: application/json
       User-Agent: Home Assistant REST sensor
+
+  - platform: version
+    name: Current Version
+    source: local
+
+  - platform: version
+    name: Latest Version
+    image: qemux86-64
+    source: hassio
