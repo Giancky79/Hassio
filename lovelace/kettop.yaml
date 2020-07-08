@@ -1,0 +1,66 @@
+type: vertical-stack
+cards:
+  - type: markdown
+    content: >
+      **Benvenuto in Home Assistant**
+
+
+      ------------------------------------------- 
+
+
+      {% if states("sensor.current_version") != states("sensor.latest_version") %}
+      <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp;***Aggiornamento***: 
+      &nbsp;&nbsp;{{states("sensor.current_version")}} ->
+      {{states('sensor.latest_version')}} &nbsp;&nbsp;&nbsp; 
+
+
+       - ***autore***: {{states.sensor.ha_breaking.attributes["author"]["login"]}}
+
+      <img src="{{states.sensor.ha_breaking.attributes["author"]["avatar_url"]}}"
+      height="40" ></a>
+
+
+      {{ state_attr("sensor.ha_breaking", "body") }}
+
+      > {% else %}
+
+      <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp;**Versione Installata**:
+      &nbsp;&nbsp; {{states('sensor.current_version')}}
+
+      - **nessun aggiornamento**
+
+      > {%- endif %}
+
+      -------------------------------------------
+
+      <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp;**Aggiornamenti Add-on:**
+      &nbsp;&nbsp; {{ states.sensor.supervisor_updates.state }} 
+
+      > {% for addon in states.sensor.supervisor_updates.attributes.addons %}
+
+      > {{ addon.name }}&nbsp; {{ addon.installed }} -> {{ addon.version }}
+
+      > {% endfor %}
+
+
+      -------------------------------------------
+
+      <ha-icon icon="hacs:hacs"></ha-icon>&nbsp;**Aggiornamenti HACS:** &nbsp;&nbsp;
+      {{ states.sensor.hacs.state }}
+
+      > {% for repo in states.sensor.hacs.attributes.repositories %}
+
+      > {{ repo.display_name }}: _{{ repo["installed_version"] }}_ -> ***_{{
+      repo["available_version"] }}_***
+
+      > {% endfor %}
+
+    style: |
+      ha-card {
+        background: url("/local/sfondi/home-assistant.png");
+        color: black;
+        font-variant: small-caps;
+        font-size: 16px;  
+      }
+    theme: aqua-fiesta
+
