@@ -1,10 +1,10 @@
 automation:
 
-################################################################################
-#                                                                              #
-############################## NOTIFICA RIFIUTI ################################
-#                                                                              #
-################################################################################
+##########################################
+#  ╔╗╔╔═╗╔╦╗╦╔═╗╦╔═╗╔═╗  ╦═╗╦╔═╗╦╦ ╦╔╦╗╦ #
+#  ║║║║ ║ ║ ║╠╣ ║║  ╠═╣  ╠╦╝║╠╣ ║║ ║ ║ ║ #
+#  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╩╚═╩╚  ╩╚═╝ ╩ ╩ #
+##########################################
 
   - alias: 'Notifica Raccolta'
     trigger:
@@ -93,11 +93,11 @@ automation:
         data_template:
           message: "Nuovo IP: {{ states('sensor.myip') }}"
       
-################################################################################
-#                                                                              #
-################################ NOTIFICA UPDATE ###############################
-#                                                                              #
-################################################################################
+#############################################
+#  ╔╗╔╔═╗╔╦╗╦╔═╗╦╔═╗╔═╗  ╦ ╦╔═╗╔╦╗╔═╗╔╦╗╔═╗ #
+#  ║║║║ ║ ║ ║╠╣ ║║  ╠═╣  ║ ║╠═╝ ║║╠═╣ ║ ║╣  #
+#  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╚═╝╩  ═╩╝╩ ╩ ╩ ╚═╝ #
+#############################################
 
   - alias: 'Notifica Update'
     initial_state: 'true'
@@ -110,6 +110,30 @@ automation:
           message: >- 
             Home Assistant {{ states('sensor.latest_version') }} è disponibile. 
             La tua versione attuale è {{ states('sensor.current_version') }}
+            
+##################################################################################
+#  ╔╗╔╔═╗╔╦╗╦╔═╗╦╔═╗╔═╗  ╦ ╦╔═╗╔╦╗╔═╗╔╦╗╔═╗  ╔╦╗╔═╗╦  ╔═╗╔═╗╦═╗╔═╗╔╦╗  ╔╗ ╔═╗╔╦╗ #
+#  ║║║║ ║ ║ ║╠╣ ║║  ╠═╣  ║ ║╠═╝ ║║╠═╣ ║ ║╣    ║ ║╣ ║  ║╣ ║ ╦╠╦╝╠═╣║║║  ╠╩╗║ ║ ║  #
+#  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╚═╝╩  ═╩╝╩ ╩ ╩ ╚═╝   ╩ ╚═╝╩═╝╚═╝╚═╝╩╚═╩ ╩╩ ╩  ╚═╝╚═╝ ╩  #
+##################################################################################
+
+  - alias: 'Notifica Update'
+    initial_state: 'true'
+    trigger:
+      - platform: template
+        value_template: "{{ states('sensor.latest_version') != states('sensor.current_version') }}"
+    action:
+      - delay:
+          hours: '1'
+      - service: notify.telegram_giancarlo
+        data_template:
+          message: >- 
+            Home Assistant {{ states('sensor.latest_version') }} è disponibile, 
+            la tua versione attuale è {{ states('sensor.current_version') }}
+            {{state_attr('sensor.ha_breaking','body')|regex_replace(find='\[.*\]?http.*', replace=')', ignorecase=False)}}
+          data:
+            inline_keyboard:
+              - '{{ "\U0001F4A1" }} Aggiornamento:/update'
             
 ################################################################################
 #                                                                              #
