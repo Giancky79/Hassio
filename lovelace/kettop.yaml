@@ -11,11 +11,10 @@ cards:
       {% if states("sensor.current_version") != states("sensor.latest_version") %}
       <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp;***Aggiornamento***: 
       &nbsp;&nbsp;{{states("sensor.current_version")}} ->
-      {{states('sensor.latest_version')}} &nbsp;&nbsp;&nbsp; 
+      {{states('sensor.latest_version')}}
 
 
        - ***autore***: {{states.sensor.ha_breaking.attributes["author"]["login"]}}
-
       <img src="{{states.sensor.ha_breaking.attributes["author"]["avatar_url"]}}"
       height="40" ></a>
 
