@@ -1,0 +1,72 @@
+automation:
+########################################################################
+### TELEGRAM HASSIO UPDATE
+########################################################################
+
+  - alias: 'Telegram_Bot_Service'
+    initial_state: 'on'
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /servizi
+    action:
+      - service: telegram_bot.send_message
+        data_template:
+          target: '{{ trigger.event.data.user_id }}'
+          title: Benvenuto
+          message: '*PANNELLO DI CONTROLLO*'
+          inline_keyboard:
+            - '{{ "\U0001F4A1" }} Aggiornare:/update, {{ "\U0001F4A1" }} Riavviare:/reboot'
+            - '{{ "\U0001F4A1" }} Spegnere:/shutdown'
+            - '{{ "\u21a9\ufe0f" }} Menú Principale:/stop'
+
+  - alias: Servizio Aggiornamento
+    initial_state: 'true'
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /update
+    action:
+      - service: notify.telegram_giancarlo
+        data_template:
+          message: Home Assistant verrà aggiornato alla {{ state_attr('binary_sensor.updater', 'newest_version') }}
+      - delay: '00:00:01'     
+      - service: hassio.addon_stdin
+        data:
+          addon: core_ssh
+          #addon: a0d7b954_ssh
+          input: '/usr/bin/ha core update'
+      - delay: '00:00:01'
+      - service: notify.telegram_giancarlo
+        data:
+          message: Aggiornamento in corso
+
+  - alias: Servizio Riavvio
+    initial_state: 'true'
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data: 
+          data: /reboot
+    action:
+      - data:
+          message: Riavvio
+        service: notify.telegram_giancarlo
+      - delay: '00:00:01'
+      - service: homeassistant.restart 
+
+  - alias: Servizio Spegnimento
+    initial_state: 'true'
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data: 
+          data: /shutdown
+    action:
+      - data:
+          message: Spegnimento
+        service: notify.telegram_giancarlo
+      - delay: '00:00:01'
+      - service: homeassistant.stop
