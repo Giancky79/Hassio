@@ -1,7 +1,13 @@
 sensor:
 
+##############################################################
+#  ╔═╗╦╔╦╗╦ ╦╦ ╦╔╗   ╦ ╦╔═╗╔╦╗╔═╗  ╔═╗╔═╗╔═╗╦╔═╗╔╦╗╔═╗╔╗╔╔╦╗ #
+#  ║ ╦║ ║ ╠═╣║ ║╠╩╗  ╠═╣║ ║║║║║╣   ╠═╣╚═╗╚═╗║╚═╗ ║ ╠═╣║║║ ║  #
+#  ╚═╝╩ ╩ ╩ ╩╚═╝╚═╝  ╩ ╩╚═╝╩ ╩╚═╝  ╩ ╩╚═╝╚═╝╩╚═╝ ╩ ╩ ╩╝╚╝ ╩  #
+##############################################################
+
   - platform: rest
-    name: HA breaking
+    name: HA Fix
     resource: 'https://api.github.com/repos/home-assistant/home-assistant/releases/latest'
     username: !secret github_user
     password: !secret github_token
@@ -14,6 +20,12 @@ sensor:
       Accept: application/vnd.github.v3+json
       Content-Type: application/json
       User-Agent: Home Assistant REST sensor
+
+##################################################################
+#  ╦  ╦╔═╗╦═╗╔═╗╦╔═╗╔╗╔  ╦ ╦╔═╗╔╦╗╔═╗  ╔═╗╔═╗╔═╗╦╔═╗╔╦╗╔═╗╔╗╔╔╦╗ #
+#  ╚╗╔╝║╣ ╠╦╝╚═╗║║ ║║║║  ╠═╣║ ║║║║║╣   ╠═╣╚═╗╚═╗║╚═╗ ║ ╠═╣║║║ ║  #
+#   ╚╝ ╚═╝╩╚═╚═╝╩╚═╝╝╚╝  ╩ ╩╚═╝╩ ╩╚═╝  ╩ ╩╚═╝╚═╝╩╚═╝ ╩ ╩ ╩╝╚╝ ╩  #
+##################################################################
 
   - platform: version
     name: Current Version
