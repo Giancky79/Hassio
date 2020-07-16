@@ -117,20 +117,42 @@ automation:
 #  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╚═╝╩  ═╩╝╩ ╩ ╩ ╚═╝   ╩ ╚═╝╩═╝╚═╝╚═╝╩╚═╩ ╩╩ ╩  ╚═╝╚═╝ ╩  #
 ##################################################################################
 
-  - alias: 'Notifica Update'
+  - alias: 'Notifica Update Fix'
     initial_state: 'true'
     trigger:
       - platform: template
-        value_template: "{{ states('sensor.latest_version') != states('sensor.current_version') }}"
+        value_template: >
+          {{ (states("sensor.current_version") != states("sensor.latest_version") and
+          states("sensor.potential_breaking_changes") == '0') }}
     action:
       - delay:
-          hours: '1'
+          minutes: '15'
       - service: notify.telegram_giancarlo
         data_template:
           message: >- 
             Home Assistant {{ states('sensor.latest_version') }} è disponibile, 
             la tua versione attuale è {{ states('sensor.current_version') }}
-            {{state_attr('sensor.ha_breaking','body')|regex_replace(find='\[.*\]?http.*', replace=')', ignorecase=False)}}
+            {{state_attr('sensor.ha_fix','body')|regex_replace(find='\[.*\]?.*', ignorecase=False) | replace ('(', '')}}
+          data:
+            inline_keyboard:
+              - '{{ "\U0001F4A1" }} Aggiornamento:/update'
+              
+  - alias: 'Notifica Update Breaking'
+    initial_state: 'true'
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states("sensor.current_version") != states("sensor.latest_version") and
+          states("sensor.potential_breaking_changes") != '0') }}
+    action:
+      - delay:
+          minutes: '15'
+      - service: notify.telegram_giancarlo
+        data_template:
+          message: >- 
+            Home Assistant {{ states('sensor.latest_version').split(".")[1] }} è disponibile, 
+            la tua versione attuale è {{ states('sensor.current_version') }}
+            {{state_attr('sensor.potential_breaking_changes', 'description')|regex_replace(find='\[.*\]?http.*', ignorecase=False)}}
           data:
             inline_keyboard:
               - '{{ "\U0001F4A1" }} Aggiornamento:/update'
