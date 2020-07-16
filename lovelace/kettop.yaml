@@ -36,11 +36,11 @@ cards:
       <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp;**Aggiornamenti
       Add-on:**&nbsp;&nbsp;{{ states.sensor.supervisor_updates.state }}
         
-       > {% for addon in states.sensor.supervisor_updates.attributes.addons %}
+      > {% for addon in states.sensor.supervisor_updates.attributes.addons %}
 
-         > {{ addon.name }}&nbsp; {{ addon.installed }} -> {{ addon.version }}
+        > {{ addon.name }}&nbsp; {{ addon.installed }} -> {{ addon.version }}
 
-       > {% endfor %}
+      > {% endfor %}
 
       -------------------------------------------
 
@@ -51,13 +51,13 @@ cards:
       <ha-icon icon="hacs:hacs"></ha-icon>&nbsp; **Aggiornamenti HACS:**
       &nbsp;&nbsp;{{ states.sensor.hacs.state }}
 
-        > {% for repo in states.sensor.hacs.attributes.repositories %}
+      > {% for repo in states.sensor.hacs.attributes.repositories %}
 
-          > {{ repo.display_name }}: _{{ repo["installed_version"] }}_ -> ***_{{repo["available_version"] }}_***
+        > {{ repo.display_name }}: _{{ repo["installed_version"] }}_ -> ***_{{repo["available_version"] }}_***
 
-        > {% endfor %}
+      > {% endfor %}
 
-        -------------------------------------------
+      -------------------------------------------
 
       {% endif %}
 
