@@ -5,60 +5,58 @@ cards:
     content: >
       **Benvenuto in Home Assistant**
 
+      ---
 
-      **versione installata**:  {{states('sensor.current_version')}}
+      {% if states("sensor.current_version") ==
+      states("sensor.latest_version")%} <ha-icon
+      icon="mdi:home-assistant"></ha-icon>&nbsp; **Versione Installata**: 
+        
+      - **{{states('sensor.current_version')}}**
+        
+      ---
 
-
-      ------------------------------------------- 
-
-
-      {% if states("sensor.current_version") != states("sensor.latest_version")
-      %} <ha-icon
-      icon="mdi:home-assistant"></ha-icon>&nbsp;***Aggiornamento***: 
-      &nbsp;&nbsp;{{states("sensor.current_version")}} ->
+      {% elif states("sensor.current_version") !=
+      states("sensor.latest_version")%} <ha-icon 
+      icon="mdi:home-assistant"></ha-icon>&nbsp;
+      ***Aggiornamento***:&nbsp;&nbsp; {{states('sensor.current_version')}} ->
       {{states('sensor.latest_version')}} 
 
-
-      - ***autore***: {{states.sensor.ha_fix.attributes["author"]["login"]}}
-      <img
-      src="{{states.sensor.ha_breaking.attributes["author"]["avatar_url"]}}"
+      <ha-icon  icon="mdi:playlist-edit"></ha-icon>&nbsp;***Autore***:
+      {{states.sensor.ha_fix.attributes["author"]["login"]}} <img
+      src="{{states.sensor.ha_fix.attributes["author"]["avatar_url"]}}"
       height="40" ></a>
 
 
       {{ state_attr("sensor.ha_fix", "body") }}
 
-      -------------------------------------------
+      ---
 
       {% endif %}
 
       {% if states("sensor.supervisor_updates") != "0" %}
         
-      <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp;**Aggiornamenti
+      <ha-icon icon="mdi:format-list-bulleted"></ha-icon>&nbsp;**Aggiornamenti
       Add-on:**&nbsp;&nbsp;{{ states.sensor.supervisor_updates.state }}
         
-      > {% for addon in states.sensor.supervisor_updates.attributes.addons %}
+      - {% for addon in states.sensor.supervisor_updates.attributes.addons %}
+        {{ addon.name }}&nbsp; {{ addon.installed }} -> {{ addon.version }}
+        {% endfor %}
 
-        > {{ addon.name }}&nbsp; {{ addon.installed }} -> {{ addon.version }}
-
-      > {% endfor %}
-
-      -------------------------------------------
+      ---
 
       {% endif %}
 
       {% if states("sensor.hacs") != "0" %}
 
-      <ha-icon icon="hacs:hacs"></ha-icon>&nbsp; **Aggiornamenti HACS:**
-      &nbsp;&nbsp;{{ states.sensor.hacs.state }}
+      <ha-icon icon="hacs:hacs"></ha-icon>&nbsp;  **Aggiornamenti
+      HACS:**&nbsp;&nbsp; {{ states.sensor.hacs.state }}
 
-      > {% for repo in states.sensor.hacs.attributes.repositories %}
+      - {% for repo in states.sensor.hacs.attributes.repositories %}
+        **{{ repo.display_name }}:** _{{ repo["installed_version"] }}_ -> _{{repo["available_version"] }}_
+        {% endfor %}
 
-        > {{ repo.display_name }}: _{{ repo["installed_version"] }}_ -> ***_{{repo["available_version"] }}_***
-
-      > {% endfor %}
-
-      -------------------------------------------
-
+        ---
+        
       {% endif %}
 
     style: |
