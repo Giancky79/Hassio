@@ -2,20 +2,19 @@ type: vertical-stack
 cards:
   - type: markdown
     theme: aqua-fiesta
-    content: >
+    content: >-
       **Benvenuto in Home Assistant**
 
       ---
 
       {% if (states("sensor.current_version") == states("sensor.latest_version")
-      and states("sensor.potential_breaking_changes") == '0') %}
+      and states("sensor.potential_breaking_changes") == '0') %}  <ha-icon
+      icon="mdi:home-assistant"></ha-icon>&nbsp; **Versione Installata:** 
+      {{states('sensor.current_version')}}
 
-      <ha-icon icon="mdi:home-assistant"></ha-icon>&nbsp; **Versione
-      Installata**: 
-        
-      - {{states('sensor.current_version')}}  
 
       ---
+
 
       {% elif (states("sensor.current_version") !=
       states("sensor.latest_version") and
@@ -30,15 +29,44 @@ cards:
       src="{{states.sensor.ha_fix.attributes["author"]["avatar_url"]}}"
       height="40" ></a>
 
-      {{ state_attr("sensor.ha_fix", "body") }}
+      {{ state_attr("sensor.ha_fix", "body")|regex_replace(find='\[.*\]?.*',
+      ignorecase=False) | replace ('(', '') }}
+
 
       ---  
+
 
       {% elif states("sensor.potential_breaking_changes") != '0' %}
 
       {{ state_attr("sensor.potential_breaking_changes", "description") }}
 
+
       ---
+
+
+      {% endif %}
+
+      {% if state_attr("sensor.supervisor_updates", "current_version") == 
+      state_attr("sensor.supervisor_updates", "newest_version") %}
+
+      <ha-icon  icon="mdi:home-assistant"></ha-icon>&nbsp; **Supervisor
+      Installato:** 
+      {{states.sensor.supervisor_updates.attributes["current_version"]}}
+
+
+      ---
+
+      {% elif state_attr("sensor.supervisor_updates", "current_version") != 
+      state_attr("sensor.supervisor_updates", "newest_version") %}
+
+
+      **Aggiornamento Supervisor:** {{ state_attr("sensor.supervisor_updates",
+      "current_version") }} ->  {{ state_attr("sensor.supervisor_updates",
+      "newest_version") }}
+
+
+      ---
+
 
       {% endif %}
 
@@ -51,7 +79,9 @@ cards:
         {{ addon.name }}&nbsp; {{ addon.installed }} -> {{ addon.version }}
         {% endfor %}
 
+
       ---
+
 
       {% endif %}
 
@@ -64,16 +94,18 @@ cards:
         **{{ repo.display_name }}:** _{{ repo["installed_version"] }}_ -> _{{repo["available_version"] }}_
         {% endfor %}
 
+
         ---
-        
+
+
       {% endif %}
     style: |
       ha-card {
-        #background: url("https://cdn.dribbble.com/users/60665/screenshots/3879059/home-assistant-400-300.gif?vid=1");
-        background: url("/local/sfondi/home-assistant.png");
-        background-repeat: no-repeat;
-        #background-attachment: scroll;
+        background: rgba(0, 0, 0, 0.6);
         background-position: auto; 
         background-size: cover;
-        color: black;
+        color: lime;
+        border: 4px solid orange; 
+        border-radius: 20px;  
+        text-align: justify;
       }
