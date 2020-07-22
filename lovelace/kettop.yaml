@@ -36,7 +36,8 @@ cards:
       ---  
 
 
-      {% elif states("sensor.potential_breaking_changes") != '0' %}
+      {% elif (states("sensor.current_version") != states("sensor.latest_version") 
+      and states("sensor.potential_breaking_changes") != '0') %}
 
       {{ state_attr("sensor.potential_breaking_changes", "description") }}
 
