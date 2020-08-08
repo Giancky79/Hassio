@@ -1,2 +1,21 @@
 title: Casa
 views:
+  - background: center / auto repeat url("/local/sfondi/deep_space2.jpg") fixed
+    icon: 'mdi:server'
+    panel: true
+    path: server
+    theme: aqua-fiesta
+    title: Server
+    badges: []
+    cards:
+      - !include lovelace/server/kettop.yaml
+
+  - background: center / auto repeat url("/local/sfondi/scontro_pianeti.jpg") fixed
+    icon: 'mdi:speaker'
+    panel: false
+    path: web-radio
+    theme: ''
+    title: Web Radio
+    badges: []
+    cards:
+      - !include lovelace/alexa_cards.yaml
