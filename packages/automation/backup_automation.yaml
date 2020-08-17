@@ -9,11 +9,13 @@ automation:
   - alias: 'Backup Full Automatico'
     trigger:
       - platform: time 
-        at: '10:00:00'
+        at: '05:30:00'
     condition:
       - condition: time
         weekday:
-          - mon
+          - sun
+          - wed
+          - fri
     action:
       - service: hassio.snapshot_full
         data_template:
@@ -28,7 +30,7 @@ automation:
   - alias: 'Backup Partial Automatico'
     trigger:
       - platform: time
-        at: '11:00:00'
+        at: '05:30:00'
     condition:
       - condition: time
         weekday:
@@ -55,11 +57,15 @@ automation:
 ################################################################################
 
           addons: 
-            - a0d7b954_nodered          
-
-#          repositories: 
-#            - https://github.com/hassio-addons/repository
-#            - https://github.com/esphome/hassio   
+            - core_samba
+            - core_mosquitto
+            - core_mariadb
+            - a0d7b954_portainer
+            - a0d7b954_nodered
+            - a0d7b954_vscode
+            - 7be23ff5_dropbox_sync
+            - a0d7b954_ssh
+            - a0d7b954_appdaemon
 
 ################################################################################
 #                                                                              #
