@@ -1,9 +1,9 @@
 switch:
 
   - platform: rest
-    name: Shelly1PM Switch - BA0CED
+    name: Shelly1PM Switch - <xxxyyyy>
     timeout: 5
-    resource: http://10.0.1.6/relay/0
+    resource: http://ip-shelly/relay/0
     body_on: 'turn=on'
     body_off: 'turn=off'
     is_on_template: '{{ value_json.ison == true }}'
@@ -12,5 +12,5 @@ switch:
     verify_ssl: false
     
   - platform: rest
-    resource: http://10.0.1.6/ota?update=1
-    name: Shelly1PM FW Update - BA0CED
+    resource: http://ip-shelly/ota?update=1
+    name: Shelly1PM FW Update - <xxxyyyy>
