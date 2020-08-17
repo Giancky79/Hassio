@@ -1,23 +1,3 @@
-switch:
-
-  - platform: rest
-    name: Shelly1PM Switch - <xxxyyyy>
-    timeout: 5
-    resource: http://ip/relay/0
-    body_on: 'turn=on'
-    body_off: 'turn=off'
-    is_on_template: '{{ value_json.ison == true }}'
-    headers:
-      Content-Type: application/json
-    verify_ssl: false
-
-
-  - platform: command_line
-    switches:
-      shelly1pm_fw_update_<xxxyyy> :
-        friendly_name: Shelly1PM FW Update - <xxxyyy>
-        command_on: "http://ip/ota?update=1"
-
 sensor:
 
   - platform: rest
