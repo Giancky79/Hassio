@@ -12,5 +12,5 @@ switch:
     verify_ssl: false
     
   - platform: rest
-    resource: http://ip-shelly/ota?update=1
+    resource: http://ip-shelly/ota?update
     name: Shelly1PM FW Update - <xxxyyyy>
