@@ -1,0 +1,70 @@
+automation:
+  
+  - alias: 'Avvio Samba Addon'
+    initial_state: true
+    trigger:
+      - event: start
+        platform: homeassistant
+    condition:
+      - condition: state
+        entity_id: sensor.samba
+        state: 'stopped'
+    action:
+      - service: hassio.addon_start
+        data:
+          addon: core_samba
+
+  - alias: 'Avvio Mariadb Addon'
+    initial_state: true
+    trigger:
+      - event: start
+        platform: homeassistant
+    condition:
+      - condition: state
+        entity_id: sensor.mariadb
+        state: 'stopped'
+    action:
+      - service: hassio.addon_start
+        data:
+          addon: core_mariadb
+
+  - alias: Addon Fermi
+    initial_state: true  
+    trigger:
+      platform: state
+      entity_id:
+        - sensor.web_ssh
+        - sensor.samba
+        - sensor.vscode
+        - sensor.mariadb
+      from: started
+      to: stopped
+    action:
+      - service: notify.telegram
+        data_template:
+          title: "Addon Fermi"
+          message: "{{ trigger.to_state.entity_id }} addon è fermo"
+
+  - alias: Aggiornamento Addon
+    initial_state: true
+    trigger:
+      - platform: template
+        value_template: "{{state_attr('sensor.mosquitto', 'version') != state_attr('sensor.mosquitto', 'version_latest')}}"
+      - platform: template
+        value_template: "{{state_attr('sensor.samba', 'version') != state_attr('sensor.samba', 'version_latest')}}"
+      - platform: template
+        value_template: "{{state_attr('sensor.web_ssh', 'version') != state_attr('sensor.web_ssh', 'version_latest')}}"
+      - platform: template
+        value_template: "{{state_attr('sensor.vscode', 'version') != state_attr('sensor.vscode', 'version_latest')}}"
+      - platform: template
+        value_template: "{{state_attr('sensor.mariadb', 'version') != state_attr('sensor.mariadb', 'version_latest')}}"
+    action:
+      service: notify.telegram
+      data_template:
+        title: "Aggiornamento Add-On Disponibile"
+        message: >-
+          {{ trigger.to_state.attributes.friendly_name }} add-on, 
+          
+          versione installata {{ trigger.to_state.attributes.version }}, 
+        
+          versione disponibile {{ trigger.to_state.attributes.version_latest }}
