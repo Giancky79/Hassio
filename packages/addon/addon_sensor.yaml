@@ -1,0 +1,37 @@
+sensor:
+
+  - platform: rest
+    resource: http://10.0.1.11:8123/api/hassio/addons/core_samba/info
+    name: samba
+    value_template: '{{ value_json.data.state }}'
+    timeout: 5
+    headers:
+      Authorization: !secret token_ha
+      Content-Type: application/json
+
+  - platform: rest
+    resource: http://10.0.1.11:8123/api/hassio/addons/a0d7b954_vscode/info
+    name: vscode
+    value_template: '{{ value_json.data.state }}'
+    timeout: 5
+    headers:
+      Authorization: !secret token_ha
+      Content-Type: application/json
+
+  - platform: rest
+    resource: http://10.0.1.11:8123/api/hassio/addons/a0d7b954_ssh/info
+    name: web ssh
+    value_template: '{{ value_json.data.state }}'     
+    timeout: 5
+    headers:
+      Authorization: !secret token_ha
+      Content-Type: application/json
+
+  - platform: rest
+    resource: http://10.0.1.11:8123/api/hassio/addons/core_mariadb/info
+    name: mariadb
+    value_template: '{{ value_json.data.state }}'
+    timeout: 5
+    headers:
+      Authorization: !secret token_ha
+      Content-Type: application/json
