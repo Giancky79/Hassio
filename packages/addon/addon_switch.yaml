@@ -1,0 +1,47 @@
+switch:
+  - platform: template
+    switches:
+      
+      samba:
+        value_template: "{{ is_state('sensor.samba', 'started') }}"
+        turn_on:
+          service: hassio.addon_start
+          data:
+            addon: core_samba
+        turn_off:
+          service: hassio.addon_stop
+          data:
+            addon: core_samba
+  
+      vscode:
+        value_template: "{{ is_state('sensor.vscode', 'started') }}"
+        turn_on:
+          service: hassio.addon_start
+          data:
+            addon: a0d7b954_vscode
+        turn_off:
+          service: hassio.addon_stop
+          data:
+            addon: a0d7b954_vscode
+  
+      web_ssh:
+        value_template: "{{ is_state('sensor.web_ssh', 'started') }}"
+        turn_on:
+          service: hassio.addon_start
+          data:
+            addon: a0d7b954_ssh
+        turn_off:
+          service: hassio.addon_stop
+          data:
+            addon: a0d7b954_ssh
+
+      mariadb:
+        value_template: "{{ is_state('sensor.mariadb', 'started') }}"
+        turn_on:
+          service: hassio.addon_start
+          data:
+            addon: core_mariadb
+        turn_off:
+          service: hassio.addon_stop
+          data:
+            addon: core_mariadb
