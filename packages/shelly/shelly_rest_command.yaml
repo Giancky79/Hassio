@@ -1,6 +1,6 @@
 rest_command:
-  shelly1pm_update_<>:
+  shelly1pm_update_<xxxyyy>:
     url: 'http://ip-shelly/ota?update=1'
     
-  shelly1pm_reboot_<>:
+  shelly1pm_reboot_<xxxyyy>:
     url: 'http://ip-shelly/reboot'
