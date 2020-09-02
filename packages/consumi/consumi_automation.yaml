@@ -1,10 +1,10 @@
 automation:
 
-############################################################################################
-#                                                                                          #
-#-------------------------------            MESE            -------------------------------#
-#                                                                                          #
-############################################################################################
+###############################################################
+#  ╔╗╔╔═╗╔╦╗╦╔═╗╦╔═╗╔═╗  ╔═╗╔═╗╔╗╔╔═╗╦ ╦╔╦╗╔═╗  ╔╦╗╔═╗╔═╗╔═╗  #
+#  ║║║║ ║ ║ ║╠╣ ║║  ╠═╣  ║  ║ ║║║║╚═╗║ ║║║║║ ║  ║║║║╣ ╚═╗║╣   #
+#  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╚═╝╚═╝╝╚╝╚═╝╚═╝╩ ╩╚═╝  ╩ ╩╚═╝╚═╝╚═╝  #
+###############################################################
 
   - alias: Costi Consumi Mese Precedente
     trigger:
@@ -18,9 +18,17 @@ automation:
         data_template:
           message: >-
             Report Consumi Mensili
+
+
             Consumo Mese: {{ (states('sensor.fascia_consumo_mensile_mono_oraria') | float)| round(2) }} kWh
+            
+            
             Consumo Mese precedente: {{ (states('input_number.consumo_mese_precedente') | float)| round(2) }} kWh
+            
+            
             Costo Mese: {{ (states('sensor.costo_mensile') | float)| round(2) }} €
+            
+            
             Costo Mese Precedente: {{ (states('input_number.costo_mese_precedente') | float)| round(2) }} €
       - service: input_number.set_value
         data_template:
@@ -33,11 +41,11 @@ automation:
           value: >-
             {{ (states('sensor.costo_mensile') | float)| round(2) }}'
 
-############################################################################################
-#                                                                                          #
-#-------------------------------            ANNO            -------------------------------#
-#                                                                                          #
-############################################################################################
+###############################################################
+#  ╔╗╔╔═╗╔╦╗╦╔═╗╦╔═╗╔═╗  ╔═╗╔═╗╔╗╔╔═╗╦ ╦╔╦╗╔═╗  ╔═╗╔╗╔╔╗╔╔═╗  #
+#  ║║║║ ║ ║ ║╠╣ ║║  ╠═╣  ║  ║ ║║║║╚═╗║ ║║║║║ ║  ╠═╣║║║║║║║ ║  #
+#  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╚═╝╚═╝╝╚╝╚═╝╚═╝╩ ╩╚═╝  ╩ ╩╝╚╝╝╚╝╚═╝  #
+###############################################################
 
   - alias: Costi Consumi Anno Precedente
     trigger:
@@ -53,9 +61,17 @@ automation:
       data:
         message: >
           Report Consumi Annuali
+          
+          
           Consumo Anno: {{ (states('sensor.fascia_consumo_annuale_mono_oraria') | float)| round(2) }} kWh
+          
+          
           Consumo Anno Precedente: {{(states('input_number.consumo_anno_precedente') | float)| round(2) }} kWh
+          
+          
           Costo Anno: {{ (states('sensor.costo_annuale') | float)| round(2) }} € 
+          
+          
           Costo Anno Precedente: {{(states('input_number.costo_anno_precedente') | float)| round(2) }} €      
     - service: input_number.set_value
       data_template:
@@ -67,3 +83,4 @@ automation:
         entity_id: input_number.costo_anno_precedente
         value: >-
           {{ (states('sensor.costo_annuale')| float)| round(2) }}
+
