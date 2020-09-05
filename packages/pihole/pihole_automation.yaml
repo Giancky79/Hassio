@@ -7,8 +7,8 @@ automation:
         to: 'Update'
     condition:
       - condition: state
-        entity_id: input_select.pihole_auto_updater
-        state: 'Auto'
+        entity_id: input_boolean.pihole_auto_updater
+        state: 'on'
     action:
       - service: script.pihole_updater
       - service: notify.telegram
@@ -22,8 +22,8 @@ automation:
         to: 'Update'
     condition:
       - condition: state
-        entity_id: input_select.pihole_auto_updater
-        state: 'Manual'
+        entity_id: input_boolean.pihole_auto_updater
+        state: 'off'
     action:
       - service: notify.telegram
         data_template:
