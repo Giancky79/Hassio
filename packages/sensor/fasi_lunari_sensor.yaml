@@ -7,7 +7,6 @@ sensor:
 
       moon_state:
         friendly_name: "Fasi Lunari"
-        entity_id: sensor.moon
         value_template: >-
           {{ {
           'new_moon' : 'Nuova',
@@ -19,7 +18,7 @@ sensor:
           'last_quarter' : 'Ultimo Quarto',
           'waning_crescent' : 'Calante'
           } [states('sensor.moon')] }}
-        icon_template: >-
+        icon_template: >
           {{ {
           'new_moon' : 'mdi:moon-new',
           'waxing_crescent' : 'mdi:moon-waxing-crescent',
