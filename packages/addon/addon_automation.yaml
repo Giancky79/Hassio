@@ -28,12 +28,19 @@ automation:
         data:
           addon: core_mariadb
 
+####################################
+#  ╔═╗╔╦╗╔╦╗╔═╗╔╗╔  ╔═╗╔═╗╦═╗╔╦╗╦  #
+#  ╠═╣ ║║ ║║║ ║║║║  ╠╣ ║╣ ╠╦╝║║║║  #
+#  ╩ ╩═╩╝═╩╝╚═╝╝╚╝  ╚  ╚═╝╩╚═╩ ╩╩  #
+####################################
+
   - alias: Addon Fermi
     initial_state: true  
     trigger:
       platform: state
       entity_id:
         - sensor.web_ssh
+        - sensor.mosquitto
         - sensor.samba
         - sensor.vscode
         - sensor.mariadb
@@ -45,26 +52,55 @@ automation:
           title: "Addon Fermi"
           message: "{{ trigger.to_state.entity_id }} addon è fermo"
 
+##########################################################
+#  ╔═╗╔═╗╔═╗╦╔═╗╦═╗╔╗╔╔═╗╔╦╗╔═╗╔╗╔╔╦╗╦  ╔═╗╔╦╗╔╦╗╔═╗╔╗╔  #
+#  ╠═╣║ ╦║ ╦║║ ║╠╦╝║║║╠═╣║║║║╣ ║║║ ║ ║  ╠═╣ ║║ ║║║ ║║║║  #
+#  ╩ ╩╚═╝╚═╝╩╚═╝╩╚═╝╚╝╩ ╩╩ ╩╚═╝╝╚╝ ╩ ╩  ╩ ╩═╩╝═╩╝╚═╝╝╚╝  #
+##########################################################
+
   - alias: Aggiornamento Addon
     initial_state: true
     trigger:
-      - platform: template
-        value_template: "{{state_attr('sensor.mosquitto', 'version') != state_attr('sensor.mosquitto', 'version_latest')}}"
-      - platform: template
-        value_template: "{{state_attr('sensor.samba', 'version') != state_attr('sensor.samba', 'version_latest')}}"
-      - platform: template
-        value_template: "{{state_attr('sensor.web_ssh', 'version') != state_attr('sensor.web_ssh', 'version_latest')}}"
-      - platform: template
-        value_template: "{{state_attr('sensor.vscode', 'version') != state_attr('sensor.vscode', 'version_latest')}}"
-      - platform: template
-        value_template: "{{state_attr('sensor.mariadb', 'version') != state_attr('sensor.mariadb', 'version_latest')}}"
+      platform: template
+      value_template: "{{ states('sensor.supervisor_updates') != '0'}}"
+    mode: parallel
+    max: 10  
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
       service: notify.telegram
       data_template:
         title: "Aggiornamento Add-On Disponibile"
         message: >-
-          {{ trigger.to_state.attributes.friendly_name }} add-on, 
-          
-          versione installata {{ trigger.to_state.attributes.version }}, 
-        
-          versione disponibile {{ trigger.to_state.attributes.version_latest }}
+          ------
+          {% for addon in states.sensor.supervisor_updates.attributes.addons %}
+            {{addon.name }}: {{ addon.installed }} -> {{ addon.version }}
+          {% endfor %} 
+
+#######################################################
+#  ╔═╗╔═╗╔═╗╦╔═╗╦═╗╔╗╔╔═╗╔╦╗╔═╗╔╗╔╔╦╗╦  ╦ ╦╔═╗╔═╗╔═╗  #
+#  ╠═╣║ ╦║ ╦║║ ║╠╦╝║║║╠═╣║║║║╣ ║║║ ║ ║  ╠═╣╠═╣║  ╚═╗  #
+#  ╩ ╩╚═╝╚═╝╩╚═╝╩╚═╝╚╝╩ ╩╩ ╩╚═╝╝╚╝ ╩ ╩  ╩ ╩╩ ╩╚═╝╚═╝  #
+#######################################################
+
+  - alias: Aggiornamento HACS
+    initial_state: true
+    trigger:
+      platform: template
+      value_template: "{{ states('sensor.hacs') != '0'}}"
+    mode: parallel
+    max: 10
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+    action:
+      service: notify.telegram
+      data_template:
+        title: "Aggiornamento HACS Disponibile"
+        message: >-
+          ------
+          {% for hacs in states.sensor.hacs.attributes.repositories %}
+            {{hacs.display_name }}: {{ hacs.installed_version }} -> {{ hacs.available_version }}
+          {% endfor %}
+
