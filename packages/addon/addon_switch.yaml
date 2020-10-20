@@ -45,3 +45,14 @@ switch:
           service: hassio.addon_stop
           data:
             addon: core_mariadb
+
+      zigbee2mqtt:
+        value_template: "{{ is_state('sensor.zigbee2mqtt', 'started') }}"
+        turn_on:
+          service: hassio.addon_start
+          data:
+            addon: 7ad98f9c_zigbee2mqtt
+        turn_off:
+          service: hassio.addon_stop
+          data:
+            addon: 7ad98f9c_zigbee2mqtt
