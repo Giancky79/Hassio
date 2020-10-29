@@ -1,10 +1,10 @@
 type: vertical-stack
 cards:
   - type: markdown
-    theme: null
-    content: >-
+    content: >
 
-      {% if states('sensor.current_version') != states('sensor.latest_version') %}
+      {% if states('sensor.current_version') != states('sensor.latest_version')
+      %}
 
 
       <font color="lime" size="4"> <ha-icon icon="mdi:update"> </ha-icon> &nbsp;
@@ -16,10 +16,11 @@ cards:
       </font>
 
 
-      <font color="lime" size="4"> <ha-icon icon="mdi:feather"> </ha-icon> &nbsp;
-      Autore: &emsp;  <font
-      color="yellow">{{states.sensor.ha_fix.attributes["author"]["login"]}} &emsp;
-      <img src="{{states.sensor.ha_fix.attributes["author"]["avatar_url"]}}"
+      <font color="lime" size="4"> <ha-icon icon="mdi:feather"> </ha-icon>
+      &nbsp; Autore: &emsp;  <font
+      color="yellow">{{states.sensor.ha_fix.attributes["author"]["login"]}}
+      &emsp; <img
+      src="{{states.sensor.ha_fix.attributes["author"]["avatar_url"]}}"
       width="60" height="60">
 
       > {{ state_attr('sensor.ha_fix', 'body')|regex_replace(find='\[.*\]?.*',
@@ -52,7 +53,7 @@ cards:
       _{{ addon.version_latest }}_**   {% endfor %}  </font>
 
       {% else %}
- 
+
       {% endif %}
 
       {% if states("sensor.hacs") != "0" %}
@@ -70,3 +71,10 @@ cards:
       {% else %}
 
       {% endif %}
+    style: |
+      ha-card {
+        --primary-text-color: royalblue;
+        border: 4px solid royalblue; 
+        border-radius: 20px;  
+        background: rgba(0, 0, 0, 0.4);
+      }
