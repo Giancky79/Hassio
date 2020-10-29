@@ -35,3 +35,7 @@ sensor:
     name: Latest Version
     image: qemux86-64
     source: hassio
+ 
+  - platform: command_line
+    name: HA Start
+    command: grep -m1 'Home Assistant initialized' home-assistant.log | awk '{ print $6, $7, $8, $9, $10 }'
