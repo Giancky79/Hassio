@@ -1,7 +1,7 @@
 type: vertical-stack
 cards:
   - type: markdown
-    theme: aqua-fiesta
+    theme: null
     content: >-
 
       {% if states('sensor.current_version') != states('sensor.latest_version') %}
