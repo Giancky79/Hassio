@@ -36,37 +36,37 @@ cards:
       &nbsp; **Aggiornamento Supervisor:** 
 
 
-     > <font color="yellow">
-     **{{state_attr('sensor.supervisor_updates','current_version')}} ->  {{
-     state_attr('sensor.supervisor_updates','newest_version')}}**  </font>
+      > <font color="yellow">
+      **{{state_attr('sensor.supervisor_updates','current_version')}} ->  {{
+      state_attr('sensor.supervisor_updates','newest_version')}}**  </font>
 
 
-     {% elif states('sensor.supervisor_updates') != "0" %}
+      {% elif states('sensor.supervisor_updates') != "0" %}
 
 
-     <font color="lime" size="4"> <ha-icon icon="mdi:format-list-bulleted">
-     </ha-icon> &nbsp; **Aggiornamenti Add-on**    {% for addon in
-     state_attr('sensor.supervisor_updates','addons') %}   <font color="lime"> 
+      <font color="lime" size="4"> <ha-icon icon="mdi:format-list-bulleted">
+      </ha-icon> &nbsp; **Aggiornamenti Add-on**    {% for addon in
+      state_attr('sensor.supervisor_updates','addons') %}   <font color="lime"> 
 
-     - **{{addon.name }}:**   <font color="yellow"> **_{{ addon.installed }}_ ->
-     _{{ addon.version }}_**   {% endfor %}  </font>
+      - **{{addon.name }}:**   <font color="yellow"> **_{{ addon.installed }}_ ->
+      _{{ addon.version }}_**   {% endfor %}  </font>
 
-     {% else %}
+      {% else %}
+ 
+      {% endif %}
 
-     {% endif %}
+      {% if states("sensor.hacs") != "0" %}
 
-     {% if states("sensor.hacs") != "0" %}
+      <font color="lime" size="4"> <ha-icon icon="mdi:alpha-c-box"> </ha-icon>
+      &nbsp; **Aggiornamenti HACS:**
 
-     <font color="lime" size="4"> <ha-icon icon="mdi:alpha-c-box"> </ha-icon>
-     &nbsp; **Aggiornamenti HACS:**
+      {% for repo in state_attr('sensor.hacs','repositories') %} <font
+      color="lime">
 
-     {% for repo in state_attr('sensor.hacs','repositories') %} <font
-     color="lime">
+      - **{{repo.display_name}}** <font color="yellow">
+      **_{{repo["installed_version"]}}_ -> _{{repo["available_version"]}}_** {%
+      endfor %} </font> 
 
-     - **{{repo.display_name}}** <font color="yellow">
-     **_{{repo["installed_version"]}}_ -> _{{repo["available_version"]}}_** {%
-     endfor %} </font> 
+      {% else %}
 
-     {% else %}
-
-     {% endif %}
+      {% endif %}
