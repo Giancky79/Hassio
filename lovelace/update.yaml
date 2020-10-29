@@ -48,8 +48,8 @@ cards:
       </ha-icon> &nbsp; **Aggiornamenti Add-on**    {% for addon in
       state_attr('sensor.supervisor_updates','addons') %}   <font color="lime"> 
 
-      - **{{addon.name }}:**   <font color="yellow"> **_{{ addon.installed }}_ ->
-      _{{ addon.version }}_**   {% endfor %}  </font>
+      - **{{addon.name }}:**   <font color="yellow"> **_{{ addon.version }}_ ->
+      _{{ addon.version_latest }}_**   {% endfor %}  </font>
 
       {% else %}
  
