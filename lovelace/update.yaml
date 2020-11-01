@@ -3,42 +3,36 @@ cards:
   - type: markdown
     content: >-
       {% if states('sensor.current_version') != states('sensor.latest_version')
-      %} <p> <font color="lime"> <h3> <ha-icon icon="mdi:update"> </ha-icon>
-      &nbsp; Aggiornamento di versione:  <ul>  <font color="yellow">
+      %} <font color="lime"> <h3> <ha-icon icon="mdi:update"> </ha-icon> &nbsp;
+      Aggiornamento di versione:  <ul>  <font color="yellow">
       <em>{{states('sensor.current_version')}} -> {{states('sensor.ha_fix')}}
-      </em> </ul> </h3> </font> <p> <font color="lime"> <h3> <ha-icon
+      </em> </ul> </h3> </font> <font color="lime"> <h3> <ha-icon
       icon="mdi:feather"> </ha-icon> &nbsp; Autore: &emsp; <font color="yellow">
       {{states.sensor.ha_fix.attributes["author"]["login"]}} &emsp; <img
       src="{{states.sensor.ha_fix.attributes["author"]["avatar_url"]}}"
-      width="60" height="60"> <br>
-
-
-      {{state_attr('sensor.ha_fix', 'body')|regex_replace(find='\[.*\]?.*',
-      ignorecase=False)|replace ('(', '')}} </h3>  </font>  {% else %} {% endif
-      %} </p> 
-
-      <p> {% if state_attr('sensor.supervisor_updates', 'current_version') != 
+      width="60" height="60"><br><br><ul>{{state_attr('sensor.ha_fix',
+      'body')|regex_replace(find='\[.*\]?.*', ignorecase=False)|replace ('(',
+      '')| replace ('-','•')}} </ul></h3>  </font>  {% else %} {% endif %} {% if
+      state_attr('sensor.supervisor_updates', 'current_version') != 
       state_attr('sensor.supervisor_updates', 'newest_version') %} <hr> <font
       color="lime" >  <h3>  <ha-icon icon="mdi:home-assistant">  </ha-icon>
       Aggiornamento Supervisor: <br>  <ul>  <font color="yellow">  <em>
       {{state_attr('sensor.supervisor_updates','current_version')}} ->
       {{state_attr('sensor.supervisor_updates','newest_version')}} </em> </ul>
-      </h3> </font> </p>
-
-      <p> {% elif states('sensor.supervisor_updates') != "0" %}  <hr> <font
-      color="lime"> <h4> <ha-icon icon="mdi:format-list-bulleted"> </ha-icon>
-      Aggiornamenti Add-on:  <br> <ul> {% for addon in
-      state_attr('sensor.supervisor_updates','addons') %}     <font
-      color="lime">  {{addon.name }}:     </font> <font color="yellow"> <em> 
-      {{addon.version}} -> {{addon.version_latest}} {% endfor %} </em> </font>
-      {% else %} {% endif %}  </h4>  </ul>  </p> 
-
-      <p> {% if states("sensor.hacs") != "0" %}  <hr> <h4> <font color="lime"> 
-      <ha-icon icon="mdi:alpha-c-box"> </ha-icon> &nbsp; Aggiornamenti HACS:
-      <ul> {% for repo in state_attr('sensor.hacs','repositories') %} <font
-      color="lime"> {{repo.display_name}}  </font>  <font color="yellow">  <em>
+      </h3> </font> {% elif states('sensor.supervisor_updates') != "0" %} <hr>
+      <font color="lime"> <h3> <ha-icon icon="mdi:format-list-bulleted">
+      </ha-icon> &nbsp; Aggiornamenti Add-on:  <br>  <br> {% for addon in
+      state_attr('sensor.supervisor_updates','addons') %}  <font color="lime">
+      <li> {{addon.name }}: <font color="yellow">  <em> {{addon.version}} ->
+      {{addon.version_latest}}  {% endfor %}  </em> </li> </font> </h3> {% else
+      %}  {%endif %} {% if states("sensor.hacs") != "0" %}  <hr> <font 
+      color="lime"> <h3> <ha-icon icon="mdi:alpha-c-box"> </ha-icon> &nbsp; 
+      Aggiornamenti HACS:
+      <br> <br> {% for repo in state_attr('sensor.hacs','repositories') %} <font
+      color="lime"> <li> {{repo.display_name}} <font color="yellow">  <em>
       {{repo["installed_version"]}} -> {{repo["available_version"]}}  {% endfor
-      %} {% else %} {% endif %} </em> </h4> </font> </p>
+      %} </em> </li> </h3> </font> {% else %} {% endif %}
+
     style: |
       ha-card {
       --primary-text-color: royalblue;
