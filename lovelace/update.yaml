@@ -5,7 +5,7 @@ cards:
       {% if states('sensor.current_version') != states('sensor.latest_version')
       %} <font color="lime"> <h3> <ha-icon icon="mdi:update"> </ha-icon> &nbsp;
       Aggiornamento di versione:  <ul>  <font color="yellow">
-      <em>{{states('sensor.current_version')}} -> {{states('sensor.ha_fix')}}
+      <em>{{states('sensor.current_version')}} -> {{states('sensor.latest_version')}}
       </em> </ul> </h3> </font> <font color="lime"> <h3> <ha-icon
       icon="mdi:feather"> </ha-icon> &nbsp; Autore: &emsp; <font color="yellow">
       {{states.sensor.ha_fix.attributes["author"]["login"]}} &emsp; <img
