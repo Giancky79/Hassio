@@ -27,12 +27,11 @@ cards:
       {{addon.version_latest}}  {% endfor %}  </em> </li> </font> </h3> {% else
       %}  {%endif %} {% if states("sensor.hacs") != "0" %}  <hr> <font 
       color="lime"> <h3> <ha-icon icon="mdi:alpha-c-box"> </ha-icon> &nbsp; 
-      Aggiornamenti HACS:
-      <br> <br> {% for repo in state_attr('sensor.hacs','repositories') %} <font
-      color="lime"> <li> {{repo.display_name}} <font color="yellow">  <em>
+      Aggiornamenti HACS: <br> <br> {% for repo in
+      state_attr('sensor.hacs','repositories') %} <font color="lime"> <li>
+      {{repo.display_name}} <font color="yellow">  <em>
       {{repo["installed_version"]}} -> {{repo["available_version"]}}  {% endfor
       %} </em> </li> </h3> </font> {% else %} {% endif %}
-
     style: |
       ha-card {
       --primary-text-color: royalblue;
@@ -40,3 +39,4 @@ cards:
       border-radius: 20px;  
       background: rgba(0, 0, 0, 0.4);
       }
+
