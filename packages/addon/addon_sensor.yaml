@@ -16,17 +16,12 @@ sensor:
 #  ╚═╝╝╚╝╩ ╩╩  ╚═╝╩ ╩╚═╝ ╩ ╚═╝  #
 #################################
 
-  - platform: rest
-    resource: http://10.0.1.11:8123/api/hassio/snapshots
-    name: snapshots
-    value_template: '{{ value_json.data.snapshots | length }}'
-    json_attributes_path: "$.data"
+  - platform: command_line
+    name: Snapshots
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/snapshots'
+    value_template: "{{ value_json.data.snapshots | length }}"
     json_attributes:
-      - snapshots
-    timeout: 5
-    headers:
-      Authorization: !secret token_ha
-      Content-Type: application/json
+      - data
 
 #####################
 #  ╔═╗╔═╗╔╦╗╔╗ ╔═╗  #
@@ -34,67 +29,73 @@ sensor:
 #  ╚═╝╩ ╩╩ ╩╚═╝╩ ╩  #
 #####################
 
-  - platform: rest
-    resource: http://10.0.1.11:8123/api/hassio/addons/core_samba/info
-    name: samba
-    value_template: '{{ value_json.data.state }}'
-    json_attributes_path: "$.data"
-    json_attributes:
-      - version
-      - version_latest
-    timeout: 5
-    headers:
-      Authorization: !secret token_ha
-      Content-Type: application/json
+  - platform: command_line
+    name: Samba Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/core_samba/info'
+    value_template: "{{ value_json.data.state }}"
+    
+#########################
+#  ╦  ╦╔═╗╔═╗╔═╗╔╦╗╔═╗  #
+#  ╚╗╔╝╚═╗║  ║ ║ ║║║╣   #
+#   ╚╝ ╚═╝╚═╝╚═╝═╩╝╚═╝  #
+#########################
 
-  - platform: rest
-    resource: http://10.0.1.11:8123/api/hassio/addons/a0d7b954_vscode/info
-    name: vscode
-    value_template: '{{ value_json.data.state }}'
-    json_attributes_path: "$.data"
-    json_attributes:
-      - version
-      - version_latest
-    timeout: 5
-    headers:
-      Authorization: !secret token_ha
-      Content-Type: application/json
+  - platform: command_line
+    name: Vscode Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_vscode/info'
+    value_template: "{{ value_json.data.state }}"
 
-  - platform: rest
-    resource: http://10.0.1.11:8123/api/hassio/addons/a0d7b954_ssh/info
-    name: web ssh
-    value_template: '{{ value_json.data.state }}'
-    json_attributes_path: "$.data"
-    json_attributes:
-      - version
-      - version_latest
-    timeout: 5
-    headers:
-      Authorization: !secret token_ha
-      Content-Type: application/json
+###########################
+#  ╦ ╦╔═╗╔╗  ┬ ╔═╗╔═╗╦ ╦  #
+#  ║║║║╣ ╠╩╗┌┼─╚═╗╚═╗╠═╣  #
+#  ╚╩╝╚═╝╚═╝└┘ ╚═╝╚═╝╩ ╩  #
+###########################
 
-  - platform: rest
-    resource: http://10.0.1.11:8123/api/hassio/addons/7ad98f9c_zigbee2mqtt/info
-    name: zigbee2mqtt
-    value_template: '{{ value_json.data.state }}'
-    json_attributes_path: "$.data"
-    json_attributes:
-      - version
-      - version_latest
-    timeout: 5
-    headers:
-      Authorization: !secret token_ha
-      Content-Type: application/json
+  - platform: command_line
+    name: Webssh Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_ssh/info'
+    value_template: "{{ value_json.data.state }}"
 
-  - platform: rest
-    resource: http://10.0.1.11:8123/api/hassio/addons/core_mariadb/info
-    name: mariadb
-    value_template: '{{ value_json.data.state }}'
-    json_attributes_path: "$.data"
-    json_attributes:
-      - version
-      - version_latest
-    timeout: 5
-    headers:
-      Authorization: !secret token_ha
-      Content-Type: application/json
+####################################
+#  ╔═╗╦╔═╗╔╗ ╔═╗╔═╗  ╔╦╗╔═╗╔╦╗╔╦╗  #
+#  ╔═╝║║ ╦╠╩╗║╣ ║╣   ║║║║═╬╗║  ║   #
+#  ╚═╝╩╚═╝╚═╝╚═╝╚═╝  ╩ ╩╚═╝╚╩  ╩   #
+####################################
+
+  - platform: command_line
+    name: Zigbee2Mqtt Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/7ad98f9c_zigbee2mqtt/info'
+    value_template: "{{ value_json.data.state }}"
+
+#########################
+#  ╔╦╗╔═╗╦═╗╦╔═╗╔╦╗╔╗   #
+#  ║║║╠═╣╠╦╝║╠═╣ ║║╠╩╗  #
+#  ╩ ╩╩ ╩╩╚═╩╩ ╩═╩╝╚═╝  #
+#########################
+
+  - platform: command_line
+    name: MariaDB Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/core_mariadb/info'
+    value_template: "{{ value_json.data.state }}"
+
+###########################
+#  ╔╗╔╔═╗╔╦╗╔═╗╦═╗╔═╗╔╦╗  #
+#  ║║║║ ║ ║║║╣ ╠╦╝║╣  ║║  #
+#  ╝╚╝╚═╝═╩╝╚═╝╩╚═╚═╝═╩╝  #
+###########################
+
+  - platform: command_line
+    name: Nodered Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_nodered/info'
+    value_template: "{{ value_json.data.state }}"
+
+###############################
+#  ╔═╗╔═╗╦═╗╔╦╗╔═╗╦╔╗╔╔═╗╦═╗  #
+#  ╠═╝║ ║╠╦╝ ║ ╠═╣║║║║║╣ ╠╦╝  #
+#  ╩  ╚═╝╩╚═ ╩ ╩ ╩╩╝╚╝╚═╝╩╚═  #
+###############################
+
+  - platform: command_line
+    name: Portainer Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_portainer/info'
+    value_template: "{{ value_json.data.state }}"
