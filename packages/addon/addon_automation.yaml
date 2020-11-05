@@ -45,7 +45,7 @@ automation:
       - service: notify.telegram_giancarlo
         data:
           title: "Addon Fermi"
-          message: "{{ trigger.to_state.entity_id }} è stato fermato"
+          message: "{{ trigger.to_state.name }} è stato fermato"
           
 ##########################################################
 #  ╔═╗╔═╗╔═╗╦╔═╗╦═╗╔╗╔╔═╗╔╦╗╔═╗╔╗╔╔╦╗╦  ╔═╗╔╦╗╔╦╗╔═╗╔╗╔  #
