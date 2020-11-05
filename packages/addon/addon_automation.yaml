@@ -1,4 +1,5 @@
 automation:
+
   - alias: "Avvio Addon"
     initial_state: true
     trigger:
@@ -23,6 +24,7 @@ automation:
               - service: hassio.addon_start
                 data:
                   addon: core_mariadb
+                  
   - alias: Addon Fermi
     initial_state: true
     trigger:
