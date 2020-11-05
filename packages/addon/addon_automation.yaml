@@ -1,32 +1,28 @@
 automation:
-  - alias: "Avvio Samba Addon"
+  - alias: "Avvio Addon"
     initial_state: true
     trigger:
       - event: start
         platform: homeassistant
-    condition:
-      - condition: state
-        entity_id: sensor.samba_addon
-        state: "stopped"
+    mode: restart
     action:
-      - service: hassio.addon_start
-        data:
-          addon: core_samba
-
-  - alias: "Avvio Mariadb Addon"
-    initial_state: true
-    trigger:
-      - event: start
-        platform: homeassistant
-    condition:
-      - condition: state
-        entity_id: sensor.mariadb_addon
-        state: "stopped"
-    action:
-      - service: hassio.addon_start
-        data:
-          addon: core_mariadb
-
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: sensor.samba_addon
+                state: "stopped"
+            sequence:
+              - service: hassio.addon_start
+                data:
+                  addon: core_samba
+          - conditions:
+              - condition: state
+                entity_id: sensor.mariadb_addon
+                state: "stopped"
+            sequence:
+              - service: hassio.addon_start
+                data:
+                  addon: core_mariadb
   - alias: Addon Fermi
     initial_state: true
     trigger:
@@ -44,10 +40,10 @@ automation:
     mode: parallel
     max: 5
     action:
-      - service: notify.telegram
+      - service: notify.telegram_giancarlo
         data:
           title: "Addon Fermi"
-          message: "{{ trigger.to_state.entity_id }} addon è fermo"
+          message: "{{ trigger.to_state.entity_id }} è stato fermato"
           
 ##########################################################
 #  ╔═╗╔═╗╔═╗╦╔═╗╦═╗╔╗╔╔═╗╔╦╗╔═╗╔╗╔╔╦╗╦  ╔═╗╔╦╗╔╦╗╔═╗╔╗╔  #
