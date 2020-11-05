@@ -1,57 +1,54 @@
 automation:
-  
-  - alias: 'Avvio Samba Addon'
+  - alias: "Avvio Samba Addon"
     initial_state: true
     trigger:
       - event: start
         platform: homeassistant
     condition:
       - condition: state
-        entity_id: sensor.samba
-        state: 'stopped'
+        entity_id: sensor.samba_addon
+        state: "stopped"
     action:
       - service: hassio.addon_start
         data:
           addon: core_samba
 
-  - alias: 'Avvio Mariadb Addon'
+  - alias: "Avvio Mariadb Addon"
     initial_state: true
     trigger:
       - event: start
         platform: homeassistant
     condition:
       - condition: state
-        entity_id: sensor.mariadb
-        state: 'stopped'
+        entity_id: sensor.mariadb_addon
+        state: "stopped"
     action:
       - service: hassio.addon_start
         data:
           addon: core_mariadb
 
-####################################
-#  ╔═╗╔╦╗╔╦╗╔═╗╔╗╔  ╔═╗╔═╗╦═╗╔╦╗╦  #
-#  ╠═╣ ║║ ║║║ ║║║║  ╠╣ ║╣ ╠╦╝║║║║  #
-#  ╩ ╩═╩╝═╩╝╚═╝╝╚╝  ╚  ╚═╝╩╚═╩ ╩╩  #
-####################################
-
   - alias: Addon Fermi
-    initial_state: true  
+    initial_state: true
     trigger:
       platform: state
-      entity_id:
-        - sensor.web_ssh
-        - sensor.mosquitto
-        - sensor.samba
-        - sensor.vscode
-        - sensor.mariadb
-      from: started
-      to: stopped
+      entity_id: 
+        - sensor.mariadb_addon
+        - sensor.nodered_addon
+        - sensor.portainer_addon
+        - sensor.samba_addon
+        - sensor.vscode_addon
+        - sensor.webssh_addon
+        - sensor.zigbee2mqtt_addon
+      from: 'started'
+      to: 'stopped'
+    mode: parallel
+    max: 5
     action:
       - service: notify.telegram
-        data_template:
+        data:
           title: "Addon Fermi"
           message: "{{ trigger.to_state.entity_id }} addon è fermo"
-
+          
 ##########################################################
 #  ╔═╗╔═╗╔═╗╦╔═╗╦═╗╔╗╔╔═╗╔╦╗╔═╗╔╗╔╔╦╗╦  ╔═╗╔╦╗╔╦╗╔═╗╔╗╔  #
 #  ╠═╣║ ╦║ ╦║║ ║╠╦╝║║║╠═╣║║║║╣ ║║║ ║ ║  ╠═╣ ║║ ║║║ ║║║║  #
@@ -64,25 +61,39 @@ automation:
       platform: template
       value_template: "{{ states('sensor.supervisor_updates') != '0'}}"
     mode: parallel
-    max: 10  
+    max: 10
     condition:
       - condition: template
         value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
-      service: notify.telegram
-      data_template:
+      service: notify.telegram_giancarlo
+      data:
         title: "Aggiornamento Add-On Disponibile"
         message: >-
           ------
           {% for addon in states.sensor.supervisor_updates.attributes.addons %}
-            {{addon.name }}: {{ addon.installed }} -> {{ addon.version }}
-          {% endfor %} 
+            {{addon.name }}: {{ addon.version }} -> {{ addon.version_latest }}
+          {% endfor %}
 
-#######################################################
-#  ╔═╗╔═╗╔═╗╦╔═╗╦═╗╔╗╔╔═╗╔╦╗╔═╗╔╗╔╔╦╗╦  ╦ ╦╔═╗╔═╗╔═╗  #
-#  ╠═╣║ ╦║ ╦║║ ║╠╦╝║║║╠═╣║║║║╣ ║║║ ║ ║  ╠═╣╠═╣║  ╚═╗  #
-#  ╩ ╩╚═╝╚═╝╩╚═╝╩╚═╝╚╝╩ ╩╩ ╩╚═╝╝╚╝ ╩ ╩  ╩ ╩╩ ╩╚═╝╚═╝  #
-#######################################################
+  - alias: Aggiornamento Supervisor
+    initial_state: true
+    trigger:
+      platform: template
+      value_template: >
+        {{ state_attr('sensor.supervisor_updates','current_version') != 
+        state_attr('sensor.supervisor_updates','newest_version') }}
+    condition:
+      - condition: template
+        value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
+    action:
+      service: notify.telegram_giancarlo
+      data:
+        title: "Aggiornamento Supervisor Disponibile"
+        message: >-
+          ------
+
+          {{ state_attr('sensor.supervisor_updates','current_version') }} ->
+          {{ state_attr('sensor.supervisor_updates','newest_version') }}
 
   - alias: Aggiornamento HACS
     initial_state: true
@@ -95,12 +106,11 @@ automation:
       - condition: template
         value_template: "{{ trigger.from_state.state != trigger.to_state.state }}"
     action:
-      service: notify.telegram
-      data_template:
+      service: notify.telegram_giancarlo
+      data:
         title: "Aggiornamento HACS Disponibile"
         message: >-
           ------
           {% for hacs in states.sensor.hacs.attributes.repositories %}
             {{hacs.display_name }}: {{ hacs.installed_version }} -> {{ hacs.available_version }}
           {% endfor %}
-
