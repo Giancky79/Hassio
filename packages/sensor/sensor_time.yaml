@@ -10,36 +10,30 @@ sensor:
           
       odd_even:
         friendly_name: 'Giorno'
-        entity_id: sensor.date
         value_template: >
-          {% if (now().strftime("%-d") | int % 2) == 0 %}
-            Pari
-          {% else %}
+          {% if states('sensor.date') and now().day % 2 == 1 %}
             Dispari
+          {% else %}
+            Pari
           {% endif %}
 
       weekday:
-        friendly_name: Settimana
-        entity_id: sensor.date
-        icon_template: mdi:calendar-range
+        friendly_name: "Giorno della Settimana"
         value_template: >
-          {% set days = ["Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato", "Domenica"] %}
-          {% set weekday = days[now().weekday()] %}
-            {{ weekday }}
+          {{ states('sensor.date') and ['Lunedì','Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'][now().weekday()]}}
+        icon_template: >
+          mdi:{{['emoticon-dead-outline', 'emoticon-angry-outline', 'emoticon-sad-outline','emoticon-neutral-outline','emoticon-cool-outline','emoticon-excited-outline','emoticon-happy-outline'][now().strftime('%A')] }}
 
       month:
         friendly_name: Mese
-        entity_id: sensor.date
-        icon_template: mdi:calendar-range
         value_template: >
-          {% set mese = ["Dicembre","Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre"] %}
-          {% set month = mese[now().month] %}
-            {{ month }}
+           {{ states('sensor.date') and ['Dicembre','Gennaio','Febbraio','Marzo','Aprile','Maggio','Giugno','Luglio','Agosto','Settembre','Ottobre','Novembre'][now().month] }}
+        icon_template: mdi:calendar-month
 
       fine_del_mese:
         friendly_name: "Fine Del Mese"
-        entity_id: sensor.date
         value_template: >
+          {% set date = states('sensor.date') %}
           {% if now().month in [1,3,5,7,8,10,12] %}
             {{ 31 - now().day }}
           {% elif now().month in [4,6,9,11] %}
