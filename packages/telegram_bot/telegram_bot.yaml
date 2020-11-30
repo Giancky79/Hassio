@@ -4,4 +4,3 @@ telegram_bot:
   allowed_chat_ids: 
     - !secret chat_ids_giancarlo
     - !secret chat_ids_oksana
-  parse_mode: html
