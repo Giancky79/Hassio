@@ -1,0 +1,39 @@
+automation:
+  - alias: Repack DB
+    initial_state: true
+    trigger:
+      platform: state
+      entity_id: sensor.db_size
+    condition:
+      - condition: time
+        after: " 04:10:00"
+        before: " 05:00:00"
+    action:
+      - service: input_text.set_value
+        data:
+          entity_id: input_text.previous_dimension_db
+          value: "{{states('sensor.db_size')}}"
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.repack_starting
+        data:
+          time: "{{ now().strftime('%H:%M:%S') }}"
+      - wait_template: "{{ (states('input_text.previous_dimension_db') |float) - (states('sensor.db_size') |float ) > 10 }}"
+        timeout: "00:30:00"
+        continue_on_timeout: false
+      - service: input_datetime.set_datetime
+        entity_id: input_datetime.repack_ending
+        data:
+          time: "{{ now().strftime('%H:%M:%S') }}"
+      - service: input_text.set_value
+        data:
+          entity_id: input_text.repack
+          value: >
+            {{ (((trigger.to_state.state|float) / (states('input_text.previous_dimension_db')|float)) * 100 - 100) |round(2)|replace('-','') }} %
+      - service: notify.telegram
+        data:
+          title: "*-- Repack DB Home Assistant --*"
+          message: "
+            \n Repack DB completato alle {{ states('input_datetime.repack_ending') }},
+            \n Dimensione precedente DB: {{ states('input_text.previous_dimension_db') }},
+            \n Dimensione attuale DB: {{ states('sensor.db_size') }}, 
+            \n Ridotto del {{ (((trigger.to_state.state|float) / (states('input_text.previous_dimension_db')|float)) * 100 - 100) |round(2)|replace('-','') }} %"
