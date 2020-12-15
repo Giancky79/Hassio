@@ -1,0 +1,30 @@
+sensor:
+################################################################################
+#                                                                              #
+############################## TEMPO AVVIO SERVER ##############################
+#                                                                              #
+################################################################################
+
+  - platform: template
+    sensors:
+
+      server_uptime:
+        friendly_name: "Ultimo Riavvio Server"
+        value_template: >
+          {% set server_up = as_timestamp(now()) - as_timestamp(states('sensor.last_boot')) %}
+          {% if server_up == 0 %}
+            Appena Riavviato
+          {% else %}
+            {% macro phrase(value, name) %}
+            {%- set value = value | int %}
+              {{- '{} {}'.format(value, name) if value | int > 0 else '' }}
+            {%- endmacro %}
+            {% set minutes = (server_up // 60) %}
+            {% set hours = (minutes // 60) %}
+            {% set days = (hours // 24) %}
+            {% set weeks = (days // 7) %}
+            {% set minutes = (minutes % 60) %}
+            {% set hours = (hours % 24) %}
+            {% set days = (days % 7) %}
+            {{[phrase(weeks, 'settimane' if weeks > 1 else 'settimana'), phrase(days, 'giorni' if days > 1 else 'giorno'), phrase(hours, 'ore' if hours > 1 else 'ora'), phrase(minutes, 'minuti' if minutes > 1 else 'minuto')] | select('!=','') | list | join(', ') }}
+          {% endif %}
