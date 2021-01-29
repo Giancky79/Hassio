@@ -1,0 +1,23 @@
+automation:
+  - id: corrente
+    alias: Avviso Superamento Soglia
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.#aggiungere_nome_dispositivo#_power_alarm_active
+        from: "off"
+        to: "on"
+        for: 
+          minutes: 2
+    action:
+      - service: notify.telegram
+        data:
+          title: >
+            ⚠️⚡Attenzione⚡⚠️
+          message: "
+            \n=========================
+            \n👉Superamento Soglia👈
+            \n=========================
+            \n
+            \nRischio distacco corrente
+            \ndal contatore Enel🔌
+            "
