@@ -1,0 +1,47 @@
+input_select:
+  khw_limit:
+    name: Soglia kWh
+    icon: mdi:lightning-bolt
+    options:
+      - DISABLE
+      - 3000
+      - 3300
+      - 3500
+      - 3800
+      - 4000
+    initial: DISABLE
+
+  effect:
+    name: Effetto
+    options:
+      - blink3
+      - fixed
+      - blinkgreen
+      - blinkblue
+
+  led:
+    name: Led
+    options:
+      - default
+      - red
+      - green
+      - blue
+      - lightblue
+      - yellow
+      - pink
+      - white
+
+# identify['effect']: only works for blink3 & fixed in effect. Values:
+# blink3
+# fixed
+# blinkgreen
+# blinkblue
+# identify['color']: only works for blink3 & fixed in effect. Values:
+# default
+# red
+# green
+# blue
+# lightblue
+# yellow
+# pink
+# white
