@@ -1,0 +1,83 @@
+automation:
+  - alias: Messaggio Feste
+    trigger:
+      - platform: time
+        at: "09:00:00"
+    action:
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ now().month == 12 and 4 <= n.day <= 24 }}
+            sequence:
+              - service: notify.telegram_famiglia
+                data:
+                  title: >
+                    {{ {
+                      '03' : '*21 Giorni al Natale!*',
+                      '04' : '*20 Giorni al Natale!*',
+                      '05 : '*19 Giorni al Natale!*',
+                      '06' : '*18 Giorni al Natale!*',
+                      '07' : '*17 Giorni al Natale!*',
+                      '08' : '*16 Giorni al Natale!*',
+                      '09' : '*15 Giorni al Natale!*',
+                      '10' : '*14 Giorni al Natale!*',
+                      '11' : '*13 Giorni al Natale!*',
+                      '12' : '*12 Giorni al Natale!*',
+                      '13' : '*11 Giorni al Natale!*',
+                      '14' : '*10 Giorni al Natale!*',
+                      '15' : '*9 Giorni al Natale!*',
+                      '16' : '*8 Giorni al Natale!*',
+                      '17' : '*Una settimana al Natale!*',
+                      '18' : '*6 Giorni al Natale!*',
+                      '19' : '*5 Giorni al Natale!*',
+                      '20' : '*4 Giorni al Natale!*',
+                      '21' : '*3 Giorni al Natale!*',
+                      '22' : '*2 Giorni al Natale!*',
+                      '23' : '*Buona Vigilia di Natale!*',
+                    } [states('sensor.date') | regex_replace('....-..-')] }}
+                  message: >
+                    {{ {
+                      '03' : "Attendo Natale per riscoprire i miei valori più alti… *colesterolo*, *trigliceridi* e *glicemia*. _Anonimo_",
+                      '04' : "Credo che Babbo Natale sia offeso con me da quella volta che gli chiesi il giubbotto di renna. _ilmarziano1_, *Twitter*",
+                      '05' : "Caro Babbo Natale, quest’anno sono stata bravissima. Ok… forse non sempre. Qualche volta… Raramente… Aaah lascia stare, me lo compro da sola. _Anonimo_",
+                      '06' : "Natale. Oggi per i credenti è il compleanno di Gesù, per gli atei l’anniversario della nascita di Sir Isaac Newton. _Anonimo_",
+                      '07' : "Il Natale è come un giorno in ufficio. Tu fai tutto il lavoro di cercare i regali e il tipo grasso con la tuta si prende tutti i meriti. _Anonimo_",
+                      '08' : "Le tre frasi che riassumono il Natale sono: Pace in terra, che il tuo natale sia ricco di gioia, e batterie non incluse. _Anonimo_",
+                      '09' : "Nipote di due anni ha scambiato il fiocco del suo pacchetto per il regalo. Il Natale dev’essere questa roba qui. Stupore allo stato puro. _egyzia_, *Twittter*",
+                      '10' : "È un diamante! *disse il desiderio*, È una Vuitton! *disse la speranza*, Ti piace questo pigiama? *esclamò il fidanzato* _FranAltomare_",
+                      '11' : "Per fare un albero di Natale ci vogliono tre cose: gli ornamenti, l’albero e la fede nel futuro. _Proverbio armeno_",
+                      '12' : "S’io fossi il mago del Natale farei spuntare un albero di Natale in ogni casa, in ogni appartamento dalle piastrelle del pavimento! _Gianni Rodari_",
+                      '13' : "È bene tornar bambini qualche volta e non vi è miglior tempo che il Natale, allorché il suo onnipotente fondatore era egli stesso un bambino…. _Charkes Dickens_",
+                      '14' : "Ho smesso di credere a Babbo Natale quando avevo sei anni. Mia madre mi portò a vederlo in un grande magazzino e lui mi chiese l’autografo. _Shirley Temple_",
+                      '15' : "A Natale son tutti più buoni. È il *prima* e il *dopo* che mi preoccupa. *Peanuts*, _Charles M. Schulz_",
+                      '16' : "Per il settimo anno di seguito mia suocera è venuta da noi a Natale. Quest'anno abbiamo deciso di cambiare...*La faremo entrare*. _Les Dawson_",
+                      '17' : "Eravamo così poveri che a Natale il mio vecchio usciva di casa, sparava un colpo di pistola in aria, poi rientrava in casa e diceva: spiacente ma Babbo Natale si è *suicidato*. _J. La Motta_",
+                      '18' : "Non preoccuparti per le dimensioni del tuo albero di Natale. Negli occhi dei bambini, sono alti tutti *30 metri*. _Larry Wilde_",
+                      '19' : "Vorrei poter mettere lo spirito del Natale all'interno di un *barattolo* e poterlo tirare fuori mese per mese, poco alla volta. _Harland Miller_",
+                      '20' : "Natale non è tanto aprire i regali quanto aprire i nostri cuori. _Janice Maeditere_",
+                      '21' : "L’infanzia è credere che con un albero di Natale e tre fiocchi di neve tutta la terra viene cambiata. _André Laurendeau_",
+                      '22' : "Non esiste nulla di così triste che lo svegliarsi la mattina di Natale e ricordarsi di non essere più un bambino. _Erma Bombeck_",
+                      '23' : "È la vigilia di Natale. Se è passato il tempo in cui accadevano miracoli, ci è rimasto almeno un giorno magico in cui *tutto può succedere*. _Jostein Gaarder_",
+                    } [states('sensor.date') | regex_replace('....-..-')] }}
+          - conditions:
+              - condition: template
+                value_template: "{{ now().day == 25 and now().month == 12 }}"
+            sequence:
+              - service: notify.telegram_famiglia
+                data:
+                  message: ""
+                  data:
+                    photo:
+                      - file: "/config/www/telegram/eventi/25_dicembre.jpg"
+                        caption: "Allora oggi è il *Santo Natale*, il gran varietà religioso comincerà alle ore 9 e 30. Il cappellano *Charlie* vi farà sapere come il mondo libero riuscirà a far fuori il comunismo. _Sergente Hartman (Full Metal Jacket)_"
+          - conditions:
+              - condition: template
+                value_template: "{{ now().day == 31 and now().month == 12 }}"
+            sequence:
+              - service: notify.telegram_famiglia
+                data:
+                  message: ""
+                  data:
+                    document:
+                      file: "/config/www/telegram/eventi/31_dicembre.gif"
