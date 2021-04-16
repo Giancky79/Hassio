@@ -1,0 +1,4 @@
+input_boolean:
+  elimina_snapshots:
+    name: elimina snapshots
+    initial: false
