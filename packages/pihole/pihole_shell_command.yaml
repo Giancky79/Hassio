@@ -1,5 +1,0 @@
-shell_command:
-
-  pihole_reboot_proxmox: "ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox pct exec 103 -- bash -c 'reboot'"
-
-  pihole_updater_proxmox: "ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox pct exec 103 -- bash -c 'pihole -up'"

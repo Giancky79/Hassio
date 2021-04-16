@@ -1,8 +1,0 @@
-binary_sensor:
-
-  - platform: template
-    sensors:
-    
-      pihole_enable:
-        friendly_name: "PiHole Enable"
-        value_template: "{{ is_state('sensor.pihole_status','enabled') }}"
