@@ -1,0 +1,111 @@
+sensor:
+
+  - platform: command_line
+    name: Supervisor updates
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/supervisor/info | jq ''{"newest_version":.data.version_latest,"current_version":.data.version,"addons":[.data.addons[] | select(.update_available)]}'''
+    value_template: "{{ value_json.addons | length }}"
+    unit_of_measurement: pending update(s)
+    json_attributes:
+      - newest_version
+      - current_version
+      - addons
+
+#################################
+#  ╔═╗╔╗╔╔═╗╔═╗╔═╗╦ ╦╔═╗╔╦╗╔═╗  #
+#  ╚═╗║║║╠═╣╠═╝╚═╗╠═╣║ ║ ║ ╚═╗  #
+#  ╚═╝╝╚╝╩ ╩╩  ╚═╝╩ ╩╚═╝ ╩ ╚═╝  #
+#################################
+
+  - platform: command_line
+    name: Snapshots
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/snapshots'
+    value_template: "{{ value_json.data.snapshots | length }}"
+    json_attributes:
+      - data
+
+  - platform: command_line
+    name: Latest snapshot
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/snapshots | jq ''[.data.snapshots[]] | sort_by(.date) | last'''
+    value_template: '{{ value_json.name }}'
+    json_attributes:
+      - slug
+      - date
+      - type
+      - protected
+
+#####################
+#  ╔═╗╔═╗╔╦╗╔╗ ╔═╗  #
+#  ╚═╗╠═╣║║║╠╩╗╠═╣  #
+#  ╚═╝╩ ╩╩ ╩╚═╝╩ ╩  #
+#####################
+
+  - platform: command_line
+    name: Samba Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/core_samba/info'
+    value_template: "{{ value_json.data.state }}"
+    
+#########################
+#  ╦  ╦╔═╗╔═╗╔═╗╔╦╗╔═╗  #
+#  ╚╗╔╝╚═╗║  ║ ║ ║║║╣   #
+#   ╚╝ ╚═╝╚═╝╚═╝═╩╝╚═╝  #
+#########################
+
+  - platform: command_line
+    name: Vscode Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_vscode/info'
+    value_template: "{{ value_json.data.state }}"
+
+###########################
+#  ╦ ╦╔═╗╔╗  ┬ ╔═╗╔═╗╦ ╦  #
+#  ║║║║╣ ╠╩╗┌┼─╚═╗╚═╗╠═╣  #
+#  ╚╩╝╚═╝╚═╝└┘ ╚═╝╚═╝╩ ╩  #
+###########################
+
+  - platform: command_line
+    name: Webssh Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_ssh/info'
+    value_template: "{{ value_json.data.state }}"
+
+####################################
+#  ╔═╗╦╔═╗╔╗ ╔═╗╔═╗  ╔╦╗╔═╗╔╦╗╔╦╗  #
+#  ╔═╝║║ ╦╠╩╗║╣ ║╣   ║║║║═╬╗║  ║   #
+#  ╚═╝╩╚═╝╚═╝╚═╝╚═╝  ╩ ╩╚═╝╚╩  ╩   #
+####################################
+
+  - platform: command_line
+    name: Zigbee2Mqtt Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/45df7312_zigbee2mqtt/info'
+    value_template: "{{ value_json.data.state }}"
+
+#########################
+#  ╔╦╗╔═╗╦═╗╦╔═╗╔╦╗╔╗   #
+#  ║║║╠═╣╠╦╝║╠═╣ ║║╠╩╗  #
+#  ╩ ╩╩ ╩╩╚═╩╩ ╩═╩╝╚═╝  #
+#########################
+
+  - platform: command_line
+    name: MariaDB Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/core_mariadb/info'
+    value_template: "{{ value_json.data.state }}"
+
+###########################
+#  ╔╗╔╔═╗╔╦╗╔═╗╦═╗╔═╗╔╦╗  #
+#  ║║║║ ║ ║║║╣ ╠╦╝║╣  ║║  #
+#  ╝╚╝╚═╝═╩╝╚═╝╩╚═╚═╝═╩╝  #
+###########################
+
+  - platform: command_line
+    name: Nodered Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_nodered/info'
+    value_template: "{{ value_json.data.state }}"
+
+###############################
+#  ╔═╗╔═╗╦═╗╔╦╗╔═╗╦╔╗╔╔═╗╦═╗  #
+#  ╠═╝║ ║╠╦╝ ║ ╠═╣║║║║║╣ ╠╦╝  #
+#  ╩  ╚═╝╩╚═ ╩ ╩ ╩╩╝╚╝╚═╝╩╚═  #
+###############################
+
+  - platform: command_line
+    name: Portainer Addon
+    command: 'curl -sSL -H "Authorization: Bearer $SUPERVISOR_TOKEN" http://supervisor/addons/a0d7b954_portainer/info'
+    value_template: "{{ value_json.data.state }}"
