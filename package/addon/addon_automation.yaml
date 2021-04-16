@@ -1,0 +1,55 @@
+automation:
+  - alias: "Avvio Addon"
+    initial_state: true
+    trigger:
+      - event: start
+        platform: homeassistant
+    mode: parallel
+    action:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: sensor.samba_addon
+                state: "stopped"
+            sequence:
+              - service: hassio.addon_start
+                data:
+                  addon: core_samba
+          - conditions:
+              - condition: state
+                entity_id: sensor.mariadb_addon
+                state: "stopped"
+            sequence:
+              - service: hassio.addon_start
+                data:
+                  addon: core_mariadb
+
+  - alias: Stato Addon
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: 
+          - sensor.mariadb_addon
+          - sensor.nodered_addon
+          - sensor.portainer_addon
+          - sensor.samba_addon
+          - sensor.vscode_addon
+          - sensor.webssh_addon
+        to: "stopped"
+      - platform: state
+        entity_id: 
+          - sensor.mariadb_addon
+          - sensor.nodered_addon
+          - sensor.portainer_addon
+          - sensor.samba_addon
+          - sensor.vscode_addon
+          - sensor.webssh_addon
+        to: "started"
+    mode: parallel
+    max: 5
+    action:
+      - service: notify.telegram
+        data:
+          title: "{{ trigger.to_state.name }}"
+          message: >
+            è stato {% if trigger.to_state.state == 'stopped' %}fermato{% else %}avviato{% endif %}
