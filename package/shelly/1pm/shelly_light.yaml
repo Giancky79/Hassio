@@ -1,0 +1,4 @@
+light:
+  - platform: switch
+    name: Shelly1PM Light
+    entity_id: switch.shelly1pm_switch
