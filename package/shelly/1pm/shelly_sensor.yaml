@@ -1,0 +1,88 @@
+sensor:
+
+  - platform: rest
+    name: Shelly1PM Status
+    timeout: 5
+    resource: http://ip-shelly/status
+    value_template: "{{ value_json.status }}"
+    json_attributes:
+      - temperature
+      - overtemperature
+      - cloud
+      - mqtt
+      - meters
+      - wifi_sta
+      - time
+      - serial
+      - has_update
+      - mac
+      - relays
+      - inputs
+      - ext_temperature
+      - tmp
+      - update 
+      - ram_total 
+      - ram_free
+      - fs_size
+      - fs_free
+      - uptime
+
+  - platform: template
+    sensors:
+      
+      shelly1pm_temperature:
+        friendly_name: 'Shelly1PM Temperature'
+        icon_template: mdi:thermometer
+        unit_of_measurement: '°C'
+        value_template: "{{ state_attr('sensor.shelly1pm_status', 'temperature') | round(0) }}"
+
+      shelly1pm_overtemperature:
+        friendly_name: 'Shelly1PM Overtemperature'
+        value_template: "{{ state_attr('sensor.shelly1pm_status', 'overtemperature') }}"
+        icon_template: >
+          {% if state_attr('sensor.shelly1pm_status', 'overtemperature'), False %}
+          mdi:thermometer-low
+          {% else %}
+          mdi:thermometer-alert
+          {% endif %} 
+      shelly1pm_cloud_enabled_connected:
+        friendly_name: 'Shelly1PM Cloud Enabled & Connected'
+        value_template: >
+          {% set enabled = state_attr('sensor.shelly1pm_status', 'cloud')['enabled'] %}
+          {% set connected = state_attr('sensor.shelly1pm_status', 'cloud')['connected'] %}
+          {% if enabled == True and connected == True %}
+            True
+          {% else %}
+            False
+          {% endif %}
+        icon_template: >-
+          {% if is_state('sensor.shelly1pm_cloud_enabled_connected', 'True') %}
+          mdi:cloud-check
+          {% else %}
+          mdi:cloud-alert
+          {% endif %}
+      shelly1pm_power_meters:
+        friendly_name: 'Shelly1PM PowerMeter'
+        icon_template: mdi:flash-circle
+        unit_of_measurement: 'W'
+        value_template: "{{ (state_attr('sensor.shelly1pm_status', 'meters')[0]['power'] | float) | round(2) }}"
+
+      shelly1pm_wifi:
+        friendly_name: 'Shelly1PM WiFi'
+        value_template: "{{ state_attr('sensor.shelly1pm_status', 'wifi_sta')['connected'] }}"
+        icon_template: >-
+          {% if is_state('sensor.shelly1pm_wifi', 'True') %}
+          mdi:cloud-check
+          {% else %}
+          mdi:cloud-alert
+          {% endif %}
+      shelly1pm_update:
+        friendly_name: 'Shelly1PM Update'
+        value_template: "{{ state_attr('sensor.shelly1pm_status', 'update')['has_update'] }}"
+        icon_template: >
+          {% if state_attr('sensor.shelly1pm_status', 'update'), False %}
+            mdi:cloud-check
+          {% else %}
+            mdi:cloud-alert
+          {% endif %}  
+
