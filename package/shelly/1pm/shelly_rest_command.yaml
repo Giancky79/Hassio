@@ -1,0 +1,6 @@
+rest_command:
+  shelly1pm_update:
+    url: 'http://ip-shelly/ota?update=1'
+    
+  shelly1pm_reboot:
+    url: 'http://ip-shelly/reboot'
