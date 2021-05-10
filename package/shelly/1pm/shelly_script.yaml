@@ -1,0 +1,11 @@
+script:
+
+  shelly1pm_update:
+    icon: mdi:update
+    sequence:
+      - service: rest_command.shelly1pm_update
+
+  shelly1pm_reboot:
+    icon: mdi:restart
+    sequence:
+      - service: rest_command.shelly1pm_reboot
