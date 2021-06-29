@@ -1,0 +1,70 @@
+sensor:
+
+  - platform: command_line
+    name: Local
+    unit_of_measurement: "%"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox  pvesm status | awk 'NR==1'| awk '{ print $7 }' | cut -d '%' -f 1
+    scan_interval: 120
+
+  - platform: command_line
+    name: Local-Lvm
+    unit_of_measurement: "%"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox pvesm status | awk 'NR==2'| awk '{ print $7 }' | cut -d '%' -f 1
+    scan_interval: 120
+
+  - platform: command_line
+    name: Cpu Temp Zone 0
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox cat /sys/class/thermal/thermal_zone0/temp
+    scan_interval: 120
+
+  - platform: command_line
+    name: Cpu Temp Zone 1
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox cat /sys/class/thermal/thermal_zone1/temp
+    scan_interval: 120
+
+  - platform: command_line
+    name: Cpu Temp Zone 2
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox cat /sys/class/thermal/thermal_zone2/temp
+    scan_interval: 120
+
+  - platform: command_line
+    name: Cpu Temp Zone 3
+    unit_of_measurement: "°C"
+    value_template: "{{ value | multiply(0.001) | round(1) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox cat /sys/class/thermal/thermal_zone3/temp
+    scan_interval: 120
+
+  - platform: command_line
+    name: Cpu Usage
+    value_template: "{{ value | multiply (0.001) | round(2) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}'
+    scan_interval: 120
+
+  - platform: command_line
+    name: Memory Available
+    unit_of_measurement: "MB"
+    value_template: "{{ value | multiply (0.001) |round (0) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox cat /proc/meminfo | grep MemAvailable | awk '{ print $2 }'
+    scan_interval: 120
+
+  - platform: command_line
+    name: Memory Free
+    unit_of_measurement: "MB"
+    value_template: "{{ value | multiply (0.001) |round (0) }}"
+    command: >-
+      ssh -i /config/ssh/id_rsa -o StrictHostKeyChecking=no -q root@ip-proxmox cat /proc/meminfo | grep MemFree | awk '{ print $2 }'
+    scan_interval: 120
