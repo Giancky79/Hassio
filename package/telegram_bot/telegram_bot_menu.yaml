@@ -1,0 +1,64 @@
+automation:
+
+#######################################################
+#  ╔╦╗╔═╗╦  ╔═╗╔═╗╦═╗╔═╗╔╦╗  ╔╗ ╔═╗╔╦╗  ╔╦╗╔═╗╔╗╔╦ ╦  #
+#   ║ ║╣ ║  ║╣ ║ ╦╠╦╝╠═╣║║║  ╠╩╗║ ║ ║   ║║║║╣ ║║║║ ║  #
+#   ╩ ╚═╝╩═╝╚═╝╚═╝╩╚═╩ ╩╩ ╩  ╚═╝╚═╝ ╩   ╩ ╩╚═╝╝╚╝╚═╝  #
+#######################################################
+
+  - id: "telegram_bot_start"
+    alias: "Telegram Bot Start"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: telegram_command
+        event_data:
+          command: /start
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /stop
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /exit
+        id: 'exit'
+    action:
+      - choose:
+          - conditions: '{{ trigger.event.data.from_first == "Giancarlo" and trigger.id != "exit" }}'
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "*PANNELLO AVANZATO*"
+                  inline_keyboard:
+                    - '🖥️ Server:/server, 🧰 Servizi:/servizi' 
+                    - '🎛️ Dispositivi:/dispositivi, ⚡ Consumi:/consumi'
+                    - '{{ "\U0001F6AA" }} Sensori:/sensori, {{ "\U00002600" }} Meteo:/meteo'
+                    - '{{ "\U0001F6A8" }} Sicurezza:/sicurezza, {{ "\U0001F4C4" }} Sommario:/Sommario' 
+                    - '🛑 Esci:/exit' 
+              - service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.user_id }}" 
+          - conditions: '{{ trigger.event.data.from_first != "Giancarlo" and trigger.id != "exit" }}'
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "*PANNELLO BASE*"
+                  inline_keyboard:
+                    - '🎛️ Dispositivi:/dispositivi, ⚡ Consumi:/consumi'
+                    - '{{ "\U0001F6AA" }} Sensori:/sensori, {{ "\U00002600" }} Meteo:/meteo'
+                    - '{{ "\U0001F6A8" }} Sicurezza:/sicurezza, {{ "\U0001F4C4" }} Sommario:/Sommario'
+                    - '🛑 Esci:/exit'
+              - service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.user_id }}"  
+          - conditions: '{{ trigger.id == "exit" }}'
+            sequence:
+              - service: telegram_bot.delete_message
+                data:
+                  message_id: "{{ trigger.event.data.message.message_id }}"
+                  chat_id: "{{ trigger.event.data.user_id }}" 
