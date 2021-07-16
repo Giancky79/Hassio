@@ -1,0 +1,167 @@
+automation:
+
+  ##################################################################################
+  #  ╔╗╔╔═╗╔╦╗╦╔═╗╦╔═╗╔═╗  ╦ ╦╔═╗╔╦╗╔═╗╔╦╗╔═╗  ╔╦╗╔═╗╦  ╔═╗╔═╗╦═╗╔═╗╔╦╗  ╔╗ ╔═╗╔╦╗ #
+  #  ║║║║ ║ ║ ║╠╣ ║║  ╠═╣  ║ ║╠═╝ ║║╠═╣ ║ ║╣    ║ ║╣ ║  ║╣ ║ ╦╠╦╝╠═╣║║║  ╠╩╗║ ║ ║  #
+  #  ╝╚╝╚═╝ ╩ ╩╚  ╩╚═╝╩ ╩  ╚═╝╩  ═╩╝╩ ╩ ╩ ╚═╝   ╩ ╚═╝╩═╝╚═╝╚═╝╩╚═╩ ╩╩ ╩  ╚═╝╚═╝ ╩  #
+  ##################################################################################
+
+  - id: "notifica_update_fix"
+    alias: "Notifica Update Fix"
+    initial_state: true
+    trigger:
+      - platform: template
+        value_template: >
+          {{ states("sensor.current_version") != states("sensor.latest_version") }}
+    action:
+      - delay:
+          hours: 1
+          minutes: 30
+      - service: notify.telegram_giancarlo
+        data:
+          title: >
+            🎉 Aggiornamento Home Assistant 🎉
+          message: "
+          \n========================
+          \nversione installata: {{states('sensor.current_version')}}🖥️
+          \n========================
+          \nversione aggiornata: {{states('sensor.latest_version')}}🌍
+          \n========================"
+          data:
+            inline_keyboard:
+              - 'ℹ️ Info Update:/info_update'
+            
+  #############################################################
+  #  ╔═╗╔═╗╦═╗╦  ╦╦╔═╗╦  ╔╦╗╔═╗╦  ╔═╗╔═╗╦═╗╔═╗╔╦╗  ╔╗ ╔═╗╔╦╗  #
+  #  ╚═╗║╣ ╠╦╝╚╗╔╝║╔═╝║   ║ ║╣ ║  ║╣ ║ ╦╠╦╝╠═╣║║║  ╠╩╗║ ║ ║   #
+  #  ╚═╝╚═╝╩╚═ ╚╝ ╩╚═╝╩   ╩ ╚═╝╩═╝╚═╝╚═╝╩╚═╩ ╩╩ ╩  ╚═╝╚═╝ ╩   #
+  #############################################################
+
+  - id: "telegram_bot_service"
+    alias: "Telegram Bot Servizi"
+    initial_state: true
+    trigger:
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /servizi
+        id: 'servizi'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /info_update
+        id: 'info_update'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /conferma_update
+        id: 'conferma_update'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /update
+        id: 'update'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /conferma_reboot
+        id: 'conferma_reboot'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /reboot
+        id: 'reboot'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /conferma_shutdown
+        id: 'shutdown'
+      - platform: event
+        event_type: telegram_callback
+        event_data:
+          data: /shutdown
+        id: 'shutdown'
+    action:
+      - choose:
+          - conditions: '{{ trigger.id == "servizi" }}'
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  title: "*MENU' SERVIZI*"
+                  message: ""
+                  inline_keyboard:
+                    - '🤞 Riavviare:/conferma_reboot, 👋 Spegnere:/conferma_shutdown'
+                    - '🔄 Aggiornare:/conferma_update, ◀️ Menú Principale:/stop'
+          - conditions: '{{ trigger.id == "info_update" }}'
+            sequence: 
+              - service: telegram_bot.send_message
+                data:
+                  parse_mode: html
+                  target: "{{ trigger.event.data.user_id }}"
+                  title: "Home Assistant {{ states('sensor.latest_version') }} è disponibile"
+                  message: >
+                    =====================
+                    
+                    {{ state_attr('sensor.ha_fix','body') | regex_replace(find='\[.*\]?.*', ignorecase=False) | replace('(', '') | replace ('- ','▫️ ') }}
+                  inline_keyboard:
+                    - '🔄 Aggiornare:/conferma_update, ◀️ Menú Principale:/stop'
+          - conditions: "{{ trigger.id == 'conferma_update' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Sei sicuro?"
+                  inline_keyboard:
+                    - '✔️ Si:/update, ❌ No:/stop'
+          - conditions: '{{ trigger.id == "update" }}'
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Home Assistant verrà aggiornato alla {{ states('sensor.latest_version') }}"
+              - delay: "00:00:02"
+              - service: switch.turn_on
+                data:
+                  entity_id: switch.home_assistant_update
+              - delay: "00:00:02"
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Aggiornamento di Home Assistant 🔄"
+          - conditions: "{{ trigger.id == 'conferma_reboot' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Sei sicuro?"
+                  inline_keyboard:
+                    - '✔️ Si:/reboot, ❌ No:/stop'
+          - conditions: "{{ trigger.id == 'reboot' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Riavvio di Home Assistant 🤞"
+              - delay: "00:00:02"
+              - service: homeassistant.restart
+          - conditions: "{{ trigger.id == 'conferma_shutdown' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Sei sicuro?"
+                  inline_keyboard:
+                    - '✔️ Si:/shutdown, ❌ No:/stop'
+          - conditions: "{{ trigger.id == 'shutdown' }}"
+            sequence:
+              - service: telegram_bot.send_message
+                data:
+                  target: "{{ trigger.event.data.user_id }}"
+                  message: "Spegnimento di Home Assistant 👋"
+              - delay: "00:00:02"
+              - service: homeassistant.stop
+      - service: telegram_bot.delete_message
+        data:
+          message_id: "{{ trigger.event.data.message.message_id }}"
+          chat_id: "{{ trigger.event.data.user_id }}"
