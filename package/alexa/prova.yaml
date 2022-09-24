@@ -1,0 +1,6 @@
+service: notify.alexa_media
+data:
+  target: media_player.echo
+  data:
+    type: tts
+  message: <audio src='https://raw.githubusercontent.com/Giancky79/Hassio/master/www/audio/heartbeat.mp3'/>
